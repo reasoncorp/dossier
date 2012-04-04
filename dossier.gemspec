@@ -1,0 +1,28 @@
+$:.push File.expand_path("../lib", __FILE__)
+
+# Maintain your gem's version:
+require "dossier/version"
+
+# Describe your gem and declare its dependencies:
+Gem::Specification.new do |s|
+  s.name        = "dossier"
+  s.version     = Dossier::VERSION
+  s.authors     = ["Adam Hunter", "Rodney Turnham"]
+  s.email       = ["adamhunter@me.com", "rodney.turnham@tma1.com"]
+  # s.homepage    = "TODO"
+  s.summary     = "TODO: Summary of Dossier."
+  s.description = "TODO: Description of Dossier."
+
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.test_files = Dir["spec/**/*"]
+
+  s.add_dependency "arel",            "~> 3.0.2"
+  s.add_dependency "activesupport",   "~> 3.2.2"
+  s.add_dependency "actionpack",      "~> 3.2.2"
+  s.add_dependency "actionmailer",    "~> 3.2.2"
+  s.add_dependency "railties",        "~> 3.2.2"
+
+  s.add_development_dependency "sqlite3"
+  s.add_development_dependency "activerecord", "~> 3.2.2"
+  s.add_development_dependency "rspec-rails",  "~> 2.9.0"
+end
