@@ -3,7 +3,7 @@ defaults: &defaults
   database: dossier_test
   host: localhost
   user: root
-  password: rubyr3d!
+  password:
   
 development:
   <<: *defaults
