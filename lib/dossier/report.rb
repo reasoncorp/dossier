@@ -1,5 +1,11 @@
 module Dossier
   class Report
+
+    SELECT = 'SELECT'
+    WHERE  = 'WHERE'
+    HAVING = 'HAVING'
+    ORDER  = 'ORDER BY'
+    
     attr_accessor :options
 
     %w[select where having order].each do |method|
@@ -15,7 +21,11 @@ module Dossier
     end
 
     def initialize(options = {})
-      self.options = options
+      self.options = options.with_indifferent_access
+    end
+
+    def sql
+      "#{select} #{where} #{having} #{order}".strip
     end
 
     private
@@ -25,14 +35,19 @@ module Dossier
     end
 
     def compile(type)
-      sql_fragment = self.class.instance_variable_get(:"@#{type}")
-      sql_fragment = instance_eval(&sql_fragment) if sql_fragment.respond_to?(:call)
       @conditions  = nil
-      sql_fragment.to_s
+      sql_fragment = self.class.instance_variable_get(:"@#{type}")
+      sql_fragment = instance_eval(&sql_fragment).to_s if sql_fragment.respond_to?(:call)
+      return if sql_fragment.blank?
+      "#{self.class.const_get(type.to_s.upcase)} #{sql_fragment}"
     end
     
     def conditions
       @conditions ||= ConditionSet.new
+    end
+
+    def fragment(sql, binds)
+      Condition.new(sql, binds)
     end
 
   end
