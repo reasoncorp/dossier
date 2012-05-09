@@ -1,33 +1,33 @@
 module Dossier
   class Report
 
-    SELECT = 'SELECT'
-    WHERE  = 'WHERE'
-    HAVING = 'HAVING'
-    GROUP  = 'GROUP BY'
-    ORDER  = 'ORDER BY'
-    
     attr_accessor :options
     attr_reader :results
 
-    %w[select where having group order].each do |method|
+    def self.keyword(type)
       class_eval <<-RUBY, __FILE__, __LINE__ + 1
-        def self.#{method}(string = nil, &block)
-          dsl :#{method}, string, block
+        def self.#{type}(string = nil, &block)
+          dsl :#{type}, string, block
         end
 
-        def #{method}
-          compile :#{method}
+        def #{type}
+          compile :#{type}
         end
       RUBY
     end
+
+    keyword :select
+    keyword :where
+    keyword :having
+    keyword :group_by
+    keyword :order_by
 
     def initialize(options = {})
       self.options = options.with_indifferent_access
     end
 
     def sql
-      "#{select} #{where} #{having} #{group} #{order}".strip
+      "#{select} #{where} #{having} #{group_by} #{order_by}".strip
     end
     
     def run
@@ -47,7 +47,7 @@ module Dossier
       sql_fragment = self.class.instance_variable_get(:"@#{type}")
       sql_fragment = instance_eval(&sql_fragment).to_s if sql_fragment.respond_to?(:call)
       return if sql_fragment.blank?
-      "#{self.class.const_get(type.to_s.upcase)} #{sql_fragment}"
+      "#{type.to_s.gsub('_', ' ').upcase} #{sql_fragment}"
     end
     
     def conditions

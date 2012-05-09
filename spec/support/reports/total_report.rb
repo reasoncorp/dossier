@@ -20,9 +20,9 @@ class TotalReport < Dossier::Report
   SQL
 
   where do
-    conditions << fragment("business_id IN (:businesses)", :businesses => options[:businesses].split(','))
+    fragment("business_id IN (:businesses)", :businesses => options[:businesses].split(','))
   end
 
-  group "business_id"
+  group_by "business_id"
 
 end

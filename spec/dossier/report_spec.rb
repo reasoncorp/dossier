@@ -94,49 +94,49 @@ describe Dossier::Report do
         end
       end
 
-      describe "order" do
+      describe "order_by" do
         it "takes a string" do
-          TestReport.order "salary DESC"
-          @report.order.should eq("ORDER BY salary DESC")
+          TestReport.order_by "salary DESC"
+          @report.order_by.should eq("ORDER BY salary DESC")
         end
 
         it "takes a block" do
-          TestReport.order { "salary DESC" }
-          @report.order.should eq("ORDER BY salary DESC")
+          TestReport.order_by { "salary DESC" }
+          @report.order_by.should eq("ORDER BY salary DESC")
         end
 
         it "has it's options in the block" do
-          TestReport.order do
+          TestReport.order_by do
             if options[:suspended]
               "suspended, salary DESC"
             else
               "salary DESC"
             end
           end
-          @report.order.should eq("ORDER BY suspended, salary DESC")
+          @report.order_by.should eq("ORDER BY suspended, salary DESC")
         end
       end
 
-      describe "group" do
+      describe "group_by" do
         it "takes a string" do
-          TestReport.group "business_id"
-          @report.group.should eq("GROUP BY business_id")
+          TestReport.group_by "business_id"
+          @report.group_by.should eq("GROUP BY business_id")
         end
 
         it "takes a block" do
-          TestReport.group { "business_id" }
-          @report.group.should eq("GROUP BY business_id")
+          TestReport.group_by { "business_id" }
+          @report.group_by.should eq("GROUP BY business_id")
         end
 
         it "has it's options in the block" do
-          TestReport.group do
+          TestReport.group_by do
             if options[:suspended]
               "suspended"
             else
               "business_id"
             end
           end
-          @report.group.should eq("GROUP BY suspended")
+          @report.group_by.should eq("GROUP BY suspended")
         end
       end
     end
