@@ -105,7 +105,7 @@ describe Dossier::Report do
           @report.order.should eq("ORDER BY salary DESC")
         end
 
-        it "yields it's options to the block" do
+        it "has it's options in the block" do
           TestReport.order do
             if options[:suspended]
               "suspended, salary DESC"
@@ -116,12 +116,50 @@ describe Dossier::Report do
           @report.order.should eq("ORDER BY suspended, salary DESC")
         end
       end
+
+      describe "group" do
+        it "takes a string" do
+          TestReport.group "business_id"
+          @report.group.should eq("GROUP BY business_id")
+        end
+
+        it "takes a block" do
+          TestReport.group { "business_id" }
+          @report.group.should eq("GROUP BY business_id")
+        end
+
+        it "has it's options in the block" do
+          TestReport.group do
+            if options[:suspended]
+              "suspended"
+            else
+              "business_id"
+            end
+          end
+          @report.group.should eq("GROUP BY suspended")
+        end
+      end
     end
 
     describe "sql statement" do
       it "can generate a valid sequel statement" do
         @report = EmployeeReport.new(:names => %w[Long Hunter])
         @report.sql.should eq("SELECT * from employees WHERE (name like '%Long%' or name like '%Hunter%')")
+      end
+    end
+
+    describe "run" do
+      it "will execute the generated sql query" do
+        @report = EmployeeReport.new
+        Dossier.client.should_receive(:query).with(@report.sql)
+        @report.run
+      end
+
+      it "will cache the results of the run in `results`" do
+        @report = EmployeeReport.new
+        Dossier.client.stub(:query).and_return(@mock = mock('results'))
+        @report.run
+        @report.results.should eq(@mock)
       end
     end
 

@@ -2,7 +2,7 @@ defaults: &defaults
   adapter: mysql2
   database: dossier_test
   host: localhost
-  user: root
+  username: root
   password:
   
 development:

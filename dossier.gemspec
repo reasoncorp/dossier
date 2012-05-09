@@ -16,11 +16,12 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"]
 
-  s.add_dependency "arel",            "~> 3.0.2"
-  s.add_dependency "activesupport",   "~> 3.2.2"
-  s.add_dependency "actionpack",      "~> 3.2.2"
-  s.add_dependency "actionmailer",    "~> 3.2.2"
-  s.add_dependency "railties",        "~> 3.2.2"
+  s.add_dependency "arel",            "~> 3.0"
+  s.add_dependency "activesupport",   "~> 3.2"
+  s.add_dependency "actionpack",      "~> 3.2"
+  s.add_dependency "actionmailer",    "~> 3.2"
+  s.add_dependency "railties",        "~> 3.2"
+  s.add_dependency "haml",            "<= 3.1.4"
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "activerecord", "~> 3.2.2"

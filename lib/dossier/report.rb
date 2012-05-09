@@ -4,11 +4,13 @@ module Dossier
     SELECT = 'SELECT'
     WHERE  = 'WHERE'
     HAVING = 'HAVING'
+    GROUP  = 'GROUP BY'
     ORDER  = 'ORDER BY'
     
     attr_accessor :options
+    attr_reader :results
 
-    %w[select where having order].each do |method|
+    %w[select where having group order].each do |method|
       class_eval <<-RUBY, __FILE__, __LINE__ + 1
         def self.#{method}(string = nil, &block)
           dsl :#{method}, string, block
@@ -25,7 +27,13 @@ module Dossier
     end
 
     def sql
-      "#{select} #{where} #{having} #{order}".strip
+      "#{select} #{where} #{having} #{group} #{order}".strip
+    end
+    
+    def run
+      @results = Dossier.client.query(sql)
+    rescue Mysql2::Error => e
+      raise Mysql2::Error.new("#{e.message}. \n\n #{sql}")
     end
 
     private
