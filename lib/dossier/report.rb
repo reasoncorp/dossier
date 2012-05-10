@@ -47,12 +47,21 @@ module Dossier
     
     def run
       @results = Results.new(Dossier.client.query(sql), self)
+      self
     rescue Mysql2::Error => e
       raise Mysql2::Error.new("#{e.message}. \n\n #{sql}")
     end
 
     def headers
       results.first.keys.map {|key| Dossier::Format::Header.new(key)}
+    end
+
+    def rows
+      results.map(&:values)
+    end
+
+    def to_a
+      [headers] + rows.map {|row| row.map(&:value)}
     end
 
     def view

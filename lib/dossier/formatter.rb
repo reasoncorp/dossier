@@ -10,6 +10,10 @@ module Dossier
       format
     end
 
+    def as_json(options={})
+      format
+    end
+
     def format
       raise NotImplementedError.new("You must define format in all subclasses of Dossier::Formatter")
     end

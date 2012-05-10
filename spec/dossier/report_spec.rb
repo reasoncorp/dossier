@@ -172,6 +172,14 @@ describe Dossier::Report do
       it "extracts headers from the result set"
     end
 
+    describe "to_json" do
+      it "can output as json"
+    end
+
+    describe "to_csv" do
+      it "can output as csv"
+    end
+
     describe "present" do
       it "has a format method"
     end

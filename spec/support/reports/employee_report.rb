@@ -4,6 +4,14 @@ class EmployeeReport < Dossier::Report
 
   select "* from employees"
 
+  select do
+    if options[:columns].present?
+      "#{options[:columns]} from employees"
+    else
+      "* from employees"
+    end
+  end
+
   where do 
     conditions << condition("salary > :salary", :salary => 10000) if options[:salary].present?
     names = options[:names].map { |name| condition("name like :name", :name => "%#{name}%") }

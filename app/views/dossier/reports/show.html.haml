@@ -4,7 +4,7 @@
       - @report.headers.each do |header|
         %th= header
   %tbody
-    - @report.results.each do |row|
+    - @report.rows.each do |row|
       %tr
-        - row.values.each do |value|
+        - row.each do |value|
           %td= value
