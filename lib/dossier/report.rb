@@ -4,14 +4,22 @@ module Dossier
     attr_accessor :options
     attr_reader :results
 
+    def self.options
+      @options ||= {}
+    end
+
+    def self.option(name, options)
+      self.options[name] = options.delete(:default)
+    end
+
     def self.keyword(type)
       class_eval <<-RUBY, __FILE__, __LINE__ + 1
         def self.#{type}(string = nil, &block)
-          dsl :#{type}, string, block
+          clause :#{type}, string, block
         end
 
         def #{type}
-          compile :#{type}
+          clause :#{type}
         end
       RUBY
     end
@@ -23,7 +31,7 @@ module Dossier
     keyword :order_by
 
     def initialize(options = {})
-      self.options = options.with_indifferent_access
+      self.options = self.class.options.merge(options).with_indifferent_access
     end
 
     def sql
@@ -38,11 +46,13 @@ module Dossier
 
     private
 
-    def self.dsl(type, string = nil, block = nil)
+    # Class method sets the clause
+    def self.clause(type, string = nil, block = nil)
       instance_variable_set(:"@#{type}", block || string)
     end
 
-    def compile(type)
+    # Instance method gets the clause
+    def clause(type)
       @conditions  = nil
       sql_fragment = self.class.instance_variable_get(:"@#{type}")
       sql_fragment = instance_eval(&sql_fragment).to_s if sql_fragment.respond_to?(:call)
@@ -54,7 +64,7 @@ module Dossier
       @conditions ||= ConditionSet.new
     end
 
-    def fragment(sql, binds)
+    def condition(sql, binds)
       Condition.new(sql, binds)
     end
 

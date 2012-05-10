@@ -1,15 +1,12 @@
 class EmployeeReport < Dossier::Report
 
-  def options
-    @options[:names] ||= []
-    @options
-  end
+  option :names, :default => []
 
   select "* from employees"
 
   where do 
-    names = options[:names].map { |name| fragment("name like :name", :name => "%#{name}%") }
-    conditions << fragment("salary > :salary", :salary => 10000) if options[:salary].present?
+    conditions << condition("salary > :salary", :salary => 10000) if options[:salary].present?
+    names = options[:names].map { |name| condition("name like :name", :name => "%#{name}%") }
     conditions << names.join(' or ')
   end
 
