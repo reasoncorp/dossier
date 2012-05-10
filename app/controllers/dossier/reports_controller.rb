@@ -4,7 +4,7 @@ module Dossier
     def show
       @report = report_class.new(params[:options] || {})
       @report.run
-      render params[:report]
+      render @report.view
     rescue ActionView::MissingTemplate => e
       render
     end

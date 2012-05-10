@@ -44,6 +44,10 @@ module Dossier
       raise Mysql2::Error.new("#{e.message}. \n\n #{sql}")
     end
 
+    def view
+      self.class.name.sub('Report', '').downcase
+    end
+
     private
 
     # Class method sets the clause

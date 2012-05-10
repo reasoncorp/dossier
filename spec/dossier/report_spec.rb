@@ -163,6 +163,12 @@ describe Dossier::Report do
       end
     end
 
+    describe "view" do
+      it "will infer its view name from the class name" do
+        EmployeeReport.new.view.should eq("employee")
+      end
+    end
+
     describe "present" do
     end
   end
