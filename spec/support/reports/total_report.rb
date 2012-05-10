@@ -17,9 +17,11 @@ class TotalReport < Dossier::Report
   SQL
 
   where do
-    fragment("business_id IN (:businesses)", :businesses => options[:businesses].split(','))
+    condition("business_id IN (:businesses)", :businesses => options[:businesses].split(','))
   end
 
   group_by "business_id"
+
+  format "A" => Currency, "B" => Currency, "C" => Currency
 
 end

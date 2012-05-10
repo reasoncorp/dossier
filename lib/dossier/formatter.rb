@@ -19,4 +19,6 @@ end
 
 require 'dossier/format/currency'
 require 'dossier/format/currency_in_cents'
-require 'dossier/format/string'
+require 'dossier/format/date'
+require 'dossier/format/header'
+require 'dossier/format/object'

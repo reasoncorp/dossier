@@ -1,8 +1,8 @@
 module Dossier
   module Format
-    class String < Formatter
+    class Object < Formatter
       def format
-        value.to_s
+        value
       end
     end
   end

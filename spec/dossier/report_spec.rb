@@ -151,15 +151,14 @@ describe Dossier::Report do
     describe "run" do
       it "will execute the generated sql query" do
         @report = EmployeeReport.new
-        Dossier.client.should_receive(:query).with(@report.sql)
+        Dossier.client.should_receive(:query).with(@report.sql).and_return([])
         @report.run
       end
 
       it "will cache the results of the run in `results`" do
         @report = EmployeeReport.new
-        Dossier.client.stub(:query).and_return(@mock = mock('results'))
         @report.run
-        @report.results.should eq(@mock)
+        @report.results.should_not be_nil
       end
     end
 
@@ -169,7 +168,12 @@ describe Dossier::Report do
       end
     end
 
+    describe "headers" do
+      it "extracts headers from the result set"
+    end
+
     describe "present" do
+      it "has a format method"
     end
   end
 

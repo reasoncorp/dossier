@@ -30,6 +30,13 @@ module Dossier
     keyword :group_by
     keyword :order_by
 
+    def self.format(formats)
+      @formats = formats.inject({}) do |hash, (key, format)|
+        hash[key] = lookup_format_class(format)
+        hash
+      end.with_indifferent_access
+    end
+
     def initialize(options = {})
       self.options = self.class.options.merge(options).with_indifferent_access
     end
@@ -39,16 +46,45 @@ module Dossier
     end
     
     def run
-      @results = Dossier.client.query(sql)
+      @results = Results.new(Dossier.client.query(sql), self)
     rescue Mysql2::Error => e
       raise Mysql2::Error.new("#{e.message}. \n\n #{sql}")
+    end
+
+    def headers
+      results.first.keys.map {|key| Dossier::Format::Header.new(key)}
     end
 
     def view
       self.class.name.sub('Report', '').downcase
     end
 
+    # For the benefit of the `format` method. See also `lookup_format_class`.
+    # Assume missing format constants are in the Dossier::Format namespace.
+    # Eg: `format :salary => Currency` will look for Dossier::Format::Currency
+    # before exploding.
+    def self.const_missing(name)
+      return Dossier::Format.const_get(name) if Dossier::Format.const_defined?(name)
+      super
+    end
+
     private
+
+    def self.formats
+      @formats ||= {}
+    end
+
+    # For the benefit of the `format` method. See also `self.const_missing`.
+    # Ensure that, even if const_missing isn't called, we find format
+    # constants under Dossier::Format if they exist.
+    # Eg: `format :salary => Date`; Date is an existing constant, but we want
+    # Dossier::Format::Date. If that doesn't exist, use ::Date.
+    def self.lookup_format_class(format)
+      # Any namespaced constant clearly isn't under Dossier::Format
+      return format if format.name =~ /::/ 
+
+      Dossier::Format.const_get(format.name)
+    end
 
     # Class method sets the clause
     def self.clause(type, string = nil, block = nil)

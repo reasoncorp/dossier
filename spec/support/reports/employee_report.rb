@@ -10,4 +10,14 @@ class EmployeeReport < Dossier::Report
     conditions << names.join(' or ')
   end
 
+  class FormatName < Dossier::Formatter
+    def format
+      "Employee #{value}"
+    end
+  end
+
+  format :salary   => Currency,
+         :hired_on => Date,
+         :name     => FormatName
+
 end
