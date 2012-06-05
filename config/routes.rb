@@ -1,5 +1,5 @@
-Dossier::Engine.routes.draw do
+Rails.application.routes.draw do
 
-  match "reports/:report", :to => 'reports#show'
+  match "reports/:report", :to => 'dossier/reports#show', :as => :dossier_report
 
 end
