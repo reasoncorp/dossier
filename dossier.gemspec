@@ -9,9 +9,8 @@ Gem::Specification.new do |s|
   s.version     = Dossier::VERSION
   s.authors     = ["Adam Hunter", "Rodney Turnham"]
   s.email       = ["adamhunter@me.com", "rodney.turnham@tma1.com"]
-  # s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Dossier."
-  s.description = "TODO: Description of Dossier."
+  s.summary     = "SQL based report generation."
+  s.description = "Easy SQL based report generation with the ability to accept request parameters and render multiple formats."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.markdown"]
   s.test_files = Dir["spec/**/*"]
