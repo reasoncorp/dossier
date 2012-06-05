@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dossier (0.0.1)
+    dossier (1.0.0.pre.2)
       actionmailer (~> 3.2)
       actionpack (~> 3.2)
       activesupport (~> 3.2)
