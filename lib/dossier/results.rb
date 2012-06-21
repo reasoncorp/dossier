@@ -25,5 +25,9 @@ module Dossier
       end
     end
 
+    def headers
+      @adapter_results.fields
+    end
+
   end
 end

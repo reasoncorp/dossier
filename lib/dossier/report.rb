@@ -24,6 +24,7 @@ module Dossier
       RUBY
     end
 
+    keyword :query
     keyword :select
     keyword :where
     keyword :having
@@ -42,7 +43,7 @@ module Dossier
     end
 
     def sql
-      "#{select} #{where} #{having} #{group_by} #{order_by}".strip
+      query.presence || "#{select} #{where} #{having} #{group_by} #{order_by}".strip
     end
     
     def run
@@ -53,7 +54,7 @@ module Dossier
     end
 
     def headers
-      results.first.keys.map {|key| Dossier::Format::Header.new(key)}
+      results.headers.map {|key| Dossier::Format::Header.new(key)}
     end
 
     def rows
@@ -106,7 +107,8 @@ module Dossier
       sql_fragment = self.class.instance_variable_get(:"@#{type}")
       sql_fragment = instance_eval(&sql_fragment).to_s if sql_fragment.respond_to?(:call)
       return if sql_fragment.blank?
-      "#{type.to_s.gsub('_', ' ').upcase} #{sql_fragment}"
+      keyword = type == :query ? nil : type.to_s.gsub('_', ' ').upcase
+      "#{keyword} #{sql_fragment}".strip
     end
     
     def conditions
