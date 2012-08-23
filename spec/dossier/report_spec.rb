@@ -14,6 +14,18 @@ describe Dossier::Report do
       @report = TestReport.new(:suspended => true, :foo => 'baz')
     end
 
+    describe "filters" do
+      it "has a before filter" do
+        TestReport.before { @name = 'Adam' }
+        TestReport.query { condition("select * from users where name = :name", :name => @name) }
+        @report.sql.should eq("select * from users where name = 'Adam'")
+      end
+
+      it "has an after filter" do
+        pending
+      end
+    end
+
     describe "query" do
       describe "select" do
         it "takes a string" do

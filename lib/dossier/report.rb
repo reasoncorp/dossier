@@ -24,12 +24,14 @@ module Dossier
       RUBY
     end
 
+    keyword :before
     keyword :query
     keyword :select
     keyword :where
     keyword :having
     keyword :group_by
     keyword :order_by
+    keyword :after
 
     def self.format(formats)
       @formats = formats.inject({}) do |hash, (key, format)|
@@ -43,11 +45,13 @@ module Dossier
     end
 
     def sql
+      before
       query.presence || "#{select} #{where} #{having} #{group_by} #{order_by}".strip
     end
     
     def run
       @results = Results.new(Dossier.client.query(sql), self)
+      after
       self
     rescue Mysql2::Error => e
       raise Mysql2::Error.new("#{e.message}. \n\n #{sql}")

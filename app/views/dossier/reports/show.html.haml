@@ -1,7 +1,3 @@
-= link_to 'Download CSV', dossier_report_path(:format => 'csv', :options => params[:options]), :class => 'download-csv'
-
-%h1 #{params[:report].titleize} Report
-
 %table
   %thead
     %tr
@@ -13,3 +9,4 @@
         - row.each do |value|
           %td= value
 
+= link_to 'Download CSV', dossier_report_path(:format => 'csv', :options => params[:options]), :class => 'download-csv'

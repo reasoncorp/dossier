@@ -8,7 +8,6 @@ describe Dossier::Configuration do
   end
 
   describe "defaults" do
-
     it "uses the rails configuration directory for the config path" do
       @config.config_path.should eq(Rails.root.join("config", "dossier.yml"))
     end
