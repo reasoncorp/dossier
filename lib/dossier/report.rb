@@ -58,7 +58,7 @@ module Dossier
     end
 
     def headers
-      results.headers.map {|key| Dossier::Format::Header.new(key)}
+      results.headers.map {|key| Dossier::Format::Title.new(key)}
     end
 
     def rows

@@ -1,9 +1,9 @@
 module Dossier
   module Format
-    class Header < Formatter
+    class Title < Formatter
 
       def format
-        value.to_s.humanize
+        value.to_s.titleize
       end
     end
   end
