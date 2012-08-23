@@ -23,4 +23,6 @@ describe Dossier::Formatter do
     expect {@formatter.format}.to raise_error(NotImplementedError)
   end
 
+  it "has options"
+
 end

@@ -20,7 +20,7 @@ module Dossier
       raise ArgumentError.new("#{result_row.inspect} must respond to :[]") unless result_row.respond_to?(:[])
       formats = @report.class.formats
       result_row.inject({}) do |new_row, (key, value)|
-        new_row[key] = (formats[key] || Dossier::Format::Object).new(value)
+        new_row[key] = (formats[key] || Dossier::Format::Object).new(value, @report.options)
         new_row
       end
     end

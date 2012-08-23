@@ -53,6 +53,8 @@ describe Dossier::Results do
       pending "write DSL"
     end
 
+    it "passes the options to the formatter"
+
   end
 
 end

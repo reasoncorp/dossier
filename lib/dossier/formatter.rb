@@ -1,8 +1,9 @@
 module Dossier
   class Formatter
-    attr_accessor :value
+    attr_accessor :value, :options
 
-    def initialize(value)
+    def initialize(value, options={})
+      @options = options
       @value = value
     end
 
@@ -26,3 +27,4 @@ require 'dossier/format/currency_in_cents'
 require 'dossier/format/date'
 require 'dossier/format/title'
 require 'dossier/format/object'
+require 'dossier/format/url'
