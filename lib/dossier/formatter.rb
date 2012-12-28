@@ -25,6 +25,7 @@ end
 require 'dossier/format/currency'
 require 'dossier/format/currency_in_cents'
 require 'dossier/format/date'
+require 'dossier/format/number'
 require 'dossier/format/title'
 require 'dossier/format/object'
 require 'dossier/format/url'
