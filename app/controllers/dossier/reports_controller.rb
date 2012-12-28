@@ -1,6 +1,5 @@
 module Dossier
   class ReportsController < ApplicationController
-
     def show
       @report = report_class.new(params[:options] || {})
       @report.run

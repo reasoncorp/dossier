@@ -26,6 +26,17 @@ describe Dossier::Report do
       end
     end
 
+    describe "footer" do
+      it "can be set to true" do
+        TestReport.footer true
+        expect(@report.footer?).to be_true
+      end
+
+      it "is false by default" do
+        expect(Class.new(Dossier::Report).new.footer?).to be_false
+      end
+    end
+
     describe "query" do
       describe "select" do
         it "takes a string" do
@@ -183,6 +194,8 @@ describe Dossier::Report do
     describe "headers" do
       it "extracts headers from the result set"
     end
+
+    it "extracts footers if it should"
 
     describe "to_json" do
       it "can output as json"

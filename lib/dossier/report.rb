@@ -2,7 +2,7 @@ module Dossier
   class Report
 
     attr_accessor :options
-    attr_reader :results
+    attr_reader :results, :footer
 
     def self.options
       @options ||= {}
@@ -40,8 +40,16 @@ module Dossier
       end.with_indifferent_access
     end
 
+    def self.footer(boolean = nil)
+      @footer = !!boolean
+    end
+
     def initialize(options = {})
       self.options = self.class.options.merge(options).with_indifferent_access
+    end
+
+    def footer?
+      self.class.instance_variable_get(:@footer).presence
     end
 
     def sql
@@ -62,7 +70,9 @@ module Dossier
     end
 
     def rows
-      results.map(&:values)
+      results.map(&:values).tap do |r|
+        @footer = r.pop if footer?
+      end
     end
 
     def to_a
