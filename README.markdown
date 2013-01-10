@@ -25,7 +25,8 @@ Dossier will add a route to your app so that `reports/fancy_ketchup` will instan
 - Run `bundle`
 - Create a local `dossier_test` database.
 - `cp spec/dummy/config/database.yml{.example,}` and edit it so that it can connect to the test database.
-- 
+- `cd spec/dummy; rake db:create db:schema:load; cd -;` 
+- `rspec spec`
 
 ## Misc
 
