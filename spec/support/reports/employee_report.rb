@@ -1,31 +1,74 @@
 class EmployeeReport < Dossier::Report
 
-  option :names, :default => []
+  set_callback :build_query, :before, :example_before_hook
+  set_callback :execute,     :after  do
+    # do some stuff
+  end
 
-  select "* from employees"
+  # Valid for users to choose via a multi-select
+  def self.valid_columns
+    %w[id name hired_on suspended]
+  end
 
-  select do
-    if options[:columns].present?
-      "#{options[:columns]} from employees"
-    else
-      "* from employees"
+  def query
+    "SELECT #{columns} FROM employees WHERE 1=1".tap do |sql|
+      sql << " AND divisions in (:divisions)" if divisions.any?
+      sql << " AND salary > :salary"          if salary?
+      sql << " AND (#{names_like})"           if names_like.present?
+      sql << " ORDER BY name #{order}"
     end
   end
 
-  where do 
-    conditions << condition("salary > :salary", :salary => 10000) if options[:salary].present?
-    names = options[:names].map { |name| condition("name like :name", :name => "%#{name}%") }
-    conditions << names.join(' or ')
+  def columns
+    valid_columns.join(', ').presence || '*'
   end
 
-  class FormatName < Dossier::Formatter
-    def format
-      "Employee #{value}"
-    end
+  def valid_columns
+    self.class.valid_columns & Array.wrap(options[:columns])
   end
 
-  format :salary   => Currency,
-         :hired_on => Date,
-         :name     => FormatName
+  def order
+    options[:order].to_s.upcase === 'DESC' ? 'DESC' : 'ASC'
+  end
+
+  def salary
+    10_000
+  end
+
+  def name
+    "%#{names.pop}%"
+  end
+
+  def divisions
+    @divisions ||= options.fetch(:divisions) { [] }
+  end
+
+  def salary?
+    options[:salary].present?
+  end
+
+  def names_like
+    names.map { |name| "name like :name" }.join(' or ')
+  end
+
+  def names
+    @names ||= options.fetch(:names) { [] }.dup
+  end
+
+  def format_salary(amount)
+    formatter.currency(amount) unless format.csv?
+  end
+
+  def format_hired_on(date)
+    formatter.date(date)
+  end
+
+  def format_name(name)
+    "Employee #{value}"
+  end
+
+  def example_before_hook
+    # do some stuff
+  end
 
 end

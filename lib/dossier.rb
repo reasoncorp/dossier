@@ -21,8 +21,6 @@ module Dossier
 end
 
 require "dossier/configuration"
-require "dossier/condition"
-require "dossier/condition_set"
 require "dossier/formatter"
 require "dossier/report"
 require "dossier/results"

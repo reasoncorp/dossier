@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe Dossier::Report do
 
+  let(:report) { TestReport.new(:foo => 'bar') }
+
   describe "report instances" do
     it "takes options when initializing" do
       @report = TestReport.new(:foo => 'bar')
@@ -9,172 +11,24 @@ describe Dossier::Report do
     end
   end
 
+  it "has callbacks"
+
+  it "requires you to override the query method" do
+    expect {report.query}.to raise_error(NotImplementedError)
+  end
+
   describe "DSL" do
     before :each do 
       @report = TestReport.new(:suspended => true, :foo => 'baz')
     end
 
-    describe "filters" do
-      it "has a before filter" do
-        TestReport.before { @name = 'Adam' }
-        TestReport.query { condition("select * from users where name = :name", :name => @name) }
-        @report.sql.should eq("select * from users where name = 'Adam'")
-      end
-
-      it "has an after filter" do
-        pending
-      end
-    end
-
-    describe "footer" do
-      it "can be set to true" do
-        TestReport.footer true
-        expect(@report.footer?).to be_true
-      end
-
-      it "is false by default" do
-        expect(Class.new(Dossier::Report).new.footer?).to be_false
-      end
-    end
-
     describe "query" do
-      describe "select" do
-        it "takes a string" do
-          TestReport.select "* from employees"
-          @report.select.should eq("SELECT * from employees")
-        end
-
-        it "takes a block" do
-          TestReport.select { "* from employees" }
-          @report.select.should eq("SELECT * from employees")
-        end
-
-        it "yields it's options to the block" do
-          TestReport.select do
-            if options[:suspended]
-              "name, hired_on from employees"
-            else
-              "* from employees"
-            end
-          end
-          @report.select.should eq("SELECT name, hired_on from employees")
-        end
-      end
-
-      describe "where" do
-        it "takes a string" do
-          TestReport.where "foo = 'bar'"
-          @report.where.should eq("WHERE foo = 'bar'")
-        end
-
-        it "takes a block" do
-          TestReport.where { "foo = 'bom'" }
-          @report.where.should eq("WHERE foo = 'bom'")
-        end
-
-        it "yields it's options to the block" do
-          TestReport.where { "foo = '#{options[:foo]}'" }
-          @report.where.should eq("WHERE foo = 'baz'")
-        end
-
-        it "allows appending to a condition set" do
-          TestReport.where { conditions << "foo = 'bat'" }
-          @report.where.should eq("WHERE (foo = 'bat')")
-        end
-
-        it "does not have conditions from having in the where" do
-          TestReport.having { conditions << "bing = 'bat'" }
-          TestReport.where { conditions << "foo = 'bat'" }
-          @report.where.should eq("WHERE (foo = 'bat')")
-        end
-      end
-
-      describe "having" do
-        it "takes a string" do
-          TestReport.having "bing = 'bar'"
-          @report.having.should eq("HAVING bing = 'bar'")
-        end
-
-        it "takes a block" do
-          TestReport.having { "bing = 'bom'" }
-          @report.having.should eq("HAVING bing = 'bom'")
-        end
-
-        it "yields it's options to the block" do
-          TestReport.having { "bing = '#{options[:foo]}'" }
-          @report.having.should eq("HAVING bing = 'baz'")
-        end
-
-        it "allows appending to a condition set" do
-          TestReport.having { conditions << "bing = 'bat'" }
-          @report.having.should eq("HAVING (bing = 'bat')")
-        end
-
-        it "does not have the conditions from where in the having" do
-          TestReport.where { conditions << "foo = 'bat'" }
-          TestReport.having { conditions << "bing = 'bat'" }
-          @report.having.should eq("HAVING (bing = 'bat')")
-        end
-      end
-
-      describe "order_by" do
-        it "takes a string" do
-          TestReport.order_by "salary DESC"
-          @report.order_by.should eq("ORDER BY salary DESC")
-        end
-
-        it "takes a block" do
-          TestReport.order_by { "salary DESC" }
-          @report.order_by.should eq("ORDER BY salary DESC")
-        end
-
-        it "has it's options in the block" do
-          TestReport.order_by do
-            if options[:suspended]
-              "suspended, salary DESC"
-            else
-              "salary DESC"
-            end
-          end
-          @report.order_by.should eq("ORDER BY suspended, salary DESC")
-        end
-      end
-
-      describe "group_by" do
-        it "takes a string" do
-          TestReport.group_by "business_id"
-          @report.group_by.should eq("GROUP BY business_id")
-        end
-
-        it "takes a block" do
-          TestReport.group_by { "business_id" }
-          @report.group_by.should eq("GROUP BY business_id")
-        end
-
-        it "has its options in the block" do
-          TestReport.group_by do
-            if options[:suspended]
-              "suspended"
-            else
-              "business_id"
-            end
-          end
-          @report.group_by.should eq("GROUP BY suspended")
-        end
-      end
-    end
-
-    describe "sql statement" do
-      it "can generate a valid sequel statement" do
-        @report = EmployeeReport.new(:names => %w[Long Hunter])
-        @report.sql.should eq("SELECT * from employees WHERE (name like '%Long%' or name like '%Hunter%')")
-      end
     end
 
     describe "run" do
       it "will execute the generated sql query" do
         @report = EmployeeReport.new
-        Dossier.client.should_receive(:query).with(@report.sql).and_return([])
+        Dossier.client.should_receive(:query).with(@report.build_query).and_return([])
         @report.run
       end
 
@@ -194,8 +48,6 @@ describe Dossier::Report do
     describe "headers" do
       it "extracts headers from the result set"
     end
-
-    it "extracts footers if it should"
 
     describe "to_json" do
       it "can output as json"

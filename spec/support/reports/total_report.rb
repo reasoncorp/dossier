@@ -1,27 +1,35 @@
 class TotalReport < Dossier::Report
-  # SELECT business_id, sum( IF( `year` = '2011', amount, 0 ) ) AS A,  
-  #   sum( IF( `year` = '2010', amount, 0 ) ) AS B, 
-  #   sum( IF( `year` = '2009', amount, 0 ) ) AS C 
-  # FROM totals 
-  # WHERE business_id IN (233689,233759,234124,234507,235047,235258,235312,235451,235816,235950,236157,236588,237302,237505,237761,238369,238519,239208,239226,239468,239511,239518,239733,239763,240120,241633,242181,242298,243317,243519,243854,244615,244954,245179,245600,245779,245824,265046)
-  # GROUP BY business_id
 
-  option :businesses, :default => ''
-  
-  select <<-SQL
-    business_id, 
-    sum( IF( `year` = '2011', amount, 0 ) ) AS A,  
-    sum( IF( `year` = '2010', amount, 0 ) ) AS B, 
-    sum( IF( `year` = '2009', amount, 0 ) ) AS C 
-    FROM totals
-  SQL
-
-  where do
-    condition("business_id IN (:businesses)", :businesses => options[:businesses].split(','))
+  def query
+    <<-SQL.strip_heredoc
+      SELECT
+        business_id, 
+        sum( IF( `year` = '2011', amount, 0 ) ) AS 2011_total,  
+        sum( IF( `year` = '2010', amount, 0 ) ) AS 2010_total, 
+        sum( IF( `year` = '2009', amount, 0 ) ) AS 2009_total 
+      FROM 
+        totals
+      WHERE
+        business_id IN (:businesses)
+      GROUP BY
+        business_id
+    SQL
   end
 
-  group_by "business_id"
+  def businesses
+    options.fetch(:businesses) { '' }.split(',')
+  end
 
-  format "A" => Currency, "B" => Currency, "C" => Currency
+  def format_2011_total(value)
+    formatter.currency(value)
+  end
+
+  def format_2010_total(value)
+    formatter.currency(value)
+  end
+
+  def format_2009_total(value)
+    formatter.currency(value)
+  end
 
 end
