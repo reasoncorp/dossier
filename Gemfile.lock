@@ -38,6 +38,7 @@ GEM
       multi_json (~> 1.0)
     arel (3.0.2)
     builder (3.0.0)
+    coderay (1.0.8)
     diff-lcs (1.1.3)
     erubis (2.7.0)
     haml (3.1.7)
@@ -52,10 +53,15 @@ GEM
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    method_source (0.8.1)
     mime-types (1.19)
     multi_json (1.3.6)
     mysql2 (0.3.11)
     polyglot (0.3.3)
+    pry (0.9.10)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.3.1)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -84,6 +90,7 @@ GEM
       rspec-core (~> 2.12.0)
       rspec-expectations (~> 2.12.0)
       rspec-mocks (~> 2.12.0)
+    slop (3.3.3)
     sprockets (2.1.3)
       hike (~> 1.2)
       rack (~> 1.0)
@@ -104,5 +111,6 @@ DEPENDENCIES
   dossier!
   jquery-rails
   mysql2
+  pry (~> 0.9.10)
   rspec-rails (~> 2.12.0)
   sqlite3

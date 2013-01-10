@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency "haml",            ">= 3.1.6"
 
   s.add_development_dependency "sqlite3"
+  s.add_development_dependency "pry",          "~> 0.9.10"
   s.add_development_dependency "activerecord", "~> 3.2.2"
   s.add_development_dependency "rspec-rails",  "~> 2.12.0"
 end
