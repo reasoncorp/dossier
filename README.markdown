@@ -10,7 +10,6 @@ Install the Dossier gem and create `config/dossier.yml`. This has the same forma
 
 In your app, create report classes under `app/reports`, `Report` as the end of the class name. For example:
 
-
 ```ruby
 # app/reports/fancy_ketchup_report.rb
 class FancyKetchupReport < Dossier::Report
@@ -23,7 +22,6 @@ Dossier will add a route to your app so that `reports/fancy_ketchup` will instan
 ## Running the Tests
 
 - Run `bundle`
-- Create a local `dossier_test` database.
 - `cp spec/dummy/config/database.yml{.example,}` and edit it so that it can connect to the test database.
 - `cd spec/dummy; rake db:create db:schema:load; cd -;` 
 - `rspec spec`
