@@ -151,7 +151,7 @@ describe Dossier::Report do
           @report.group_by.should eq("GROUP BY business_id")
         end
 
-        it "has it's options in the block" do
+        it "has its options in the block" do
           TestReport.group_by do
             if options[:suspended]
               "suspended"
