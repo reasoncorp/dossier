@@ -24,6 +24,7 @@ describe Dossier do
   end
 
   it "exposes the configurations client via Dossier.client" do
+    Dossier.configure
     Dossier.configuration.should_receive(:client)
     Dossier.client
   end

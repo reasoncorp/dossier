@@ -17,7 +17,9 @@ module Dossier
       @client = Mysql2::Client.new(@connection_options.merge(:reconnect => true))
 
     rescue Errno::ENOENT => e
-      raise ConfigurationMissingError.new("#{e.message}. #{@config_path} must exist for Dossier to connect to the database.")
+      raise ConfigurationMissingError.new(
+        "#{e.message}. #{@config_path} must exist for Dossier to connect to the database."
+      )
     end
 
   end

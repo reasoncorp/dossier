@@ -1,4 +1,4 @@
-%h1= report_class.name.titleize
+%h1= @report.class.name.titleize
 
 %table
   %thead
@@ -10,10 +10,5 @@
       %tr
         - row.each do |value|
           %td= value
-  - if @report.footer?
-    %tfoot
-      %tr
-        - @report.footer.each do |value|
-          %th= value
 
 = link_to 'Download CSV', dossier_report_path(:format => 'csv', :options => params[:options]), :class => 'download-csv'

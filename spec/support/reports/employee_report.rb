@@ -12,10 +12,10 @@ class EmployeeReport < Dossier::Report
 
   def query
     "SELECT #{columns} FROM employees WHERE 1=1".tap do |sql|
-      sql << " AND divisions in (:divisions)" if divisions.any?
-      sql << " AND salary > :salary"          if salary?
-      sql << " AND (#{names_like})"           if names_like.present?
-      sql << " ORDER BY name #{order}"
+      sql << "\n AND division in (:divisions)"  if divisions.any?
+      sql << "\n AND salary > :salary"          if salary?
+      sql << "\n AND (#{names_like})"           if names_like.present?
+      sql << "\n ORDER BY name #{order}"
     end
   end
 
