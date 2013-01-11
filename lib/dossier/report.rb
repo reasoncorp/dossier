@@ -32,7 +32,7 @@ module Dossier
     end
 
     def headers
-      results.headers.map {|key| Dossier::Format::Title.new(key)}
+      results.headers.map {|key| Dossier::Formatter.titleize(key.to_s)}
     end
 
     def rows

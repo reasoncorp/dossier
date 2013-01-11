@@ -1,31 +1,33 @@
 module Dossier
-  class Formatter
-    attr_accessor :value, :options
+  module Formatter
+    extend self
+    extend ActiveSupport::Inflector
+    extend ActionView::Helpers::NumberHelper
 
-    def initialize(value, options={})
-      @options = options
-      @value = value
+    def number_to_currency_from_cents(value)
+      number_to_currency(value /= 100.0)
     end
 
-    def to_s
-      format
+    def url_formatter
+      @url_formatter ||= UrlFormatter.new
     end
 
-    def as_json(options={})
-      format
-    end
+    delegate :url_for, :link_to, :url_helpers, to: :url_formatter
 
-    def format
-      raise NotImplementedError.new("You must define format in all subclasses of Dossier::Formatter")
-    end
+    class UrlFormatter
+      include ActionView::Helpers::UrlHelper
 
+      def _routes
+        Rails.application.routes
+      end
+
+      # No controller in current context, must be specified when generating routes
+      def controller
+      end
+
+      def url_helpers
+        _routes.url_helpers
+      end
+    end
   end
 end
-
-require 'dossier/format/currency'
-require 'dossier/format/currency_in_cents'
-require 'dossier/format/date'
-require 'dossier/format/number'
-require 'dossier/format/title'
-require 'dossier/format/object'
-require 'dossier/format/url'
