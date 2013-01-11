@@ -50,22 +50,18 @@ module Dossier
     private
     
     def compile(query)
-      query.gsub(/\w*\:\w+/) {|match| escape(send(match[1..-1])) }
+      query.gsub(/\w*\:\w+/) { |match| escape(public_send(match[1..-1])) }
     end
 
 
     def escape(value)
       case value
-      when Fixnum
+      when Numeric
         value
-      when String
-        "'#{Dossier.client.escape(value)}'"
       when Array
         value.map { |v| escape(v) }.join(', ')
       else
-        raise ArgumentError.new(
-          "bound values may only be an Array, String, or Fixnum; you provided a #{value.class} (#{value.inspect})."
-        )
+        "'#{Dossier.client.escape(value.to_s)}'"
       end
     end
 

@@ -30,33 +30,16 @@ describe Dossier::Report do
 
         describe "replacing symbols by calling methods of the same name" do
 
-          context "when the method returns an integer" do
+          context "when the method returns a Numeric" do
 
             before :each do
-              report.stub(:query).and_return("SELECT * FROM employees WHERE id = :id")
+              report.stub(:query).and_return("SELECT * FROM employees WHERE id = :id OR girth < :girth")
               report.stub(:id).and_return(92)
+              report.stub(:girth).and_return(3.14)
             end
 
-            it "inserts the integer as-is" do
-              expect(report.build_query).to eq("SELECT * FROM employees WHERE id = 92")
-            end
-
-          end
-
-          context "when the method returns a string" do
-
-            before :each do
-              report.stub(:query).and_return("SELECT * FROM employees WHERE name = :name")
-              report.stub(:name).and_return('Jimmy')
-            end
-
-            it "escapes the string" do
-              Dossier.client.should_receive(:escape).with('Jimmy')
-              report.build_query
-            end
-
-            it "quotes the string" do
-              expect(report.build_query).to eq("SELECT * FROM employees WHERE name = 'Jimmy'")
+            it "inserts the numeric as-is" do
+              expect(report.build_query).to eq("SELECT * FROM employees WHERE id = 92 OR girth < 3.14")
             end
 
           end
@@ -83,12 +66,17 @@ describe Dossier::Report do
           context "when the method returns anything else" do
 
             before :each do
-              report.stub(:query).and_return("SELECT * FROM employees WHERE projectile = :projectile")
-              report.stub(:projectile).and_return(:bidet)
+              report.stub(:query).and_return("SELECT * FROM employees WHERE name = :name")
+              report.stub(:name).and_return(:Jimmy)
             end
 
-            it "raises an exception" do
-              expect{report.build_query}.to raise_error(ArgumentError)
+            it "coerces it to a string and escapes it" do
+              Dossier.client.should_receive(:escape).with('Jimmy')
+              report.build_query
+            end
+
+            it "quotes the escaped string" do
+              expect(report.build_query).to eq("SELECT * FROM employees WHERE name = 'Jimmy'")
             end
 
           end
