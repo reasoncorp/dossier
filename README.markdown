@@ -6,13 +6,12 @@ Dossier is a Rails engine that turns SQL into reports. Reports can be easily ren
 
 Install the Dossier gem and create `config/dossier.yml`. This has the same format as Rails' `database.yml`, and can actually just be a symlink: `ln -s config/{database,dossier}.yml`.
 
-## Usage (Extremely Incomplete)
+## Usage
 
 ### Reports
 
 In your app, create report classes under `app/reports`, `Report` as the end of the class name. Define a `sql` method that returns the sql string to be sent to the database. 
 
-Any symbols in the query will be replaced by calling methods of the same name in the report.
 
 For example:
 
@@ -22,10 +21,20 @@ class FancyKetchupReport < Dossier::Report
   def sql 
     'SELECT * FROM ketchups WHERE fancy = true'
   end
-end
 
-# OR
+  # Or, if you're using ActiveRecord and hate writing SQL:
+
+  def sql 
+    Ketchup.where(fancy: true).to_sql
+  end
+
+end
+```
+
+Any symbols in the query will be replaced by calling methods of the same name in the report.
   
+```ruby
+# app/reports/fancy_ketchup_report.rb
 class FancyKetchupReport < Dossier::Report
   def sql
     'SELECT * FROM ketchups WHERE brand = :brand'
@@ -78,10 +87,23 @@ formatter.url_helpers.edit_accounts_path(3)
 - `cd spec/dummy; rake db:create db:schema:load; cd -;` 
 - `rspec spec`
 
-## TODO
+## TODO - Moar Dokumentationz pleaze
 
 - Document using hooks and what methods are available in them
-
-## Misc
-
-This project rocks and uses MIT-LICENSE.
+- params => options
+- using models with reports
+- generating sql with scopes
+  - with AREL
+- callbacks
+  - stored procedures
+  - reformat results
+- custom views
+  - custom options
+  - form_for @report
+- Bound parameters vs interpolation
+- linking to reports
+  - linking to formats
+- using reports outside of Dossier::ReportsController
+  - APIs
+  - Exports
+- Extending the formatter
