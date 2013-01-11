@@ -22,9 +22,11 @@ class FancyKetchupReport < Dossier::Report
   def sql 
     'SELECT * FROM ketchups WHERE fancy = true'
   end
+end
 
-  # OR
+# OR
   
+class FancyKetchupReport < Dossier::Report
   def sql
     'SELECT * FROM ketchups WHERE brand = :brand'
   end
@@ -35,13 +37,35 @@ class FancyKetchupReport < Dossier::Report
 end
 ```
 
-To see a report with all the bells and whistles, check out [spec/support/reports/employee_report.rb](spec/support/reports/employee_report.rb).
+To see a report with all the bells and whistles, check out `spec/support/reports/employee_report.rb`.
 
 Dossier will add a route to your app so that `reports/fancy_ketchup` will instantiate and run a `FancyKetchupReport`. It will respond with whatever format was requested; for example `reports/fancy_ketchup.csv` will render the results as CSV.
 
 ### Formatting
 
-Dossier makes several of Rails' URL helpers available for use in your reports. For example, in a report of your least profitable accounts, you might want to add a link to change the salesperson assigned to that account.
+You can format any values in your results by defining a `format_` method for that column on your report class. For instance, to reverse the names of your employees:
+
+```ruby
+class EmployeeReport < Dossier::Report
+  # ...
+  def format_name(value)
+    value.reverse
+  end
+end
+```
+
+Dossier also provides a `formatter` with access to all the standard Rails formatters. So to format all values in the `payment` column as currency, you could do:
+
+```ruby
+class MoneyLaunderingReport < Dossier::Report
+  #...
+  def format_payment(value)
+    formatter.number_to_currency
+  end
+end
+```
+
+In addition, the formatter provides Rails' URL helpers for use in your reports. For example, in a report of your least profitable accounts, you might want to add a link to change the salesperson assigned to that account.
 
 ```ruby
 formatter.url_helpers.edit_accounts_path(3)
