@@ -4,7 +4,7 @@ module Dossier
 
     define_callbacks :build_query, :execute
 
-    attr_reader :options, :results
+    attr_reader :options
 
     def initialize(options = {})
       @options = options.dup.with_indifferent_access
@@ -18,17 +18,13 @@ module Dossier
       raise NotImplementedError, "Must be defined by each report"
     end
 
-    def execute
-      build_query
-      run_callbacks :execute do
-        Dossier.client.query(@query)
-      end
-    rescue Mysql2::Error => e
-      raise Mysql2::Error.new("#{e.message}. \n\n #{@query}")
+    def results
+      execute unless @results.is_a?(Dossier::Result)
+      @results
     end
 
     def run
-      tap { @results = Results.new(execute, self) }
+      tap { results }
     end
 
     def headers
@@ -47,12 +43,15 @@ module Dossier
       self.class.name.sub('Report', '').underscore
     end
 
+    def formatter
+      Dossier::Formatter
+    end
+
     private
     
     def compile(query)
       query.gsub(/\w*\:\w+/) { |match| escape(public_send(match[1..-1])) }
     end
-
 
     def escape(value)
       case value
@@ -63,6 +62,19 @@ module Dossier
       else
         "'#{Dossier.client.escape(value.to_s)}'"
       end
+    end
+
+    def execute
+      build_query
+      run_callbacks :execute do
+        self.results = Dossier.client.query(@query)
+      end
+    rescue Mysql2::Error => e
+      raise Mysql2::Error.new("#{e.message}. \n\n #{@query}")
+    end
+
+    def results=(results)
+      @results = Result.new(results, self)
     end
 
   end

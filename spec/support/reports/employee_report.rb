@@ -56,15 +56,15 @@ class EmployeeReport < Dossier::Report
   end
 
   def format_salary(amount)
-    formatter.currency(amount) unless format.csv?
+    formatter.number_to_currency(amount) # unless format.csv?
   end
 
   def format_hired_on(date)
-    formatter.date(date)
+    date.to_s(:db)
   end
 
   def format_name(name)
-    "Employee #{value}"
+    "Employee #{name}"
   end
 
   def example_before_hook

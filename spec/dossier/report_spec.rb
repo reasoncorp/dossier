@@ -119,9 +119,6 @@ describe Dossier::Report do
       it "can output as csv"
     end
 
-    describe "present" do
-      it "has a format method"
-    end
   end
 
 end

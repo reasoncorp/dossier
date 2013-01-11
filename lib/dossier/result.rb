@@ -1,6 +1,8 @@
 module Dossier
-  class Results
+  class Result
     include Enumerable
+
+    attr_reader :report
 
     def initialize(adapter_results, report)
       unless adapter_results.respond_to?(:each)
@@ -19,6 +21,7 @@ module Dossier
     def format(result_row)
       raise ArgumentError.new("#{result_row.inspect} must respond to :[]") unless result_row.respond_to?(:[])
       result_row.inject({}) do |new_row, (key, value)|
+        value = report.public_send("format_#{key}", value) if report.respond_to?("format_#{key}")
         new_row[key] = value
         new_row
       end
