@@ -10,14 +10,32 @@ Install the Dossier gem and create `config/dossier.yml`. This has the same forma
 
 ### Reports
 
-In your app, create report classes under `app/reports`, `Report` as the end of the class name. For example:
+In your app, create report classes under `app/reports`, `Report` as the end of the class name. Define a `sql` method that returns the sql string to be sent to the database. 
+
+Any symbols in the query will be replaced by calling methods of the same name in the report.
+
+For example:
 
 ```ruby
 # app/reports/fancy_ketchup_report.rb
 class FancyKetchupReport < Dossier::Report
-  select '* FROM ketchups WHERE fancy = true'
+  def sql 
+    'SELECT * FROM ketchups WHERE fancy = true'
+  end
+
+  # OR
+  
+  def sql
+    'SELECT * FROM ketchups WHERE brand = :brand'
+  end
+
+  def brand
+    'Acme'
+  end
 end
 ```
+
+To see a report with all the bells and whistles, check out [spec/support/reports/employee_report.rb](spec/support/reports/employee_report.rb).
 
 Dossier will add a route to your app so that `reports/fancy_ketchup` will instantiate and run a `FancyKetchupReport`. It will respond with whatever format was requested; for example `reports/fancy_ketchup.csv` will render the results as CSV.
 
@@ -35,6 +53,10 @@ formatter.url_helpers.edit_accounts_path(3)
 - `cp spec/dummy/config/database.yml{.example,}` and edit it so that it can connect to the test database.
 - `cd spec/dummy; rake db:create db:schema:load; cd -;` 
 - `rspec spec`
+
+## TODO
+
+- Document using hooks and what methods are available in them
 
 ## Misc
 
