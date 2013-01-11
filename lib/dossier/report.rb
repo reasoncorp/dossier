@@ -1,6 +1,7 @@
 module Dossier
   class Report
     include ActiveSupport::Callbacks
+    extend ActiveModel::Naming
 
     define_callbacks :build_query, :execute
 
@@ -15,36 +16,27 @@ module Dossier
     end
 
     def query
-      build_query unless @query.is_a?(Dossier::Query)
+      build_query unless defined?(@query)
       @query.to_s
     end
 
     def results
-      execute unless @results.is_a?(Dossier::Result)
+      execute unless defined?(@results)
       @results
+    end
+
+    def raw_results
+      execute unless defined?(@raw_results)
+      @raw_results
     end
 
     def run
       tap { results }
     end
 
-    # TODO move into presentation object
-    def headers
-      results.headers.map {|key| Dossier::Formatter.titleize(key.to_s)}
-    end
-
-    def rows
-      results.map(&:values)
-    end
-
-    def to_a
-      [headers] + rows.map {|row| row.map(&:value)}
-    end
-
     def view
-      self.class.name.sub('Report', '').underscore
+      self.class.name.sub(/Report\Z/, '').underscore
     end
-    # END TODO
 
     def formatter
       Dossier::Formatter
@@ -66,7 +58,9 @@ module Dossier
     end
 
     def results=(results)
-      @results = Result.new(results, self)
+      results.freeze
+      @raw_results = Result::Unformatted.new(results, self)
+      @results     = Result::Formatted.new(results, self)
     end
 
   end

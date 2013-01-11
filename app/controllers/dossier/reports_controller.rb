@@ -13,12 +13,12 @@ module Dossier
         end
 
         format.json do
-          render :json => @report.results.to_a
+          render :json => @report.results.hashes
         end
 
         format.csv do
           headers["Content-Disposition"] = %[attachment;filename=#{params[:report]}-report_#{Time.now.strftime('%m-%d-%Y-%H%M%S')}.csv]
-          self.response_body = StreamCSV.new(@report.to_a)
+          self.response_body = StreamCSV.new(@report.raw_results.arrays)
         end
       end
     end

@@ -12,23 +12,48 @@ module Dossier
       @report          = report
     end
 
-    def each
-      @adapter_results.each do |row|
-        yield format(row)
-      end
-    end
-
-    def format(result_row)
-      raise ArgumentError.new("#{result_row.inspect} must respond to :[]") unless result_row.respond_to?(:[])
-      result_row.inject({}) do |new_row, (key, value)|
-        value = report.public_send("format_#{key}", value) if report.respond_to?("format_#{key}")
-        new_row[key] = value
-        new_row
-      end
-    end
-
     def headers
-      @adapter_results.fields
+      @adapter_results.fields.map { |header| Dossier::Formatter.titleize(header) }
+    end
+
+    def rows
+      map(&:values)
+    end
+
+    def arrays
+      @arrays ||= [headers] + rows
+    end
+
+    def hashes
+      @hashes ||= to_a
+    end
+
+    def each
+      raise NotImplementedError, "Every result class must define `each`"
+    end
+
+    class Formatted < Result
+      def each
+        @adapter_results.each do |row|
+          yield format(row)
+        end
+      end
+
+      def format(result_row)
+        raise ArgumentError.new("#{result_row.inspect} must respond to :[]") unless result_row.respond_to?(:[])
+
+        result_row.inject({}) do |new_row, (key, value)|
+          new_row.tap do |row|
+            method       = "format_#{key}"
+            value        = report.public_send(method, value) if report.respond_to?(method)
+            new_row[key] = value
+          end
+        end
+      end
+    end
+
+    class Unformatted < Result
+      delegate :each, to: :@adapter_results
     end
 
   end
