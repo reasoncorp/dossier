@@ -8,6 +8,8 @@ Install the Dossier gem and create `config/dossier.yml`. This has the same forma
 
 ## Usage (Extremely Incomplete)
 
+### Reports
+
 In your app, create report classes under `app/reports`, `Report` as the end of the class name. For example:
 
 ```ruby
@@ -18,6 +20,14 @@ end
 ```
 
 Dossier will add a route to your app so that `reports/fancy_ketchup` will instantiate and run a `FancyKetchupReport`. It will respond with whatever format was requested; for example `reports/fancy_ketchup.csv` will render the results as CSV.
+
+### Formatting
+
+Dossier makes several of Rails' URL helpers available for use in your reports. For example, in a report of your least profitable accounts, you might want to add a link to change the salesperson assigned to that account.
+
+```ruby
+formatter.url_helpers.edit_accounts_path(3)
+```
 
 ## Running the Tests
 
