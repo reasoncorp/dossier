@@ -22,6 +22,7 @@ end
 
 require "dossier/configuration"
 require "dossier/formatter"
+require "dossier/query"
 require "dossier/report"
 require "dossier/result"
 require "dossier/stream_csv"

@@ -1,6 +1,6 @@
 class TotalReport < Dossier::Report
 
-  def query
+  def sql
     <<-SQL.strip_heredoc
       SELECT
         business_id, 

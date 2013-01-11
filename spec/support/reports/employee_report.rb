@@ -10,7 +10,7 @@ class EmployeeReport < Dossier::Report
     %w[id name hired_on suspended]
   end
 
-  def query
+  def sql
     "SELECT #{columns} FROM employees WHERE 1=1".tap do |sql|
       sql << "\n AND division in (:divisions)"  if divisions.any?
       sql << "\n AND salary > :salary"          if salary?

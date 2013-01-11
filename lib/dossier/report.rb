@@ -10,12 +10,13 @@ module Dossier
       @options = options.dup.with_indifferent_access
     end
 
-    def build_query
-      run_callbacks(:build_query) { @query = compile(query) }
+    def sql
+      raise NotImplementedError, "Must be defined by each report"
     end
 
     def query
-      raise NotImplementedError, "Must be defined by each report"
+      build_query unless @query.is_a?(Dossier::Query)
+      @query.to_s
     end
 
     def results
@@ -27,6 +28,7 @@ module Dossier
       tap { results }
     end
 
+    # TODO move into presentation object
     def headers
       results.headers.map {|key| Dossier::Formatter.titleize(key.to_s)}
     end
@@ -42,32 +44,22 @@ module Dossier
     def view
       self.class.name.sub('Report', '').underscore
     end
+    # END TODO
 
     def formatter
       Dossier::Formatter
     end
 
     private
-    
-    def compile(query)
-      query.gsub(/\w*\:\w+/) { |match| escape(public_send(match[1..-1])) }
-    end
 
-    def escape(value)
-      case value
-      when Numeric
-        value
-      when Array
-        value.map { |v| escape(v) }.join(', ')
-      else
-        "'#{Dossier.client.escape(value.to_s)}'"
-      end
+    def build_query
+      run_callbacks(:build_query) { @query = Dossier::Query.new(self) }
     end
 
     def execute
       build_query
       run_callbacks :execute do
-        self.results = Dossier.client.query(@query)
+        self.results = Dossier.client.query(query)
       end
     rescue Mysql2::Error => e
       raise Mysql2::Error.new("#{e.message}. \n\n #{@query}")
