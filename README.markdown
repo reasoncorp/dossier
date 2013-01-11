@@ -12,7 +12,7 @@ Dossier will add a route to your app so that `reports/fancy_ketchup` will instan
 
 ## Basic Reports
 
-In your app, create report classes under `app/reports`, `Report` as the end of the class name. Define a `sql` method that returns the sql string to be sent to the database. 
+In your app, create report classes under `app/reports`, with `Report` as the end of the class name. Define a `sql` method that returns the sql string to be sent to the database.
 
 
 For example:
