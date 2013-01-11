@@ -6,12 +6,35 @@ describe Dossier::Report do
 
   describe "report instances" do
     it "takes options when initializing" do
-      @report = TestReport.new(:foo => 'bar')
-      @report.options.should eq('foo' => 'bar')
+      report = TestReport.new(:foo => 'bar')
+      report.options.should eq('foo' => 'bar')
     end
   end
 
-  it "has callbacks"
+  describe "callbacks" do
+
+    let(:report) do
+      Class.new(Dossier::Report) do
+        set_callback :build_query, :before, :before_test_for_build_query
+        set_callback :execute, :after, :after_test_for_execute
+
+        def sql; ''; end
+      end.new
+    end
+
+    it "has callbacks for build_query" do
+      report.should_receive(:before_test_for_build_query)
+      report.query
+    end
+
+    it "has callbacks for execute" do
+      Dossier.client.stub(:query).and_return([])
+      report.stub(:before_test_for_build_query)
+      report.should_receive(:after_test_for_execute)
+      report.run
+    end
+
+  end
 
   it "requires you to override the query method" do
     expect {report.sql}.to raise_error(NotImplementedError)
@@ -21,15 +44,15 @@ describe Dossier::Report do
 
     describe "run" do
       it "will execute the generated sql query" do
-        @report = EmployeeReport.new
-        Dossier.client.should_receive(:query).with(@report.query).and_return([])
-        @report.run
+        report = EmployeeReport.new
+        Dossier.client.should_receive(:query).with(report.query).and_return([])
+        report.run
       end
 
       it "will cache the results of the run in `results`" do
-        @report = EmployeeReport.new
-        @report.run
-        @report.results.should_not be_nil
+        report = EmployeeReport.new
+        report.run
+        report.results.should_not be_nil
       end
     end
 

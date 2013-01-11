@@ -6,7 +6,7 @@ Dossier is a Rails engine that turns SQL into reports. Reports can be easily ren
 
 Install the Dossier gem and create `config/dossier.yml`. This has the same format as Rails' `database.yml`, and can actually just be a symlink: `ln -s config/{database,dossier}.yml`.
 
-## Usage
+## Basic Usage
 
 ### Reports
 
@@ -23,7 +23,6 @@ class FancyKetchupReport < Dossier::Report
   end
 
   # Or, if you're using ActiveRecord and hate writing SQL:
-
   def sql 
     Ketchup.where(fancy: true).to_sql
   end

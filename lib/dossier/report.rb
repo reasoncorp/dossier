@@ -12,7 +12,7 @@ module Dossier
     end
 
     def sql
-      raise NotImplementedError, "Must be defined by each report"
+      raise NotImplementedError, "`sql` method must be defined by each report"
     end
 
     def query
