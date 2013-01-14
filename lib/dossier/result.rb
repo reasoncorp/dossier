@@ -16,8 +16,16 @@ module Dossier
       @adapter_results.fields.map { |header| Dossier::Formatter.titleize(header) }
     end
 
+    def body
+      rows.first(rows.length - report.options[:footer].to_i)
+    end
+
+    def footers
+      rows.last(report.options[:footer].to_i)
+    end
+
     def rows
-      map(&:values)
+      @rows ||= map(&:values)
     end
 
     def arrays

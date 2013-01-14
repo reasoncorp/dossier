@@ -78,6 +78,20 @@ describe Dossier::Result do
 
       end
 
+      describe "footer" do
+        let(:report) { TestReport.new(footer: 3) }
+        let(:adapter_result) { 7.times.map { result_row } }
+
+        it "has 4 result rows" do
+          expect(result.body.count).to eq(4)
+        end
+
+        it "has 3 footer rows" do
+          expect(result.footers.count).to eq(3)
+        end
+
+      end
+
     end
 
     describe Dossier::Result::Unformatted do

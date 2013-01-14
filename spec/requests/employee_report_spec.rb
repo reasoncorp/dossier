@@ -20,6 +20,13 @@ describe "employee report" do
     expect(response.body).to eq(File.read('spec/fixtures/customized_employee_report.html'))
   end
 
+  it "creates an HTML report with footer" do
+    get '/reports/employee', options: {
+      footer: 1
+    }
+    expect(response.body).to eq(File.read('spec/fixtures/employee_report_with_footer.html'))
+  end
+
   it "creates a standard CSV report" do
     get '/reports/employee.csv'
     expect(response.body).to eq(File.read('spec/fixtures/employee_report.csv'))
