@@ -87,7 +87,7 @@ You can pass these options by hardcoding them into a link, or you can allow user
 ```ruby
 # app/views/dossier/reports/employee.html.haml
 
-= form_for @report, as: :options, url: url_for, html: {method: :get} do |f|
+= form_for report, as: :options, url: url_for, html: {method: :get} do |f|
 
   = f.label "Salary greater than:"
   = f.text_field :salary_greater_than
@@ -95,7 +95,7 @@ You can pass these options by hardcoding them into a link, or you can allow user
   = f.select_tag :in_division, divisions_collection
   = f.button "Submit"
 
-= render template: 'dossier/reports/show'
+= render template: 'dossier/dossier/reports/show', locals: {report: report}
 ```
 
 It's up to you to use these options in generating your SQL query. 
@@ -104,7 +104,7 @@ However, Dossier does support one URL parameter natively: if you supply a `foote
 
 ## Additional View Customization
 
-To further customize your results view, provide your own `app/view/dossier/reports/show`.
+To further customize your results view, provide your own `app/views/dossier/reports/show`.
 
 ## Callbacks
 
