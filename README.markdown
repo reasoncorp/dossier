@@ -117,6 +117,41 @@ set_callback :execute,     :after do
 end
 ```
 
+## Using Reports Outside of Dossier::ReportsController
+
+### With Other Controllers
+
+You can use Dossier reports in your own controllers and views. For example, if you wanted to render two reports on a page with other information, you might do this in a controller:
+
+```ruby
+class ProjectsController < ApplicationController
+
+  def show
+    @project                = Project.find(params[:id])
+    @project_status_report  = ProjectStatusReport.new(project: @project)
+    @project_revenue_report = ProjectRevenueReport.new(project: @project, grouped: 'monthly')
+  end
+end
+```
+
+```haml
+.span6
+  = render template: 'dossier/reports/show', locals: {report: @project_status_report.run}
+.span6
+  = render template: 'dossier/reports/show', locals: {report: @project_revenue_report.run}
+```
+
+### Dossier for APIs
+
+```ruby
+class API::ProjectsController < Api::ApplicationController
+
+  def snapshot
+    render json: ProjectStatusReport.new(project: @project).results.hashes
+  end
+end
+```
+
 ## Advanced Usage
 
 To see a report with all the bells and whistles, check out `spec/support/reports/employee_report.rb`.
@@ -142,7 +177,4 @@ To see a report with all the bells and whistles, check out `spec/support/reports
   - reformat results
 - linking to reports
   - linking to formats
-- using reports outside of Dossier::ReportsController
-  - APIs
-  - Exports
 - Extending the formatter
