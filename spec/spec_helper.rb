@@ -17,4 +17,6 @@ RSpec.configure do |config|
   config.after :each do
     Dossier.instance_variable_set(:@configuration, nil)
   end
+
+  config.order = :random
 end
