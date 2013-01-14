@@ -14,7 +14,6 @@ Dossier will add a route to your app so that `reports/fancy_ketchup` will instan
 
 In your app, create report classes under `app/reports`, with `Report` as the end of the class name. Define a `sql` method that returns the sql string to be sent to the database.
 
-
 For example:
 
 ```ruby
@@ -32,7 +31,7 @@ class FancyKetchupReport < Dossier::Report
 end
 ```
 
-Any symbols in the query will be replaced by calling methods of the same name in the report. Return values other than numerics will be coerced to strings and escaped by the database.
+If you need dynamic values that may be influenced by the user, [do not interpolate them directly](http://xkcd.com/327/). Dossier provides a safer way to add them: any symbols in the query will be replaced by calling methods of the same name in the report. Return values other than numerics will be coerced to strings and **escaped by the database**.
   
 ```ruby
 # app/reports/fancy_ketchup_report.rb
@@ -47,7 +46,7 @@ class FancyKetchupReport < Dossier::Report
 end
 ```
 
-### Formatting
+## Column Formatting
 
 You can format any values in your results by defining a `format_` method for that column on your report class. For instance, to reverse the names of your employees:
 
@@ -77,20 +76,50 @@ In addition, the formatter provides Rails' URL helpers for use in your reports. 
 formatter.url_helpers.edit_accounts_path(3)
 ```
 
-## Advanced Usage
+The built-in `ReportsController` uses this formatting when rendering the HTML and JSON representations, but not when rendering the CSV.
 
-To see a report with all the bells and whistles, check out `spec/support/reports/employee_report.rb`.
+## Report Options and Footers
 
-### Callbacks
+You may want to specify parameters for a report: which columns to show, a range of dates, etc. Dossier supports this via URL parameters, which will be passed into your report's `initialize` method and made available via the `options` reader.
 
-To produce report results, Dossier builds your query and executes it in separate steps. You may provide callbacks around these two events using the methods provided by `ActiveSupport::Callbacks`. For example:
+You can pass these options by hardcoding them into a link, or you can allow users to customize a report with a form. For example:
+
+```ruby
+# app/views/dossier/reports/employee.html.haml
+
+= form_for @report, as: :options, url: url_for, html: {method: :get} do |f|
+
+  = f.label "Salary greater than:"
+  = f.text_field :salary_greater_than
+  = f.label "In Division:"
+  = f.select_tag :in_division, divisions_collection
+  = f.button "Submit"
+
+= render template: 'dossier/reports/show'
+```
+
+It's up to you to use these options in generating your SQL query. 
+
+However, Dossier does support one URL parameter natively: if you supply a `footer` parameter with an integer value, the last N rows will be accesible via `report.results.footers` instead of `report.results.body`. The built-in `show` view renders those rows inside an HTML footer. This is an easy way to display a totals row or something similar.
+
+## Additional View Customization
+
+To further customize your results view, provide your own `app/view/dossier/reports/show`.
+
+## Callbacks
+
+To produce report results, Dossier builds your query and executes it in separate steps. It uses [ActiveSupport::Callbacks](http://api.rubyonrails.org/classes/ActiveSupport/Callbacks.html) to define callbacks for `build_query` and `execute`. Therefore, you may provide callbacks similar to these:
 
 ```ruby
 set_callback :build_query, :before, :run_my_stored_procedure
 set_callback :execute,     :after do
-  do_some_stuff
+  mangle_results
 end
 ```
+
+## Advanced Usage
+
+To see a report with all the bells and whistles, check out `spec/support/reports/employee_report.rb`.
 
 ## Running the Tests
 
@@ -99,20 +128,18 @@ end
 - `cd spec/dummy; rake db:create db:schema:load; cd -;` 
 - `rspec spec`
 
-## TODO - Moar Dokumentationz pleaze
+## TODO
+
+### Features
+
+- Support more databases
+
+### Moar Dokumentationz pleaze
 
 - Document using hooks and what methods are available in them
-- params => options
-- using models with reports
-- generating sql with scopes
-  - with AREL
 - callbacks
   - stored procedures
   - reformat results
-- custom views
-  - custom options
-  - form_for @report
-- Bound parameters vs interpolation
 - linking to reports
   - linking to formats
 - using reports outside of Dossier::ReportsController
