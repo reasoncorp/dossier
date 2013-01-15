@@ -13,7 +13,12 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 DB_CONFIG = Hash[
   [:mysql2].map do |adapter|
-    [adapter, YAML.load_file("spec/fixtures/db/#{adapter}.yml").symbolize_keys] rescue nil
+    path = "spec/fixtures/db/#{adapter}.yml"
+    if File.exist?(path)
+      [adapter, YAML.load_file(path).symbolize_keys]
+    else
+      nil
+    end
   end.compact
 ].freeze
 
