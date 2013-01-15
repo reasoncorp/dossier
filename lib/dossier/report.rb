@@ -31,7 +31,7 @@ module Dossier
     end
 
     def run
-      tap { results }
+      tap { execute }
     end
 
     def view
@@ -51,10 +51,8 @@ module Dossier
     def execute
       build_query
       run_callbacks :execute do
-        self.results = Dossier.client.query(query)
+        self.results = Dossier.client.execute(query)
       end
-    rescue Mysql2::Error => e
-      raise Mysql2::Error.new("#{e.message}. \n\n #{@query}")
     end
 
     def results=(results)

@@ -14,7 +14,7 @@ module Dossier
 
     def setup_client!
       @connection_options = YAML.load_file(@config_path)[Rails.env].symbolize_keys
-      @client = Mysql2::Client.new(@connection_options.merge(:reconnect => true))
+      @client = Dossier::Client.new(@connection_options)
 
     rescue Errno::ENOENT => e
       raise ConfigurationMissingError.new(

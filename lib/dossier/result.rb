@@ -2,18 +2,15 @@ module Dossier
   class Result
     include Enumerable
 
-    attr_reader :report
+    attr_accessor :report, :adapter_results
 
     def initialize(adapter_results, report)
-      unless adapter_results.respond_to?(:each)
-        raise ArgumentError.new("#{adapter_results.inspect} does not respond to :each") 
-      end
-      @adapter_results = adapter_results
-      @report          = report
+      self.adapter_results = adapter_results
+      self.report          = report
     end
 
     def headers
-      @adapter_results.fields.map { |header| Dossier::Formatter.titleize(header) }
+      adapter_results.headers.map { |header| Dossier::Formatter.titleize(header) }
     end
 
     def body
@@ -42,13 +39,15 @@ module Dossier
 
     class Formatted < Result
       def each
-        @adapter_results.each do |row|
+        adapter_results.rows.each do |row|
           yield format(row)
         end
       end
 
       def format(result_row)
-        raise ArgumentError.new("#{result_row.inspect} must respond to :[]") unless result_row.respond_to?(:[])
+        unless result_row.is_a?(Enumerable)
+          raise ArgumentError.new("#{result_row.inspect} must be Enumerable") 
+        end
 
         result_row.inject({}) do |new_row, (key, value)|
           new_row.tap do |row|
@@ -61,7 +60,9 @@ module Dossier
     end
 
     class Unformatted < Result
-      delegate :each, to: :@adapter_results
+      def each
+        adapter_results.rows.each { |row| yield row }
+      end
     end
 
   end

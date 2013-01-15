@@ -4,7 +4,7 @@ describe Dossier::Result do
 
   module EachStubber
     def each
-      @adapter_results.each do |row|
+      adapter_results.rows.each do |row|
         yield row
       end
     end
@@ -12,7 +12,7 @@ describe Dossier::Result do
 
   let(:report)         { TestReport.new }
   let(:result_row)     { {mascot: 'platapus', cheese: 'bleu'} }
-  let(:adapter_result) { [result_row] }
+  let(:adapter_result) { double(:adapter_result, rows: [result_row]) }
   let(:result)         { Dossier::Result.new(adapter_result, report).tap { |r| r.extend(EachStubber) } }
 
   describe "initialization with an adapter result object" do
@@ -21,12 +21,8 @@ describe Dossier::Result do
       expect {Dossier::Result.new}.to raise_error(ArgumentError)
     end
 
-    it "will raise if the object isn't enumerable" do
-      expect {Dossier::Result.new(37, report)}.to raise_error(ArgumentError)
-    end
-
     it "can extract the fields queried" do
-      adapter_result.should_receive(:fields).and_return([])
+      adapter_result.should_receive(:headers).and_return([])
       result.headers
     end
 
@@ -59,8 +55,8 @@ describe Dossier::Result do
       describe "each" do
 
         it "calls :each on on its adapter's results" do
-          adapter_result.should_receive(:each)
-          result.each
+          adapter_result.rows.should_receive(:each)
+          result.each { |result| }
         end
 
         it "formats each of the adapter's results" do
@@ -80,7 +76,8 @@ describe Dossier::Result do
 
       describe "footer" do
         let(:report) { TestReport.new(footer: 3) }
-        let(:adapter_result) { 7.times.map { result_row } }
+        let(:adapter_result_rows) { 7.times.map { result_row } }
+        let(:adapter_result) { double(:adapter_result, rows: adapter_result_rows) }
 
         it "has 4 result rows" do
           expect(result.body.count).to eq(4)
@@ -101,8 +98,8 @@ describe Dossier::Result do
       describe "each" do
 
         it "calls :each on on its adapter's results" do
-          adapter_result.should_receive(:each)
-          result.each
+          adapter_result.rows.should_receive(:each)
+          result.each { |result| }
         end
 
         it "does not format the results" do

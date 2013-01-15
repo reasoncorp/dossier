@@ -16,7 +16,7 @@ describe Dossier::Configuration do
   describe "client" do
     it "uses config/dossier.yml to setup the client" do
       options = YAML.load_file(Rails.root.join('config', 'dossier.yml'))[Rails.env].symbolize_keys
-      Mysql2::Client.should_receive(:new).with(options.merge(:reconnect => true))
+      Dossier::Client.should_receive(:new).with(options)
       Dossier.configure
     end
 

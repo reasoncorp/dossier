@@ -28,7 +28,7 @@ describe Dossier::Report do
     end
 
     it "has callbacks for execute" do
-      Dossier.client.stub(:query).and_return([])
+      Dossier.client.stub(:execute).and_return([])
       report.stub(:before_test_for_build_query)
       report.should_receive(:after_test_for_execute)
       report.run
@@ -45,7 +45,7 @@ describe Dossier::Report do
     describe "run" do
       it "will execute the generated sql query" do
         report = EmployeeReport.new
-        Dossier.client.should_receive(:query).with(report.query).and_return([])
+        Dossier.client.should_receive(:execute).with(report.query).and_return([])
         report.run
       end
 

@@ -1,10 +1,9 @@
 require 'mysql2'
 
 module Dossier
-  module Adapters
+  module Adapter
     class Mysql2
-      attr_accessor :results
-      attr_reader   :connection
+      attr_reader :connection
 
       def self.connection_class
         ::Mysql2::Client
@@ -19,15 +18,25 @@ module Dossier
       end
 
       def execute(sql)
-        self.results = connection.query(sql)
-      end
-
-      def headers
-        results.fields
+        Result.new connection.query(sql)
+      rescue ::Mysql2::Error => e
+        raise Dossier::ExecuteError.new "#{e.message}\n\n#{sql}"
       end
 
       def escape(value)
         connection.escape(value)
+      end
+
+      class Result
+        attr_accessor :rows
+
+        def initialize(rows)
+          self.rows = rows
+        end
+
+        def headers
+          rows.fields
+        end
       end
 
     end

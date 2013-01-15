@@ -2,6 +2,7 @@ module Dossier
   class Client
 
     attr_reader :adapter
+    delegate :execute, :headers, :escape, to: :adapter
 
     def initialize(options = {})
       raise ArgumentError.new "No database adapter specified" if options[:adapter].nil?
@@ -12,7 +13,7 @@ module Dossier
     private
 
     def adapter_class(adapter_name)
-      adapter = "dossier/adapters/#{adapter_name}"
+      adapter = "dossier/adapter/#{adapter_name}"
       require adapter
       adapter.classify.constantize
     end

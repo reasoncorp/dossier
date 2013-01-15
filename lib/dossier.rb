@@ -18,6 +18,7 @@ module Dossier
     configuration.client
   end
 
+  class ExecuteError < StandardError; end
 end
 
 require "dossier/client"
