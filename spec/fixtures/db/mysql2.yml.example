@@ -1,0 +1,4 @@
+database: dossier_test
+host: localhost
+username: root
+password: something

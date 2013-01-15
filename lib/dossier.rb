@@ -20,6 +20,7 @@ module Dossier
 
 end
 
+require "dossier/client"
 require "dossier/configuration"
 require "dossier/formatter"
 require "dossier/query"
