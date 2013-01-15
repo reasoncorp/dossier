@@ -2,10 +2,6 @@ require 'spec_helper'
 
 describe "employee report" do
 
-  before :all do
-    insert_employees
-  end
-
   describe "rendering HTML" do
 
     context "when a custom view exists for the report" do

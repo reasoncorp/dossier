@@ -13,9 +13,15 @@ module Dossier
     private
 
     def adapter_class(adapter_name)
-      adapter = "dossier/adapter/#{adapter_name}"
-      require adapter
-      adapter.classify.constantize
+      require "dossier/adapter/#{adapter_name}"
+      "Dossier::Adapter::#{classname_for(adapter_name)}".constantize
+    end
+
+    def classname_for(adapter_name)
+      {
+        'mysql2'  => 'Mysql2',
+        'sqlite3' => 'SQLite3'
+      }.fetch(adapter_name)
     end
 
   end

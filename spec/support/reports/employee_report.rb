@@ -67,6 +67,10 @@ class EmployeeReport < Dossier::Report
     "Employee #{name}"
   end
 
+  def format_suspended(value)
+    value.to_i == 1 ? 'Yes' : 'No'
+  end
+
   def example_before_hook
     # do some stuff
   end
