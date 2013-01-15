@@ -11,16 +11,14 @@ Rails.backtrace_cleaner.remove_silencers!
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
-DB_CONFIG = Hash[
-  [:mysql2].map do |adapter|
-    path = "spec/fixtures/db/#{adapter}.yml"
+DB_CONFIG = [:mysql2].reduce({}) do |config, adapter_name|
+  config.tap do |hash|
+    path = "spec/fixtures/db/#{adapter_name}.yml"
     if File.exist?(path)
-      [adapter, YAML.load_file(path).symbolize_keys]
-    else
-      nil
+      hash[adapter_name] = YAML.load_file(path).symbolize_keys
     end
-  end.compact
-].freeze
+  end
+end.freeze
 
 RSpec.configure do |config|
   config.mock_with :rspec
