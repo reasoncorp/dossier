@@ -44,7 +44,7 @@ describe Dossier::Client do
         describe "if there is one known ORM loaded" do
           
           before :each do
-            described_class.any_instance.stub(:orms).and_return([double(:class, name: 'ActiveRecord::Base')])
+            described_class.any_instance.stub(:loaded_orms).and_return([double(:class, name: 'ActiveRecord::Base')])
           end
 
           it "uses that ORM's adapter" do
@@ -57,7 +57,7 @@ describe Dossier::Client do
         context "if there are no known ORMs loaded" do
 
           before :each do
-            described_class.any_instance.stub(:orms).and_return([])
+            described_class.any_instance.stub(:loaded_orms).and_return([])
           end
 
           it "raises an error" do
@@ -69,7 +69,7 @@ describe Dossier::Client do
         describe "if there are multiple known ORMs loaded" do
 
           before :each do
-            described_class.any_instance.stub(:orms).and_return([:orm1, :orm2])
+            described_class.any_instance.stub(:loaded_orms).and_return([:orm1, :orm2])
           end
 
           it "raises an error" do
@@ -81,6 +81,28 @@ describe Dossier::Client do
       end
 
     end
+
+  end
+
+  describe "instances" do
+
+    let(:client)  { described_class.new(connection: connection) }
+    let(:adapter) { double(:adapter) }
+
+    before :each do
+      client.stub(:adapter).and_return(adapter)
+    end
+
+    it "delegates `escape` to its adapter" do
+      adapter.should_receive(:escape).with('Bobby Tables')
+      client.escape('Bobby Tables')
+    end
+
+    it "delegates `execute` to its adapter" do
+      adapter.should_receive(:execute).with('SELECT * FROM `primes`') # It's OK, it's in the cloud!
+      client.execute('SELECT * FROM `primes`')
+    end
+
 
   end
 
