@@ -21,6 +21,7 @@ module Dossier
   class ExecuteError < StandardError; end
 end
 
+require "dossier/adapter/activerecord"
 require "dossier/client"
 require "dossier/configuration"
 require "dossier/formatter"

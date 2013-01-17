@@ -19,15 +19,21 @@ module Dossier
     end
 
     def escape(value)
-      case value
-      when Numeric
-        value
-      when Array
-        value.map { |v| escape(v) }.join(', ')
-      else
-        "'#{Dossier.client.escape(value.to_s)}'"
-      end
+      report.client.escape(value)
     end
+
+    # def escape(value)
+    #   case value
+    #   when NilClass
+    #     "NULL"
+    #   when Numeric
+    #     value
+    #   when Array
+    #     value.map { |v| escape(v) }.join(', ')
+    #   else
+    #     "'#{Dossier.client.escape(value.to_s)}'"
+    #   end
+    # end
 
   end
 end

@@ -23,8 +23,8 @@ RSpec.configure do |config|
 
   config.before :all do
     DB_CONFIG.keys.each do |adapter|
-      Dossier::Factory.send("#{adapter}_create_employees")
-      Dossier::Factory.send("#{adapter}_seed_employees")
+      # Dossier::Factory.send("#{adapter}_create_employees")
+      # Dossier::Factory.send("#{adapter}_seed_employees")
     end
   end
 

@@ -51,7 +51,7 @@ module Dossier
     def execute
       build_query
       run_callbacks :execute do
-        self.results = client.execute(query)
+        self.results = Dossier.client.execute(query)
       end
     end
 
@@ -59,10 +59,6 @@ module Dossier
       results.freeze
       @raw_results = Result::Unformatted.new(results, self)
       @results     = Result::Formatted.new(results, self)
-    end
-
-    def client
-      Dossier.client
     end
 
   end

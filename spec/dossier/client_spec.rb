@@ -2,17 +2,86 @@ require 'spec_helper'
 
 describe Dossier::Client do
 
-  let(:db_config) { DB_CONFIG[:mysql2] }
+  let(:connection) { 
+    double(:connection, class: double(:class, name: 'ActiveRecord::ConnectionAdapters::Mysql2Adapter')) 
+  }
 
-  it "loads the correct database adapter based on the options given" do
-    client = Dossier::Client.new(db_config.merge adapter: 'mysql2')
-    expect(client.adapter.class.name).to eq('Dossier::Adapter::Mysql2')
-  end
+  describe "initialization" do
 
-  it "passes the remaining options to the adapter" do
-    Dossier::Client.any_instance.stub(:adapter_class).and_return(OpenStruct)
-    OpenStruct.should_receive(:new).with(username: 'Jimmy', password: 'smith&wesson')
-    client = Dossier::Client.new(adapter: 'mysql2', username: 'Jimmy', password: 'smith&wesson')
+    describe "finding the correct adapter" do
+
+      context "when given a connection object" do
+
+        let(:client) { described_class.new(connection: connection) }
+
+        it "determines the adapter from the connection's class" do
+          expect(client.adapter).to be_a(Dossier::Adapter::ActiveRecord)
+        end
+
+      end
+
+      context "when given a dossier_adapter option" do
+
+        before :each do
+          Dossier::Adapter::SpecAdapter = Struct.new(:options)
+        end
+
+        after :each do
+          Dossier::Adapter.send(:remove_const, :SpecAdapter)
+        end
+
+        it "uses an adapter by that name" do
+          Dossier::Adapter::SpecAdapter.should_receive(:new).with(username: 'Timmy')
+          described_class.new(dossier_adapter: 'spec_adapter', username: 'Timmy')
+        end
+
+      end
+
+      context "when not given a connection or a dossier_adapter option" do
+
+        let(:client)   { described_class.new(username: 'Jimmy') }
+
+        describe "if there is one known ORM loaded" do
+          
+          before :each do
+            described_class.any_instance.stub(:orms).and_return([double(:class, name: 'ActiveRecord::Base')])
+          end
+
+          it "uses that ORM's adapter" do
+            Dossier::Adapter::ActiveRecord.should_receive(:new).with(username: 'Jimmy')
+            described_class.new(username: 'Jimmy')
+          end
+
+        end
+
+        context "if there are no known ORMs loaded" do
+
+          before :each do
+            described_class.any_instance.stub(:orms).and_return([])
+          end
+
+          it "raises an error" do
+            expect{described_class.new(username: 'Jimmy')}.to raise_error(Dossier::Client::IndeterminableAdapter)
+          end
+
+        end
+
+        describe "if there are multiple known ORMs loaded" do
+
+          before :each do
+            described_class.any_instance.stub(:orms).and_return([:orm1, :orm2])
+          end
+
+          it "raises an error" do
+            expect{described_class.new(username: 'Jimmy')}.to raise_error(Dossier::Client::IndeterminableAdapter)
+          end
+
+        end
+
+      end
+
+    end
+
   end
 
 end
