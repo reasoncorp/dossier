@@ -178,6 +178,7 @@ Note: when you run the tests, Dossier will **make and/or truncate** some tables 
 
 ### Moar Dokumentationz pleaze
 
+- Document how Dossier uses ORM adapters to connect to databases, currently only AR's are used.
 - Document using hooks and what methods are available in them
 - callbacks
   - stored procedures
