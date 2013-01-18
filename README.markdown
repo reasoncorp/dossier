@@ -166,8 +166,8 @@ Note: when you run the tests, Dossier will **make and/or truncate** some tables 
 
 - Run `bundle`
 - `cp spec/dummy/config/database.yml{.example,}` and edit it so that it can connect to the test database.
-- `cp spec/fixtures/db/{mysql2}.yml{.example,}`
-- `cp spec/fixtures/db/{sqlite3}.yml{.example,}`
+- `cp spec/fixtures/db/mysql2.yml{.example,}`
+- `cp spec/fixtures/db/sqlite3.yml{.example,}`
 - `rspec spec`
 
 ## TODO
