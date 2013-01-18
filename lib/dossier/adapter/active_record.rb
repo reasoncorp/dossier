@@ -13,8 +13,8 @@ module Dossier
         connection.quote(value)
       end
 
-      def execute(query)
-        Result.new(connection.exec_query(query))
+      def execute(query, report_name = nil)
+        Result.new(connection.exec_query(*[query, report_name].compact))
       rescue => e
         raise Dossier::ExecuteError.new "#{e.message}\n\n#{query}"
       end

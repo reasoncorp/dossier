@@ -45,7 +45,7 @@ describe Dossier::Report do
     describe "run" do
       it "will execute the generated sql query" do
         report = EmployeeReport.new
-        Dossier.client.should_receive(:execute).with(report.query).and_return([])
+        Dossier.client.should_receive(:execute).with(report.query, 'EmployeeReport').and_return([])
         report.run
       end
 

@@ -26,10 +26,10 @@ module Dossier
     end
 
     def mysql2_create_employees
-      mysql2_connection.execute('CREATE DATABASE IF NOT EXISTS `dossier_test`')
-      mysql2_connection.execute('DROP TABLE IF EXISTS `employees`')
+      mysql2_connection.execute('CREATE DATABASE IF NOT EXISTS `dossier_test`', 'FACTORY')
+      mysql2_connection.execute('DROP TABLE IF EXISTS `employees`', 'FACTORY')
       mysql2_connection.execute(
-        <<-SQL
+        <<-SQL, 'FACTORY'
           CREATE TABLE `employees` (
             `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
             `name` varchar(255) NOT NULL,
@@ -44,9 +44,9 @@ module Dossier
     end
 
     def sqlite3_create_employees
-      sqlite3_connection.execute('DROP TABLE IF EXISTS `employees`')
+      sqlite3_connection.execute('DROP TABLE IF EXISTS `employees`', 'FACTORY')
       sqlite3_connection.execute(
-        <<-SQL
+        <<-SQL, 'FACTORY'
           CREATE TABLE `employees` (
             `id` INTEGER PRIMARY KEY AUTOINCREMENT,
             `name` TEXT NOT NULL,
@@ -60,26 +60,26 @@ module Dossier
     end
 
     def mysql2_seed_employees
-      mysql2_connection.execute('TRUNCATE `employees`')
+      mysql2_connection.execute('TRUNCATE `employees`', 'FACTORY')
       employees.each do |employee|
         query = <<-QUERY
           INSERT INTO 
             `employees` (`name`, `hired_on`, `suspended`, `division`, `salary`) 
           VALUES ('#{employee[:name]}', '#{employee[:hired_on]}', #{employee[:suspended]}, '#{employee[:division]}', #{employee[:salary]});
         QUERY
-        mysql2_connection.execute(query)
+        mysql2_connection.execute(query, 'FACTORY')
       end
     end
 
     def sqlite3_seed_employees
-      sqlite3_connection.execute('DELETE FROM `employees`')
+      sqlite3_connection.execute('DELETE FROM `employees`', 'FACTORY')
       employees.each do |employee|
         query = <<-QUERY
           INSERT INTO 
             `employees` (`name`, `hired_on`, `suspended`, `division`, `salary`) 
           VALUES ('#{employee[:name].upcase}', '#{employee[:hired_on]}', #{employee[:suspended] ? 1 : 0}, '#{employee[:division]}', #{employee[:salary]});
         QUERY
-        sqlite3_connection.execute(query)
+        sqlite3_connection.execute(query, 'FACTORY')
       end
     end
   end

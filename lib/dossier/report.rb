@@ -55,7 +55,7 @@ module Dossier
     def execute
       build_query
       run_callbacks :execute do
-        self.results = dossier_client.execute(query)
+        self.results = dossier_client.execute(query, self.class.name)
       end
     end
 

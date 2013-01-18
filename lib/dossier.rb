@@ -4,7 +4,7 @@ require "dossier/version"
 module Dossier
 
   def self.configuration
-    @configuration
+    @configuration || configure
   end
 
   def self.configure
@@ -14,7 +14,6 @@ module Dossier
   end
 
   def self.client
-    configure unless configuration
     configuration.client
   end
 
