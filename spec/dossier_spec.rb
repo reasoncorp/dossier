@@ -16,11 +16,11 @@ describe Dossier do
   end
 
   it "allows configuration via a block" do
-    @mysql_client = Mysql2::Client.new
+    some_client = Object.new
     Dossier.configure do |config|
-      config.client = @mysql_client
+      config.client = some_client
     end
-    Dossier.configuration.client.should eq(@mysql_client)
+    Dossier.configuration.client.should eq(some_client)
   end
 
   it "exposes the configurations client via Dossier.client" do
