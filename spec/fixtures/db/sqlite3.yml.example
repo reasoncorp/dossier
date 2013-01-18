@@ -1,2 +1,2 @@
 adapter: sqlite3
-database: path/to/test.sqlite3
+database: db/test.sqlite3
