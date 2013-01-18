@@ -26,9 +26,10 @@ module Dossier
       private
 
       def active_record_connection
-        Class.new(::ActiveRecord::Base) do
-          self.abstract_class = true
-        end.establish_connection(options)
+        klass = Class.new(::ActiveRecord::Base)
+        klass.abstract_class = true
+        klass.establish_connection(options)
+        klass.connection
       end
 
 

@@ -42,6 +42,10 @@ module Dossier
       Dossier::Formatter
     end
 
+    def dossier_client
+      Dossier.client
+    end
+
     private
 
     def build_query
@@ -51,7 +55,7 @@ module Dossier
     def execute
       build_query
       run_callbacks :execute do
-        self.results = Dossier.client.execute(query)
+        self.results = dossier_client.execute(query)
       end
     end
 

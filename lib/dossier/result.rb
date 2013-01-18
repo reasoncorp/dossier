@@ -10,7 +10,7 @@ module Dossier
     end
 
     def headers
-      adapter_results.headers.map { |header| Dossier::Formatter.titleize(header) }
+      adapter_results.headers
     end
 
     def body
@@ -22,7 +22,7 @@ module Dossier
     end
 
     def rows
-      @rows ||= map(&:values)
+      @rows ||= to_a
     end
 
     def arrays
@@ -30,7 +30,8 @@ module Dossier
     end
 
     def hashes
-      @hashes ||= to_a
+      return @hashes if defined?(@hashes)
+      @hashes = rows.map { |row| Hash[headers.zip(row)] }
     end
 
     def each
@@ -45,16 +46,13 @@ module Dossier
       end
 
       def format(result_row)
-        unless result_row.is_a?(Enumerable)
-          raise ArgumentError.new("#{result_row.inspect} must be Enumerable") 
+        unless result_row.kind_of?(Enumerable)
+          raise ArgumentError.new("#{result_row.inspect} must be a kind of Enumerable") 
         end
 
-        result_row.inject({}) do |new_row, (key, value)|
-          new_row.tap do |row|
-            method       = "format_#{key}"
-            value        = report.public_send(method, value) if report.respond_to?(method)
-            new_row[key] = value
-          end
+        result_row.each_with_index.map do |field, i|
+          method = "format_#{headers[i]}"
+          report.respond_to?(method) ? report.public_send(method, field) : field
         end
       end
     end

@@ -9,7 +9,7 @@ module Dossier
     end
 
     def each
-      yield @headers.to_csv
+      yield @headers.map { |header| Dossier::Formatter.titleize(header) }.to_csv
       @collection.each do |record|
         yield record.to_csv
       end

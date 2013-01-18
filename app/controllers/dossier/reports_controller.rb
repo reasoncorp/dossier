@@ -3,6 +3,7 @@ module Dossier
     def show
       report = report_class.new(params[:options] || {})
       report.run
+
       respond_to do |format|
         format.html do
           begin

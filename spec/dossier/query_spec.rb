@@ -12,53 +12,45 @@ describe Dossier::Query do
 
   describe "replacing symbols by calling methods of the same name" do
 
-    context "when the method returns a Numeric" do
+    context "when the methods return single values" do
 
       before :each do
-        report.stub(:sql).and_return("SELECT * FROM employees WHERE id = :id OR girth < :girth")
+        report.stub(:sql).and_return("SELECT * FROM employees WHERE id = :id OR girth < :girth OR name = :name")
         report.stub(:id).and_return(92)
         report.stub(:girth).and_return(3.14)
+        report.stub(:name).and_return('Jimmy')
       end
 
-      it "inserts the numeric as-is" do
-        expect(query.to_s).to eq("SELECT * FROM employees WHERE id = 92 OR girth < 3.14")
+      it "escapes the values" do
+        query.should_receive(:escape).with(92)
+        query.should_receive(:escape).with(3.14)
+        query.should_receive(:escape).with('Jimmy')
+        query.to_s
+      end
+
+      it "inserts the values" do
+        expect(query.to_s).to eq("SELECT * FROM employees WHERE id = 92 OR girth < 3.14 OR name = 'Jimmy'")
       end
 
     end
 
-    context "when the method returns an array" do
+    context "when the methods return arrays" do
 
       before :each do
-        report.stub(:sql).and_return("SELECT * FROM employees WHERE stuff = :stuff")
+        report.stub(:sql).and_return("SELECT * FROM employees WHERE stuff IN :stuff")
         report.stub(:stuff).and_return([38, 'blue', 'mandible', 2])
       end
 
-      it "escapes each individual string" do
+      it "escapes each value in the array" do
+        Dossier.client.should_receive(:escape).with(38)
         Dossier.client.should_receive(:escape).with('blue')
         Dossier.client.should_receive(:escape).with('mandible')
+        Dossier.client.should_receive(:escape).with(2)
         query.to_s
       end
 
       it "joins the return values with commas" do
-        expect(query.to_s).to eq("SELECT * FROM employees WHERE stuff = 38, 'blue', 'mandible', 2")
-      end
-
-    end
-
-    context "when the method returns anything else" do
-
-      before :each do
-        report.stub(:sql).and_return("SELECT * FROM employees WHERE name = :name")
-        report.stub(:name).and_return(:Jimmy)
-      end
-
-      it "coerces it to a string and escapes it" do
-        Dossier.client.should_receive(:escape).with('Jimmy')
-        query.to_s
-      end
-
-      it "quotes the escaped string" do
-        expect(query.to_s).to eq("SELECT * FROM employees WHERE name = 'Jimmy'")
+        expect(query.to_s).to eq("SELECT * FROM employees WHERE stuff IN (38, 'blue', 'mandible', 2)")
       end
 
     end

@@ -11,8 +11,8 @@ describe Dossier::Result do
   end
 
   let(:report)         { TestReport.new }
-  let(:result_row)     { {mascot: 'platapus', cheese: 'bleu'} }
-  let(:adapter_result) { double(:adapter_result, rows: [result_row]) }
+  let(:result_row)     { {'mascot' => 'platapus', 'cheese' => 'bleu'} }
+  let(:adapter_result) { double(:adapter_result, rows: [result_row.values], headers: result_row.keys) }
   let(:result)         { Dossier::Result.new(adapter_result, report).tap { |r| r.extend(EachStubber) } }
 
   describe "initialization with an adapter result object" do
@@ -26,8 +26,8 @@ describe Dossier::Result do
       result.headers
     end
 
-    it "can extract the values from the results" do
-      result.should_receive(:map)
+    it "can extract the values from the adapter results" do
+      result.should_receive(:to_a)
       result.rows
     end
 
@@ -60,7 +60,7 @@ describe Dossier::Result do
         end
 
         it "formats each of the adapter's results" do
-          result.should_receive(:format).with(result_row)
+          result.should_receive(:format).with(result_row.values)
           result.each { |result| }
         end
 
@@ -76,8 +76,11 @@ describe Dossier::Result do
 
       describe "footer" do
         let(:report) { TestReport.new(footer: 3) }
-        let(:adapter_result_rows) { 7.times.map { result_row } }
-        let(:adapter_result) { double(:adapter_result, rows: adapter_result_rows) }
+        let(:adapter_result_rows) { 7.times.map { result_row.values } }
+
+        before :each do
+          adapter_result.stub(:rows).and_return(adapter_result_rows)
+        end
 
         it "has 4 result rows" do
           expect(result.body.count).to eq(4)

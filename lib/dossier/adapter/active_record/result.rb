@@ -1,11 +1,20 @@
-class Dossier::Adapter::ActiveRecord::Result
-  attr_accessor :rows
+module Dossier
+  module Adapter
+    class ActiveRecord
+      class Result
 
-  def initialize(ar_connection_results)
-    self.rows = ar_connection_results
-  end
+        attr_accessor :rows
 
-  def headers
-    rows.fields
+        def initialize(ar_connection_results)
+          self.rows = ar_connection_results
+        end
+
+        def headers
+          rows.fields
+        end
+
+      end
+    end
+
   end
 end
