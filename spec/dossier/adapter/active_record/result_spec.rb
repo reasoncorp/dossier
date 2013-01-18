@@ -2,24 +2,20 @@ require 'spec_helper'
 
 describe Dossier::Adapter::ActiveRecord::Result do
 
-  let(:ar_connection_results) { [] }
+  let(:ar_connection_results) { double(:results, columns: %w[name age], rows: [['bob', 20], ['sue', 30]]) }
   let(:result)                { described_class.new(ar_connection_results) }
 
   describe "headers" do
 
-    let(:fake_fields) { %[foo bar] }
+    let(:fake_columns) { %[foo bar] }
 
-    before :each do
-      ar_connection_results.stub(:fields).and_return(fake_fields)
-    end
-
-    it "calls `fields` on its connection_results" do
-      ar_connection_results.should_receive(:fields)
+    it "calls `columns` on its connection_results" do
+      ar_connection_results.should_receive(:columns)
       result.headers
     end
 
-    it "returns the fields from the connection_results" do
-      expect(result.headers).to eq(fake_fields)
+    it "returns the columns from the connection_results" do
+      expect(result.headers).to eq(ar_connection_results.columns)
     end
 
   end
@@ -27,7 +23,7 @@ describe Dossier::Adapter::ActiveRecord::Result do
   describe "rows" do
 
     it "returns the connection_results" do
-      expect(result.rows).to eq(ar_connection_results)
+      expect(result.rows).to eq(ar_connection_results.rows)
     end
 
   end

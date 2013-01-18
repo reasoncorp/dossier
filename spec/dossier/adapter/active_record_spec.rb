@@ -29,24 +29,23 @@ describe Dossier::Adapter::ActiveRecord do
     let(:adapter_result_class) { Dossier::Adapter::ActiveRecord::Result}
 
     it "delegates to the connection" do
-      ar_connection.should_receive(:execute).with(query)
+      ar_connection.should_receive(:exec_query).with(query)
       adapter.execute(query)
     end
 
     it "builds an adapter result" do
-      ar_connection.stub(:execute).and_return(connection_results)
+      ar_connection.stub(:exec_query).and_return(connection_results)
       adapter_result_class.should_receive(:new).with(connection_results)
       adapter.execute(:query)
     end
 
     it "returns the adapter result" do
-      ar_connection.stub(:execute).and_return(connection_results)
+      ar_connection.stub(:exec_query).and_return(connection_results)
       expect(adapter.execute(:query)).to be_a(adapter_result_class)
     end
 
-    # TODO - well, not just ANY errors... but what?
     it "rescues any errors and raises a Dossier::ExecuteError" do
-      ar_connection.stub(:execute).and_raise(StandardError.new('wat'))
+      ar_connection.stub(:exec_query).and_raise(StandardError.new('wat'))
       expect{ adapter.execute(:query) }.to raise_error(Dossier::ExecuteError)
     end
 

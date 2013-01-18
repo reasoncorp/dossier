@@ -14,15 +14,10 @@ module Dossier
       end
 
       def execute(query)
-        Result.new(connection.execute(query))
+        Result.new(connection.exec_query(query))
       rescue => e
         raise Dossier::ExecuteError.new "#{e.message}\n\n#{query}"
       end
-
-      # # TODO figure if i can store this w/o the abstract clas
-      # def connection
-      #   @abstract_class.connection
-      # end
 
       private
 
@@ -30,8 +25,9 @@ module Dossier
         @abstract_class = Class.new(::ActiveRecord::Base) do
           self.abstract_class = true
           
+          # Needs a unique name for ActiveRecord's connection pool
           def self.name
-            object_id.to_s
+            "Dossier::Adapter::ActiveRecord::Connection_#{object_id}"
           end
         end
         @abstract_class.establish_connection(options)

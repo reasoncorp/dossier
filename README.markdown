@@ -158,13 +158,10 @@ To see a report with all the bells and whistles, check out `spec/support/reports
 
 ## Running the Tests
 
-Note: when you run the tests, Dossier will make and/or truncate some tables in the `dossier_test` database.
-
-(TODO: discuss how to set this up.)
+Note: when you run the tests, Dossier will **make and/or truncate** some tables in the `dossier_test` database.
 
 - Run `bundle`
 - `cp spec/dummy/config/database.yml{.example,}` and edit it so that it can connect to the test database.
-- `cd spec/dummy; rake db:create db:schema:load; cd -;` 
 - `rspec spec`
 
 ## TODO

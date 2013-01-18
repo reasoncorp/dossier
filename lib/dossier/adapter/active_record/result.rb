@@ -3,14 +3,18 @@ module Dossier
     class ActiveRecord
       class Result
 
-        attr_accessor :rows
+        attr_accessor :result
 
-        def initialize(ar_connection_results)
-          self.rows = ar_connection_results
+        def initialize(activerecord_result)
+          self.result = activerecord_result
         end
 
         def headers
-          rows.fields
+          result.columns
+        end
+
+        def rows
+          result.rows
         end
 
       end
