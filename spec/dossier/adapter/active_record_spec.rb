@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'dossier/adapter/activerecord'
 
 describe Dossier::Adapter::ActiveRecord do
 
