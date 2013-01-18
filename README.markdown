@@ -165,6 +165,10 @@ end
 
 To see a report with all the bells and whistles, check out `spec/support/reports/employee_report.rb` or other reports in `spec/support/reports`.
 
+## Compatibility
+
+Dossier currently supports all databases supported by ActiveRecord; it comes with `Dossier::Adapter::ActiveRecord`, which uses ActiveRecord connections for escaping and executing queries. However, as the `Dossier::Adapter` namespace implies, it was written to allow for other connection adapters. See `CONTRIBUTING.md` if you'd like to add one.
+
 ## Running the Tests
 
 Note: when you run the tests, Dossier will **make and/or truncate** some tables in the `dossier_test` database.
@@ -175,19 +179,14 @@ Note: when you run the tests, Dossier will **make and/or truncate** some tables 
 - `cp spec/fixtures/db/sqlite3.yml{.example,}`
 - `rspec spec`
 
-## TODO
+## Moar Dokumentationz pleaze
 
-### Features
-
-- Support more orm adapters
-
-### Moar Dokumentationz pleaze
-
-- Document how Dossier uses ORM adapters to connect to databases, currently only AR's are used.
+- How Dossier uses ORM adapters to connect to databases, currently only AR's are used.
 - Document using hooks and what methods are available in them
-- callbacks
-  - stored procedures
-  - reformat results
-- linking to reports
-  - linking to formats
+- Callbacks, eg:
+  - Stored procedures
+  - Reformat results
+- Linking 
+  - To other reports
+  - To other formats
 - Extending the formatter
