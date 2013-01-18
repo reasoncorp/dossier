@@ -1,4 +1,4 @@
-class SuspendedEmployeeReport < Dossier::Report
+class EmployeeWithCustomViewReport < Dossier::Report
 
   def sql
     "SELECT * FROM employees WHERE suspended = true"

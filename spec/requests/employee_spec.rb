@@ -7,8 +7,8 @@ describe "employee report" do
     context "when a custom view exists for the report" do
 
       it "uses the custom view" do
-        get '/reports/suspended_employee'
-        expect(response.body).to include('<h1>Yeah. Did you get that memo?</h1>')
+        get '/reports/employee_with_custom_view'
+        expect(response.body).to eq(File.read('spec/fixtures/reports/employee_with_custom_view.html'))
       end
 
     end
@@ -17,7 +17,7 @@ describe "employee report" do
 
       it "creates an HTML report using its standard 'show' view" do
         get '/reports/employee'
-        expect(response.body).to eq(File.read('spec/fixtures/employee_report.html'))
+        expect(response.body).to eq(File.read('spec/fixtures/reports/employee.html'))
       end
 
       it "uses any options provided" do
@@ -26,14 +26,14 @@ describe "employee report" do
           names: ['Jimmy Jackalope', 'Moustafa McMann'],
           divisions: ['Tedious Toiling']
         }
-        expect(response.body).to eq(File.read('spec/fixtures/customized_employee_report.html'))
+        expect(response.body).to eq(File.read('spec/fixtures/reports/employee_with_parameters.html'))
       end
 
       it "moves the specified number of rows into the footer" do
         get '/reports/employee', options: {
           footer: 1
         }
-        expect(response.body).to eq(File.read('spec/fixtures/employee_report_with_footer.html'))
+        expect(response.body).to eq(File.read('spec/fixtures/reports/employee_with_footer.html'))
       end
 
     end
@@ -44,7 +44,7 @@ describe "employee report" do
 
     it "creates a standard CSV report" do
       get '/reports/employee.csv'
-      expect(response.body).to eq(File.read('spec/fixtures/employee_report.csv'))
+      expect(response.body).to eq(File.read('spec/fixtures/reports/employee.csv'))
     end
 
   end
