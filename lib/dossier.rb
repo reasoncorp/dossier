@@ -22,6 +22,7 @@ module Dossier
 end
 
 require "dossier/adapter/activerecord"
+require "dossier/adapter/activerecord/result"
 require "dossier/client"
 require "dossier/configuration"
 require "dossier/formatter"

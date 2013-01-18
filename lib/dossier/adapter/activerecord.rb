@@ -9,10 +9,18 @@ module Dossier
         self.connection = options.delete(:connection) || active_record_connection
       end
 
-      delegate :execute, to: :connection
-
       def escape(value)
         connection.quote(value)
+      end
+
+      def execute(query)
+        Result.new(connection.execute(query))
+        # TODO: Determine how we can rescue something more specific and still be
+        # neutral about what adapter is used. Mix a common module into all known
+        # exceptions like Mysql2::Error and rescue that module?
+        # rescue ::Mysql2::Error => e
+      rescue => e
+        raise Dossier::ExecuteError.new "#{e.message}\n\n#{query}"
       end
 
       private
@@ -23,29 +31,8 @@ module Dossier
         end.establish_connection(options)
       end
 
+
     end
 
-
-    # def execute(sql)
-    #   Result.new connection.query(sql)
-    # rescue ::Mysql2::Error => e
-    #   raise Dossier::ExecuteError.new "#{e.message}\n\n#{sql}"
-    # end
-
-    # def escape(value)
-    #   connection.escape(value)
-    # end
-
-    # class Result
-    #   attr_accessor :rows
-
-    #   def initialize(rows)
-    #     self.rows = rows
-    #   end
-
-    #   def headers
-    #     rows.fields
-    #   end
-    # end
   end
 end
