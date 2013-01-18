@@ -31,7 +31,7 @@ class FancyKetchupReport < Dossier::Report
 end
 ```
 
-If you need dynamic values that may be influenced by the user, [do not interpolate them directly](http://xkcd.com/327/). Dossier provides a safer way to add them: any symbols in the query will be replaced by calling methods of the same name in the report. Return values other than numerics will be coerced to strings and **escaped by the database**.
+If you need dynamic values that may be influenced by the user, **[do not interpolate them directly](http://xkcd.com/327/)**. Dossier provides a safer way to add them: any symbols in the query will be replaced by calling methods of the same name in the report. Return values other than numerics will be coerced to strings and **escaped by the database**.  Arrays will have all of their contents escaped, joined with a "," and wrapped in parentheses.
   
 ```ruby
 # app/reports/fancy_ketchup_report.rb
@@ -65,7 +65,7 @@ Dossier also provides a `formatter` with access to all the standard Rails format
 class MoneyLaunderingReport < Dossier::Report
   #...
   def format_payment(value)
-    formatter.number_to_currency
+    formatter.number_to_currency(value)
   end
 end
 ```
@@ -73,14 +73,19 @@ end
 In addition, the formatter provides Rails' URL helpers for use in your reports. For example, in a report of your least profitable accounts, you might want to add a link to change the salesperson assigned to that account.
 
 ```ruby
-formatter.url_helpers.edit_accounts_path(3)
+class LeastProfitableAccountsReport < Dossier::Report
+  #...
+  def format_account_id(value)
+    formatter.link_to value, formatter.url_helpers.edit_accounts_path(value)
+  end
+end
 ```
 
 The built-in `ReportsController` uses this formatting when rendering the HTML and JSON representations, but not when rendering the CSV.
 
 ## Report Options and Footers
 
-You may want to specify parameters for a report: which columns to show, a range of dates, etc. Dossier supports this via URL parameters, which will be passed into your report's `initialize` method and made available via the `options` reader.
+You may want to specify parameters for a report: which columns to show, a range of dates, etc. Dossier supports this via URL parameters, anything in `params[:options]` will be passed into your report's `initialize` method and made available via the `options` reader.
 
 You can pass these options by hardcoding them into a link, or you can allow users to customize a report with a form. For example:
 
@@ -88,7 +93,6 @@ You can pass these options by hardcoding them into a link, or you can allow user
 # app/views/dossier/reports/employee.html.haml
 
 = form_for report, as: :options, url: url_for, html: {method: :get} do |f|
-
   = f.label "Salary greater than:"
   = f.text_field :salary_greater_than
   = f.label "In Division:"
@@ -154,7 +158,7 @@ end
 
 ## Advanced Usage
 
-To see a report with all the bells and whistles, check out `spec/support/reports/employee_report.rb`.
+To see a report with all the bells and whistles, check out `spec/support/reports/employee_report.rb` or other reports in `spec/support/reports`.
 
 ## Running the Tests
 
@@ -162,13 +166,15 @@ Note: when you run the tests, Dossier will **make and/or truncate** some tables 
 
 - Run `bundle`
 - `cp spec/dummy/config/database.yml{.example,}` and edit it so that it can connect to the test database.
+- `cp spec/fixtures/db/{mysql2}.yml{.example,}
+- `cp spec/fixtures/db/{sqlite3}.yml{.example,}
 - `rspec spec`
 
 ## TODO
 
 ### Features
 
-- Support more databases
+- Support more orm adapters
 
 ### Moar Dokumentationz pleaze
 
