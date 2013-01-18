@@ -22,12 +22,12 @@ For example:
 ```ruby
 # app/reports/fancy_ketchup_report.rb
 class FancyKetchupReport < Dossier::Report
-  def sql 
+  def sql
     'SELECT * FROM ketchups WHERE fancy = true'
   end
 
   # Or, if you're using ActiveRecord and hate writing SQL:
-  def sql 
+  def sql
     Ketchup.where(fancy: true).to_sql
   end
 
@@ -35,7 +35,7 @@ end
 ```
 
 If you need dynamic values that may be influenced by the user, [do not interpolate them directly](http://xkcd.com/327/). Dossier provides a safer way to add them: any symbols in the query will be replaced by calling methods of the same name in the report. Return values other than numerics will be coerced to strings and **escaped by the database**.
-  
+
 ```ruby
 # app/reports/fancy_ketchup_report.rb
 class FancyKetchupReport < Dossier::Report
@@ -101,7 +101,7 @@ You can pass these options by hardcoding them into a link, or you can allow user
 = render template: 'dossier/dossier/reports/show', locals: {report: report}
 ```
 
-It's up to you to use these options in generating your SQL query. 
+It's up to you to use these options in generating your SQL query.
 
 However, Dossier does support one URL parameter natively: if you supply a `footer` parameter with an integer value, the last N rows will be accesible via `report.results.footers` instead of `report.results.body`. The built-in `show` view renders those rows inside an HTML footer. This is an easy way to display a totals row or something similar.
 
