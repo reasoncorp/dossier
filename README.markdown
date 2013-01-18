@@ -5,6 +5,8 @@ Dossier is a Rails engine that turns SQL into reports. Reports can be easily ren
 - If you **hate** SQL, you can use whatever tool you like to generate it; for example, ActiveRecord's `to_sql`.
 - If you **love** SQL, you can use every feature feature your database supports.
 
+[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/adamhunter/dossier)
+
 ## Setup
 
 Install the Dossier gem and create `config/dossier.yml`. This has the same format as Rails' `database.yml`, and can actually just be a symlink: `ln -s config/{database,dossier}.yml`.
@@ -169,8 +171,8 @@ Note: when you run the tests, Dossier will **make and/or truncate** some tables 
 
 - Run `bundle`
 - `cp spec/dummy/config/database.yml{.example,}` and edit it so that it can connect to the test database.
-- `cp spec/fixtures/db/{mysql2}.yml{.example,}`
-- `cp spec/fixtures/db/{sqlite3}.yml{.example,}`
+- `cp spec/fixtures/db/mysql2.yml{.example,}`
+- `cp spec/fixtures/db/sqlite3.yml{.example,}`
 - `rspec spec`
 
 ## TODO
