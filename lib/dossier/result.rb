@@ -51,8 +51,20 @@ module Dossier
         end
 
         result_row.each_with_index.map do |field, i|
-          method = "format_#{headers[i]}"
-          report.respond_to?(method) ? report.public_send(method, field) : field
+          method_name = "format_#{headers[i]}"
+
+          if report.respond_to?(method_name)
+
+           # Provide the row as context if the formatter takes two arguments
+           if report.method(method_name).arity == 2
+             report.public_send(method_name, field, result_row)
+           else
+             report.public_send(method_name, field)
+           end
+
+          else
+            field
+          end
         end
       end
     end
