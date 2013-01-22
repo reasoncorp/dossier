@@ -109,7 +109,7 @@ You can pass these options by hardcoding them into a link, or you can allow user
   = f.select_tag :in_division, divisions_collection
   = f.button "Submit"
 
-= render template: 'dossier/dossier/reports/show', locals: {report: report}
+= render template: 'dossier/reports/show', locals: {report: report}
 ```
 
 It's up to you to use these options in generating your SQL query.
