@@ -55,8 +55,9 @@ class EmployeeReport < Dossier::Report
     @names ||= options.fetch(:names) { [] }.dup
   end
 
-  def format_salary(amount)
-    formatter.number_to_currency(amount) # unless format.csv?
+  def format_salary(amount, row)
+    return "Who's Asking?" if row[:division] == "Corporate Malfeasance"
+    formatter.number_to_currency(amount)
   end
 
   def format_hired_on(date)

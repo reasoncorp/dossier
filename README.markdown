@@ -93,6 +93,18 @@ end
 
 The built-in `ReportsController` uses this formatting when rendering the HTML and JSON representations, but not when rendering the CSV.
 
+If your formatting method takes a second argment, it will be given a hash of the values in the row.
+
+```ruby
+class MoneyLaunderingReport < Dossier::Report
+  #...
+  def format_payment(value, row)
+    return "$0.00" if row[:recipient] == 'Jimmy The Squid'
+    formatter.number_to_currency(value)
+  end
+end
+```
+
 ## Report Options and Footers
 
 You may want to specify parameters for a report: which columns to show, a range of dates, etc. Dossier supports this via URL parameters, anything in `params[:options]` will be passed into your report's `initialize` method and made available via the `options` reader.
