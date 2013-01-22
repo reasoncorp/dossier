@@ -27,7 +27,7 @@ module Dossier
     private
 
     def report_class
-      "#{params[:report].titleize.delete(' ')}Report".constantize
+      "#{params[:report].split('_').map(&:capitalize).join}Report".constantize
     end
 
   end
