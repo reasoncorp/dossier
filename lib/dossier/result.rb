@@ -45,19 +45,19 @@ module Dossier
         end
       end
 
-      def format(result_row)
-        unless result_row.kind_of?(Enumerable)
-          raise ArgumentError.new("#{result_row.inspect} must be a kind of Enumerable") 
+      def format(row)
+        unless row.kind_of?(Enumerable)
+          raise ArgumentError.new("#{row.inspect} must be a kind of Enumerable") 
         end
 
-        result_row.each_with_index.map do |field, i|
+        row.each_with_index.map do |field, i|
           method_name = "format_#{headers[i]}"
 
           if report.respond_to?(method_name)
 
            # Provide the row as context if the formatter takes two arguments
            if report.method(method_name).arity == 2
-             report.public_send(method_name, field, result_row)
+             report.public_send(method_name, field, Hash[headers.zip(row)])
            else
              report.public_send(method_name, field)
            end
