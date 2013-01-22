@@ -36,17 +36,22 @@ class FancyKetchupReport < Dossier::Report
 end
 ```
 
-If you need dynamic values that may be influenced by the user, **[do not interpolate them directly](http://xkcd.com/327/)**. Dossier provides a safer way to add them: any symbols in the query will be replaced by calling methods of the same name in the report. Return values other than numerics will be coerced to strings and **escaped by the database**.  Arrays will have all of their contents escaped, joined with a "," and wrapped in parentheses.
+If you need dynamic values that may be influenced by the user, **[do not interpolate them directly](http://xkcd.com/327/)**. Dossier provides a safer way to add them: any symbols in the query will be replaced by calling methods of the same name in the report. Return values will be **escaped by the database connection**.  Arrays will have all of their contents escaped, joined with a "," and wrapped in parentheses.
 
 ```ruby
 # app/reports/fancy_ketchup_report.rb
 class FancyKetchupReport < Dossier::Report
   def sql
-    'SELECT * FROM ketchups WHERE brand = :brand'
+    "SELECT * FROM ketchups WHERE price <= :max_price and brand IN :brands"
+    # => "SELECT * FROM ketchups WHERE price <= 7 and brand IN ('Acme', 'Generic', 'SoylentRed')"
   end
 
-  def brand
-    'Acme'
+  def max_price
+    7
+  end
+
+  def brands
+    %w[Acme Generic SoylentRed]
   end
 end
 ```
@@ -182,6 +187,7 @@ Note: when you run the tests, Dossier will **make and/or truncate** some tables 
 ## Moar Dokumentationz pleaze
 
 - How Dossier uses ORM adapters to connect to databases, currently only AR's are used.
+- Examples of connecting to different databases, of the same type or a different one
 - Document using hooks and what methods are available in them
 - Callbacks, eg:
   - Stored procedures
