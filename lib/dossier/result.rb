@@ -31,7 +31,11 @@ module Dossier
 
     def hashes
       return @hashes if defined?(@hashes)
-      @hashes = rows.map { |row| Hash[headers.zip(row)] }
+      @hashes = rows.map { |row| row_hash(row) }
+    end
+
+    def row_hash(row)
+      Hash[headers.zip(row)].with_indifferent_access
     end
 
     def each
@@ -57,7 +61,7 @@ module Dossier
 
            # Provide the row as context if the formatter takes two arguments
            if report.method(method_name).arity == 2
-             report.public_send(method_name, field, Hash[headers.zip(row)])
+             report.public_send(method_name, field, row_hash(row))
            else
              report.public_send(method_name, field)
            end
