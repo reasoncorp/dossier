@@ -14,9 +14,13 @@ module Dossier
         yield record.to_csv
       end
     rescue => e
-      yield e.message
-      e.backtrace.each do |line|
-        yield "#{line}\n"
+      if Rails.application.config.consider_all_requests_local
+        yield e.message
+        e.backtrace.each do |line|
+          yield "#{line}\n"
+        end
+      else
+        yield "We're sorry, but something went wrong." 
       end
     end
 
