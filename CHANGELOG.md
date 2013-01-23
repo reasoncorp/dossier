@@ -2,6 +2,10 @@
 
 Dossier does its best to use [semantic versioning](http://semver.org).
 
+## v2.1.1
+
+Fix bug: in production, CSV rendering should not contain a backtrace if there's an error.
+
 ## v2.1.0
 
 Formatter methods will now be passed a hash of the row values if they accept a second argument. This allows formatting certain rows specially.
