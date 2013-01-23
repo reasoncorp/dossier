@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.email       = ["adamhunter@me.com", "nathanmlong@gmail.com", "rodney.turnham@tma1.com"]
   s.summary     = "SQL based report generation."
   s.description = "Easy SQL based report generation with the ability to accept request parameters and render multiple formats."
+  s.homepage    = "https://github.com/adamhunter/dossier"
 
   s.files = Dir["{app,config,db,lib}/**/*"] + %w[MIT-LICENSE Rakefile README.markdown]
   s.test_files = Dir["spec/**/*"] - %w[spec/dummy/config/dossier.yml]
