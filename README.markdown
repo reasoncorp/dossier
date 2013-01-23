@@ -208,3 +208,4 @@ Note: when you run the tests, Dossier will **make and/or truncate** some tables 
   - To other reports
   - To other formats
 - Extending the formatter
+- Show how to do "crosstab" reports (preliminary query to determine columns, then build SQL case statements?)
