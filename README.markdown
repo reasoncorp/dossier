@@ -3,7 +3,7 @@
 Dossier is a Rails engine that turns SQL into reports. Reports can be easily rendered in various formats, like HTML, CSV, and JSON.
 
 - If you **hate** SQL, you can use whatever tool you like to generate it; for example, ActiveRecord's `to_sql`.
-- If you **love** SQL, you can use every feature feature your database supports.
+- If you **love** SQL, you can use every feature your database supports.
 
 [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/adamhunter/dossier)
 
