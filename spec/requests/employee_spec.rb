@@ -49,4 +49,13 @@ describe "employee report" do
 
   end
 
+  describe "rendering XLS" do
+
+    it "creates a standard XLS report" do
+      get '/reports/employee.xls'
+      expect(response.body).to eq(File.read('spec/fixtures/reports/employee.xls'))
+    end
+
+  end
+
 end
