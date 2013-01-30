@@ -4,7 +4,7 @@ Dossier does its best to use [semantic versioning](http://semver.org).
 
 ## v2.2.0
 
-Support for XLS output, added by @michelboaventura
+Support for XLS output, added by [michelboaventura](https://github.com/michelboaventura)
 
 ## v2.1.1
 
