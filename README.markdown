@@ -1,6 +1,6 @@
 # Dossier
 
-Dossier is a Rails engine that turns SQL into reports. Reports can be easily rendered in various formats, like HTML, CSV, and JSON.
+Dossier is a Rails engine that turns SQL into reports. Reports can be easily rendered in various formats, like HTML, CSV, XLS, and JSON.
 
 - If you **hate** SQL, you can use whatever tool you like to generate it; for example, ActiveRecord's `to_sql`.
 - If you **love** SQL, you can use every feature your database supports.
@@ -9,11 +9,22 @@ Dossier is a Rails engine that turns SQL into reports. Reports can be easily ren
 
 ## Setup
 
-Install the Dossier gem and create `config/dossier.yml`. This has the same format as Rails' `database.yml`, and can actually just be a symlink: `ln -s config/{database,dossier}.yml`.
+Install the Dossier gem and create `config/dossier.yml`. This has the same format as Rails' `database.yml`, and can actually just be a symlink (from your `Rails.root`: `ln -s database.yml config/dossier.yml`).
 
 ## Routing
 
 Dossier will add a route to your app so that `reports/fancy_ketchup` will instantiate and run a `FancyKetchupReport`. It will respond with whatever format was requested; for example `reports/fancy_ketchup.csv` will render the results as CSV.
+
+## Formats
+
+Dossier currently supports outputting to the following formats:
+
+- HTML
+- CSV
+- XLS
+- JSON
+
+Any of these formats can be requested by using the appropriate format extension on the end of the report's URL.
 
 ## Basic Reports
 
@@ -91,7 +102,7 @@ class LeastProfitableAccountsReport < Dossier::Report
 end
 ```
 
-The built-in `ReportsController` uses this formatting when rendering the HTML and JSON representations, but not when rendering the CSV.
+The built-in `ReportsController` uses this formatting when rendering the HTML and JSON representations, but not when rendering the CSV or XLS.
 
 If your formatting method takes a second argment, it will be given a hash of the values in the row.
 
@@ -209,3 +220,8 @@ Note: when you run the tests, Dossier will **make and/or truncate** some tables 
   - To other formats
 - Extending the formatter
 - Show how to do "crosstab" reports (preliminary query to determine columns, then build SQL case statements?)
+
+## Roadmap
+
+- Moar Dokumentationz pleaze
+- Use the [`roo`](https://github.com/hmcgowan/roo) gem to generate a variety of output formats
