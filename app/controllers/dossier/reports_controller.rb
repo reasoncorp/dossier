@@ -21,6 +21,11 @@ module Dossier
           headers["Content-Disposition"] = %[attachment;filename=#{params[:report]}-report_#{Time.now.strftime('%m-%d-%Y-%H%M%S')}.csv]
           self.response_body = StreamCSV.new(report.raw_results.arrays)
         end
+
+        format.xls do
+          headers["Content-Disposition"] = %[attachment;filename=#{params[:report]}-report_#{Time.now.strftime('%m-%d-%Y-%H%M%S')}.xls]
+          self.response_body = Xls.new(report.raw_results.arrays)
+        end
       end
     end
 
