@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe "employee report" do
+  def open(filename)
+    File.read("spec/fixtures/reports/#{filename}")
+  end
 
   describe "rendering HTML" do
 
@@ -8,7 +11,7 @@ describe "employee report" do
 
       it "uses the custom view" do
         get '/reports/employee_with_custom_view'
-        expect(response.body).to eq(File.read('spec/fixtures/reports/employee_with_custom_view.html'))
+        expect(response.body).to eq open('employee_with_custom_view.html')
       end
 
     end
@@ -17,23 +20,25 @@ describe "employee report" do
 
       it "creates an HTML report using its standard 'show' view" do
         get '/reports/employee'
-        expect(response.body).to eq(File.read('spec/fixtures/reports/employee.html'))
+        expect(response.body).to eq open('employee.html')
       end
 
       it "uses any options provided" do
         get '/reports/employee', options: {
           salary: true, order: 'desc', 
           names: ['Jimmy Jackalope', 'Moustafa McMann'],
-          divisions: ['Tedious Toiling']
+          divisions: ['Tedious Toiling'],
+          count: true,
+          table_class: 'table'
         }
-        expect(response.body).to eq(File.read('spec/fixtures/reports/employee_with_parameters.html'))
+        expect(response.body).to eq open('employee_with_parameters.html')
       end
 
       it "moves the specified number of rows into the footer" do
         get '/reports/employee', options: {
           footer: 1
         }
-        expect(response.body).to eq(File.read('spec/fixtures/reports/employee_with_footer.html'))
+        expect(response.body).to eq open('employee_with_footer.html')
       end
 
     end
@@ -44,7 +49,7 @@ describe "employee report" do
 
     it "creates a standard CSV report" do
       get '/reports/employee.csv'
-      expect(response.body).to eq(File.read('spec/fixtures/reports/employee.csv'))
+      expect(response.body).to eq open('employee.csv')
     end
 
   end
@@ -53,7 +58,7 @@ describe "employee report" do
 
     it "creates a standard XLS report" do
       get '/reports/employee.xls'
-      expect(response.body).to eq(File.read('spec/fixtures/reports/employee.xls'))
+      expect(response.body).to eq open('employee.xls')
     end
 
   end
