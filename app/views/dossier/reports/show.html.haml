@@ -18,4 +18,4 @@
           - row.each do |value|
             %th= value
 
-= link_to 'Download CSV', dossier_report_path(:format => 'csv', :options => params[:options]), :class => 'download-csv'
+= link_to 'Download CSV', dossier_report_path(format: 'csv', options: report.options, report: report.class.report_name), class: 'download-csv'
