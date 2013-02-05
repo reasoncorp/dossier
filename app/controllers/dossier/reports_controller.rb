@@ -18,12 +18,12 @@ module Dossier
         end
 
         format.csv do
-          headers["Content-Disposition"] = %[attachment;filename=#{params[:report]}-report_#{Time.now.strftime('%m-%d-%Y-%H%M%S')}.csv]
+          set_content_disposition!
           self.response_body = StreamCSV.new(report.raw_results.arrays)
         end
 
         format.xls do
-          headers["Content-Disposition"] = %[attachment;filename=#{params[:report]}-report_#{Time.now.strftime('%m-%d-%Y-%H%M%S')}.xls]
+          set_content_disposition!
           self.response_body = Xls.new(report.raw_results.arrays)
         end
       end
@@ -33,6 +33,10 @@ module Dossier
 
     def report_class
       "#{params[:report].split('_').map(&:capitalize).join}Report".constantize
+    end
+
+    def set_content_disposition!
+      headers["Content-Disposition"] = %[attachment;filename=#{params[:report]}-report_#{Time.now.strftime('%m-%d-%Y_%H-%M-%S')}.#{params[:format]}]
     end
 
   end
