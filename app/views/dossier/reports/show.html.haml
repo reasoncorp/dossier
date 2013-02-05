@@ -1,13 +1,18 @@
 %h1= report.class.name.titleize
 
-%table
+-klass = params[:options].try(:values_at,:table_class)
+%table{class: klass}
   %thead
     %tr
+      -if params[:options].try(:[],:count)
+        %th
       - report.results.headers.each do |header|
         %th= Dossier::Formatter.titleize(header)
   %tbody
-    - report.results.body.each do |row|
+    - report.results.body.each_with_index do |row,i|
       %tr
+        -if params[:options] && params[:options][:count]
+          %td= i+1
         - row.each do |value|
           %td= value
 
