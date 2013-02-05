@@ -2,6 +2,10 @@
 
 Dossier does its best to use [semantic versioning](http://semver.org).
 
+## v2.2.0
+
+Support for XLS output, added by [michelboaventura](https://github.com/michelboaventura)
+
 ## v2.1.1
 
 Fix bug: in production, CSV rendering should not contain a backtrace if there's an error.
