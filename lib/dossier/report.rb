@@ -7,6 +7,10 @@ module Dossier
 
     attr_reader :options
 
+    def self.report_name
+      Dossier.class_to_name(self)
+    end
+
     def initialize(options = {})
       @options = options.dup.with_indifferent_access
     end
@@ -32,10 +36,6 @@ module Dossier
 
     def run
       tap { execute }
-    end
-
-    def view
-      self.class.name.sub(/Report\Z/, '').underscore
     end
 
     def formatter

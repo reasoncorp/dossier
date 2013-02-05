@@ -2,19 +2,28 @@ require "dossier/engine"
 require "dossier/version"
 
 module Dossier
+  extend self
 
-  def self.configuration
+  def configuration
     @configuration || configure
   end
 
-  def self.configure
+  def configure
     @configuration = Configuration.new
     yield(@configuration) if block_given?
     @configuration
   end
 
-  def self.client
+  def client
     configuration.client
+  end
+
+  def class_to_name(klass)
+    klass.name.underscore[0..-8]
+  end
+
+  def name_to_class(name)
+    "#{name.split('_').map(&:capitalize).join}Report".constantize
   end
 
   class ExecuteError < StandardError; end

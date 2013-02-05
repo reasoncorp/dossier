@@ -7,7 +7,7 @@ module Dossier
       respond_to do |format|
         format.html do
           begin
-            render template: "dossier/reports/#{report.view}", locals: {report: report}
+            render template: "dossier/reports/#{report_class.report_name}", locals: {report: report}
           rescue ActionView::MissingTemplate => e
             render template: 'dossier/reports/show', locals: {report: report}
           end
@@ -32,7 +32,7 @@ module Dossier
     private
 
     def report_class
-      "#{params[:report].split('_').map(&:capitalize).join}Report".constantize
+      Dossier.name_to_class(params[:report])
     end
 
     def set_content_disposition!

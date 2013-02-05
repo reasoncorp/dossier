@@ -4,6 +4,10 @@ describe Dossier::Report do
 
   let(:report) { TestReport.new(:foo => 'bar') }
 
+  it "has a report name" do
+    TestReport.report_name.should eq('test')
+  end
+
   describe "report instances" do
     it "takes options when initializing" do
       report = TestReport.new(:foo => 'bar')
@@ -53,12 +57,6 @@ describe Dossier::Report do
         report = EmployeeReport.new
         report.run
         report.results.should_not be_nil
-      end
-    end
-
-    describe "view" do
-      it "will infer its view name from the class name" do
-        EmployeeReport.new.view.should eq("employee")
       end
     end
 
