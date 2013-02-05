@@ -2,6 +2,10 @@
 
 Dossier does its best to use [semantic versioning](http://semver.org).
 
+## v2.3.0
+
+Removed `view` method from report.  Moved all logic for converting to and from report names from classes into Dossier module.  Refactored spec support files.  Fixed issue when rendering dossier template outside of `Dossier::ReportsController`.
+
 ## v2.2.0
 
 Support for XLS output, added by [michelboaventura](https://github.com/michelboaventura)
