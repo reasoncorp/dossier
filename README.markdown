@@ -211,12 +211,12 @@ So for a very simple, roll-your-own solution, you could do this:
 ```ruby
 # config/initializers/dossier.rb
 Rails.application.config.to_prepare do
-  # Define this on your ApplicationController
+  # Define `#my_protection_method` on your ApplicationController
   Dossier::ReportsController.before_filter :my_protection_method
 end
 ```
 
-For a more robust solution, you might make use of some gems. Here's a solution using the [Devise](https://github.com/plataformatec/devise) for authentication and [Authority](https://github.com/nathanl/authority) for authorization:
+For a more robust solution, you might make use of some gems. Here's a solution using [Devise](https://github.com/plataformatec/devise) for authentication and [Authority](https://github.com/nathanl/authority) for authorization:
 
 ```ruby
 # app/controllers/application_controller.rb
