@@ -29,11 +29,11 @@ module Dossier
       end
     end
 
-    private
-
     def report_class
       Dossier.name_to_class(params[:report])
     end
+
+    private
 
     def set_content_disposition!
       headers["Content-Disposition"] = %[attachment;filename=#{params[:report]}-report_#{Time.now.strftime('%m-%d-%Y_%H-%M-%S')}.#{params[:format]}]
