@@ -197,6 +197,46 @@ To see a report with all the bells and whistles, check out `spec/support/reports
 
 Dossier currently supports all databases supported by ActiveRecord; it comes with `Dossier::Adapter::ActiveRecord`, which uses ActiveRecord connections for escaping and executing queries. However, as the `Dossier::Adapter` namespace implies, it was written to allow for other connection adapters. See `CONTRIBUTING.md` if you'd like to add one.
 
+## Protecting Access to Reports
+
+You probably want to provide some protection to your reports: require viewers to be logged in, possibly check whether they're allowed to access this particular report, etc.
+
+Of course, you can protect your own controllers' use of Dossier reports however you wish. To protect report access via `Dossier::Controller`, you can make use of two facts:
+
+1. `Dossier::Controller` subclasses `ApplicationController`
+2. If you use an initializer, you can call methods on `Dossier::Controller`
+
+So for a very simple, roll-your-own solution, you could do this:
+
+```ruby
+# config/initializers/dossier.rb
+Rails.application.config.to_prepare do
+  # Define this on your ApplicationController
+  Dossier::ReportsController.before_filter :my_protection_method
+end
+```
+
+For a more robust solution, you might make use of some gems. Here's a solution using the [Devise](https://github.com/plataformatec/devise) for authentication and [Authority](https://github.com/nathanl/authority) for authorization:
+
+```ruby
+# app/controllers/application_controller.rb
+class ApplicationController < ActionController::Base
+  # Basic "you must be logged in"; will apply to all subclassing controllers,
+  # including Dossier::Controller.
+  before_filter :authenticate_user!
+end
+
+# config/initializers/dossier.rb
+Rails.application.config.to_prepare do
+  # Use Authority to enforce viewing permissions for this report.
+  # You might set the report's `authorizer_name` to 'ReportsAuthorizer', and
+  # define that with a `readable_by?(user)` method that suits your needs
+  Dossier::ReportsController.authorize_actions_for :report_class
+end
+```
+
+See the referenced gems for more documentation on using them.
+
 ## Running the Tests
 
 Note: when you run the tests, Dossier will **make and/or truncate** some tables in the `dossier_test` database.
@@ -215,7 +255,7 @@ Note: when you run the tests, Dossier will **make and/or truncate** some tables 
 - Callbacks, eg:
   - Stored procedures
   - Reformat results
-- Linking 
+- Linking
   - To other reports
   - To other formats
 - Extending the formatter
