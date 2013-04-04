@@ -9,9 +9,28 @@ describe Dossier::Report do
   end
 
   describe "report instances" do
+    let(:report_with_custom_header) do
+      Class.new(Dossier::Report) do
+        def format_header(header)
+          {
+            'generic' => 'customized'
+          }[header.to_s] || super
+        end
+      end.new
+    end
+
     it "takes options when initializing" do
       report = TestReport.new(:foo => 'bar')
       report.options.should eq('foo' => 'bar')
+    end
+
+    it 'generates column headers' do
+      report = TestReport.new(:foo => 'bar')
+      report.format_header('Foo').should eq 'Foo'
+    end
+
+    it 'allows for column header customization' do
+      report_with_custom_header.format_header(:generic).should eq 'customized'
     end
   end
 

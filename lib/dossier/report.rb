@@ -42,6 +42,10 @@ module Dossier
       Dossier::Formatter
     end
 
+    def format_header(header)
+      formatter.titleize(header.to_s)
+    end
+
     def dossier_client
       Dossier.client
     end
