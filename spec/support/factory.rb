@@ -10,11 +10,11 @@ module Dossier
     end
 
     def mysql2_client
-      @mysql2_client ||= Dossier::Client.new(DB_CONFIG[:mysql2])
+      @mysql2_client ||= Dossier::Client.new(DB_CONFIG.fetch(:mysql2))
     end
 
     def sqlite3_client
-      @sqlite3_client ||= Dossier::Client.new(DB_CONFIG[:sqlite3])
+      @sqlite3_client ||= Dossier::Client.new(DB_CONFIG.fetch(:sqlite3))
     end
 
     def mysql2_connection
