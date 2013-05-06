@@ -1,5 +1,6 @@
 .rvmrc
 .bundle/
+Gemfile.lock
 log/*.log
 pkg/
 spec/dummy/config/database.yml

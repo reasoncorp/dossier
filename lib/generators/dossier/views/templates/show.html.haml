@@ -6,7 +6,7 @@
   %thead
     %tr
       - report.results.headers.each do |header|
-        %th= report.format_header(header)
+        %th= Dossier::Formatter.titleize(header)
   %tbody
     - report.results.body.each do |row|
       %tr
