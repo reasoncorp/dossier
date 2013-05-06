@@ -17,21 +17,21 @@ describe Dossier::Query do
       context "when the methods return single values" do
 
         before :each do
-          report.stub(:sql).and_return("SELECT * FROM employees WHERE id = :id OR girth < :girth OR name = :name")
+          report.stub(:sql).and_return("SELECT * FROM employees WHERE id = :id OR girth < :girth OR hired_on = :hired_on")
           report.stub(:id).and_return(92)
           report.stub(:girth).and_return(3.14)
-          report.stub(:name).and_return('Jimmy')
+          report.stub(:hired_on).and_return('2013-03-29')
         end
 
         it "escapes the values" do
           query.should_receive(:escape).with(92)
           query.should_receive(:escape).with(3.14)
-          query.should_receive(:escape).with('Jimmy')
+          query.should_receive(:escape).with('2013-03-29')
           query.to_s
         end
 
         it "inserts the values" do
-          expect(query.to_s).to eq("SELECT * FROM employees WHERE id = 92 OR girth < 3.14 OR name = 'Jimmy'")
+          expect(query.to_s).to eq("SELECT * FROM employees WHERE id = 92 OR girth < 3.14 OR hired_on = '2013-03-29'")
         end
 
       end
