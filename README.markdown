@@ -47,7 +47,7 @@ class FancyKetchupReport < Dossier::Report
 end
 ```
 
-If you need dynamic values that may be influenced by the user, **[do not interpolate them directly](http://xkcd.com/327/)**. Dossier provides a safer way to add them: any symbols in the query will be replaced by calling methods of the same name in the report. Return values will be **escaped by the database connection**.  Arrays will have all of their contents escaped, joined with a "," and wrapped in parentheses.
+If you need dynamic values that may be influenced by the user, **[do not interpolate them directly](http://xkcd.com/327/)**. Dossier provides a safer way to add them: any lowercase symbols in the query will be replaced by calling methods of the same name in the report. Return values will be **escaped by the database connection**.  Arrays will have all of their contents escaped, joined with a "," and wrapped in parentheses.
 
 ```ruby
 # app/reports/fancy_ketchup_report.rb

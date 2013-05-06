@@ -15,7 +15,7 @@ module Dossier
     private
 
     def compile
-      string.gsub(/\w*\:\w+/) { |match| escape(report.public_send(match[1..-1])) }
+      string.gsub(/\w*\:[a-z]+/) { |match| escape(report.public_send(match[1..-1])) }
     end
 
     def escape(value)
