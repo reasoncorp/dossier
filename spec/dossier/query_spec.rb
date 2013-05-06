@@ -12,48 +12,67 @@ describe Dossier::Query do
 
   describe "replacing symbols by calling methods of the same name" do
 
-    context "when the methods return single values" do
+    context "when it's a normal symbol match" do
 
-      before :each do
-        report.stub(:sql).and_return("SELECT * FROM employees WHERE id = :id OR girth < :girth OR name = :name")
-        report.stub(:id).and_return(92)
-        report.stub(:girth).and_return(3.14)
-        report.stub(:name).and_return('Jimmy')
+      context "when the methods return single values" do
+
+        before :each do
+          report.stub(:sql).and_return("SELECT * FROM employees WHERE id = :id OR girth < :girth OR name = :name")
+          report.stub(:id).and_return(92)
+          report.stub(:girth).and_return(3.14)
+          report.stub(:name).and_return('Jimmy')
+        end
+
+        it "escapes the values" do
+          query.should_receive(:escape).with(92)
+          query.should_receive(:escape).with(3.14)
+          query.should_receive(:escape).with('Jimmy')
+          query.to_s
+        end
+
+        it "inserts the values" do
+          expect(query.to_s).to eq("SELECT * FROM employees WHERE id = 92 OR girth < 3.14 OR name = 'Jimmy'")
+        end
+
       end
 
-      it "escapes the values" do
-        query.should_receive(:escape).with(92)
-        query.should_receive(:escape).with(3.14)
-        query.should_receive(:escape).with('Jimmy')
-        query.to_s
-      end
+      context "when the methods return arrays" do
 
-      it "inserts the values" do
-        expect(query.to_s).to eq("SELECT * FROM employees WHERE id = 92 OR girth < 3.14 OR name = 'Jimmy'")
-      end
+        before :each do
+          report.stub(:sql).and_return("SELECT * FROM employees WHERE stuff IN :stuff")
+          report.stub(:stuff).and_return([38, 'blue', 'mandible', 2])
+        end
 
+        it "escapes each value in the array" do
+          Dossier.client.should_receive(:escape).with(38)
+          Dossier.client.should_receive(:escape).with('blue')
+          Dossier.client.should_receive(:escape).with('mandible')
+          Dossier.client.should_receive(:escape).with(2)
+          query.to_s
+        end
+
+        it "joins the return values with commas" do
+          expect(query.to_s).to eq("SELECT * FROM employees WHERE stuff IN (38, 'blue', 'mandible', 2)")
+        end
+      end
     end
 
-    context "when the methods return arrays" do
+    context "when it's another string that includes :" do
 
-      before :each do
-        report.stub(:sql).and_return("SELECT * FROM employees WHERE stuff IN :stuff")
-        report.stub(:stuff).and_return([38, 'blue', 'mandible', 2])
-      end
-
-      it "escapes each value in the array" do
-        Dossier.client.should_receive(:escape).with(38)
-        Dossier.client.should_receive(:escape).with('blue')
-        Dossier.client.should_receive(:escape).with('mandible')
-        Dossier.client.should_receive(:escape).with(2)
+      it "does not escape a namespaced constant" do
+        report.stub(:sql).and_return("SELECT * FROM employees WHERE type = 'Foo::Bar'") 
+        query.should_not_receive(:Bar)
         query.to_s
       end
 
-      it "joins the return values with commas" do
-        expect(query.to_s).to eq("SELECT * FROM employees WHERE stuff IN (38, 'blue', 'mandible', 2)")
+      it "does not escape a top-level constant" do
+        report.stub(:sql).and_return("SELECT * FROM employees WHERE type = '::Foo'") 
+        query.should_not_receive(:Foo)
+        query.to_s
       end
 
     end
 
   end
+
 end
