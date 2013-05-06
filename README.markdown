@@ -157,7 +157,16 @@ However, Dossier does support one URL parameter natively: if you supply a `foote
 
 ## Additional View Customization
 
-To further customize your results view, provide your own `app/views/dossier/reports/show`.
+To further customize your results view, run the the generator provided. The default will provide 'app/views/dossier/reports/show'.
+
+```ruby
+rails generate dossier:views
+```
+You may pass a filename as an argument. This example creates 'app/views/dossier/reports/account_tracker.html.haml'.
+
+```ruby
+rails generate dossier:views account_tracker
+```
 
 ## Callbacks
 
