@@ -2,10 +2,14 @@
 
 Dossier does its best to use [semantic versioning](http://semver.org).
 
-## Unreleased
+## v2.5.0
 
 - Made `#report_class` a public method on `Dossier::ReportsController` for easier integration with authorization gems
 - Moved "Download CSV" link to top of default report view
+- Formatting the header is now an instance method on the report class called `format_header` (thanks @rubysolo)
+- Rails 4 compatibility (thanks @rubysolo)
+- Fixed bug when using class names in SQL queries, only lowercase symbols that are a-z will be replaced with the respective method call.
+- Added view generator for Rails (thanks @wzcolon)
 
 ## v2.3.0
 
