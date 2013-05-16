@@ -1,0 +1,22 @@
+- @multi.reports.each do |report|
+  %h1= report.class.name.titleize
+
+  = link_to 'Download CSV', dossier_report_path(format: 'csv', options: report.options, report: report.class.report_name), class: 'download-csv'
+
+  %table
+    %thead
+      %tr
+        - report.results.headers.each do |header|
+          %th= report.format_header(header)
+    %tbody
+      - report.results.body.each do |row|
+        %tr
+          - row.each do |value|
+            %td= value
+
+    - if report.results.footers.any?
+      %tfoot
+        - @r.results.footers.each do |row|
+          %tr
+            - row.each do |value|
+              %th= value

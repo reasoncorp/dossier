@@ -29,6 +29,21 @@ module Dossier
       end
     end
 
+    def multi
+      @multi  = report_class.new
+      @multi.run
+
+      respond_to do |format|
+        format.html do
+          begin
+            render template: "dossier/reports/#{report_class}"
+          rescue ActionView::MissingTemplate => e
+            render template: 'dossier/reports/multi'
+          end
+        end
+      end
+    end
+
     private
 
     def report_class

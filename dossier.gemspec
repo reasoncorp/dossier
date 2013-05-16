@@ -28,4 +28,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "pry",          ">= 0.9.10"
   s.add_development_dependency "rspec-rails",  ">= 2.12.0"
   s.add_development_dependency "genspec",      "~> 0.2.7"
+  s.add_development_dependency "capybara",     "~> 2.1.0"
+  
 end
