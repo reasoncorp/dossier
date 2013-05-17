@@ -6,6 +6,10 @@ class Dossier::MultiReport
     attr_accessor :reports
   end
 
+  def initialize(options = {})
+    @options = options.dup.with_indifferent_access
+  end
+
   def self.combine(*reports)
     self.reports = reports
   end

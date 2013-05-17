@@ -1,8 +1,7 @@
 module Dossier
   class ReportsController < ApplicationController
     def show
-      report = report_class.new(params[:options] || {})
-      report.run
+      report = report_data(params[:options] || {}).run
 
       respond_to do |format|
         format.html do
@@ -30,15 +29,14 @@ module Dossier
     end
 
     def multi
-      @multi  = report_class.new
-      @multi.run
+      multi = report_data.run
 
       respond_to do |format|
         format.html do
           begin
-            render template: "dossier/reports/#{report_class}"
+            render template: "dossier/reports/#{report_class}", locals: {multi: multi}
           rescue ActionView::MissingTemplate => e
-            render template: 'dossier/reports/multi'
+            render template: 'dossier/reports/multi', locals: {multi: multi}
           end
         end
       end
@@ -52,6 +50,10 @@ module Dossier
 
     def set_content_disposition!
       headers["Content-Disposition"] = %[attachment;filename=#{params[:report]}-report_#{Time.now.strftime('%m-%d-%Y_%H-%M-%S')}.#{params[:format]}]
+    end
+
+    def report_data(options = {})
+      @report_data ||= report_class.new(options)
     end
 
   end
