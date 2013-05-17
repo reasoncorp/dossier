@@ -1,5 +1,6 @@
+%h1= name
 - multi.each do |report|
-  %h1= report.class.name.titleize
+  %h2= report.class.name.titleize
 
   = link_to 'Download CSV', dossier_report_path(format: 'csv', options: report.options, report: report.class.report_name), class: 'download-csv'
 

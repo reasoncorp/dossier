@@ -30,13 +30,14 @@ module Dossier
 
     def multi
       multi = report_data.run
+      name  = params[:report].titleize
 
       respond_to do |format|
         format.html do
           begin
-            render template: "dossier/reports/#{report_class}", locals: {multi: multi}
+            render template: "dossier/reports/#{report_class}", locals: {multi: multi, name: name}
           rescue ActionView::MissingTemplate => e
-            render template: 'dossier/reports/multi', locals: {multi: multi}
+            render template: 'dossier/reports/multi', locals: {multi: multi, name: name}
           end
         end
       end
