@@ -1,13 +1,13 @@
 class Dossier::MultiReport
 
-  attr_accessor :reports
+  attr_accessor :options
 
   class << self
     attr_accessor :reports
   end
 
-  def initialize(options = {})
-    @options = options.dup.with_indifferent_access
+  def self.report_name
+    Dossier.class_to_name(self)
   end
 
   def self.combine(*reports)
@@ -18,12 +18,12 @@ class Dossier::MultiReport
     value
   end
 
-  def reports
-    @reports ||= self.class.reports.map(&:new)
+  def initialize(options = {})
+    self.options = options.dup.with_indifferent_access
   end
 
-  def run
-    reports.each(&:run)
+  def reports
+    @reports ||= self.class.reports.map(&:new)
   end
 
 end
