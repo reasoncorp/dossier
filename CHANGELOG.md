@@ -2,6 +2,9 @@
 
 Dossier does its best to use [semantic versioning](http://semver.org).
 
+## v2.6.0
+- Support ability to combine reports into a macro report using the Dossier::MultiReport class
+
 ## v2.5.0
 
 - Made `#report_class` a public method on `Dossier::ReportsController` for easier integration with authorization gems
