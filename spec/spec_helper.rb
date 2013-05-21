@@ -6,6 +6,7 @@ require "rails/test_help"
 require 'rspec/rails'
 require 'pry'
 require 'genspec'
+require 'capybara/rspec'
 
 Rails.backtrace_cleaner.remove_silencers!
 
