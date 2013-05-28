@@ -11,6 +11,10 @@ module Dossier
       Dossier.class_to_name(self)
     end
 
+    def self.filename
+      "#{report_name.parameterize}-report_#{Time.now.strftime('%m-%d-%Y_%H-%M-%S')}"
+    end
+
     def initialize(options = {})
       @options = options.dup.with_indifferent_access
     end

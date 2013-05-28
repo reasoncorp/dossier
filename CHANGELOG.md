@@ -6,6 +6,7 @@ Dossier does its best to use [semantic versioning](http://semver.org).
 - Support namespaces for report names (`cats/are/super_fun` => `Cats::Are::SuperRunReport`
 - Moved controller response formats into responder class
 - Added renderer that contains logic for custom views, this has a pluggable engine depending on if the request is through the controller or through direct object access.  If it is through the controller, the controller will be used as the rendering engine, otherwise a basic controller that only renders will be used.
+- Filename is configurable by overriding `self.filename` in any given report class
 
 ## v2.7.0
 - Added `formatted_dossier_report_path` helper method

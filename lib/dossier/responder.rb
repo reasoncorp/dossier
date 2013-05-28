@@ -30,7 +30,7 @@ module Dossier
     end
 
     def filename
-      "#{report.class.report_name.parameterize}-report_#{Time.now.strftime('%m-%d-%Y_%H-%M-%S')}.#{format}"
+      "#{report.class.filename}.#{format}"
     end
 
     def set_report_view_context!
