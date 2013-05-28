@@ -6,7 +6,7 @@ module Dossier
     define_callbacks :build_query, :execute
 
     attr_reader :options
-    attr_accessor :multi
+    attr_accessor :parent
 
     def self.filename
       "#{report_name.parameterize}-report_#{Time.now.strftime('%m-%d-%Y_%H-%M-%S')}"

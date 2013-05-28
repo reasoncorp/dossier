@@ -29,7 +29,7 @@ module Dossier
     end
 
     def custom_template_path
-      template_path(report.class.report_name)
+      template_path(report.report_name)
     end
 
     def default_template_path

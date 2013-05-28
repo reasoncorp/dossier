@@ -18,8 +18,12 @@ class Dossier::MultiReport
   def reports
     @reports ||= self.class.reports.map { |report| 
       report.new(options).tap { |r|
-        r.multi = self
+        r.parent = self
       }
     }
+  end
+
+  def parent
+    nil
   end
 end

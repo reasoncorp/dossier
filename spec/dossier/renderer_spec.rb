@@ -11,7 +11,7 @@ describe Dossier::Renderer do
 
     describe "with custom view" do
       let(:report)   { EmployeeWithCustomViewReport.new }
-      let(:template) { report.class.report_name }
+      let(:template) { report.report_name }
 
       it "renders the custom view" do
         engine.should_receive(:render).with(options)

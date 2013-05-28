@@ -19,6 +19,10 @@ describe Dossier::MultiReport do
   end
 
   it "sets the multi property on its child reports" do
-    expect(report.reports.first.multi).to eq(report)
+    expect(report.reports.first.parent).to eq(report)
+  end
+
+  it "never has a parent" do
+    expect(report.parent).to be_nil
   end
 end

@@ -1,12 +1,14 @@
-%h1= report.class.name.titleize
+%h2= report.formatted_title
 
-= link_to 'Download CSV', dossier_report_path(format: 'csv', options: report.options, report: report.class.report_name), class: 'download-csv'
+= link_to 'Download CSV', formatted_dossier_report_path('csv', report), class: 'download-csv'
+
+= render_options(report)
 
 %table
   %thead
     %tr
       - report.results.headers.each do |header|
-        %th= Dossier::Formatter.titleize(header)
+        %th= report.format_header(header)
   %tbody
     - report.results.body.each do |row|
       %tr

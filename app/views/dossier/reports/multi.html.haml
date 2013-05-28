@@ -1,3 +1,5 @@
 %h1= multi.formatted_title
+= render_options(multi)
+
 - multi.reports.each do |report|
   = report.render layout: false
