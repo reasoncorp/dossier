@@ -30,9 +30,5 @@ module Dossier
     def filename
       "#{report.class.filename}.#{format}"
     end
-
-    def set_report_view_context!
-      report.renderer.view = controller.view
-    end
   end
 end
