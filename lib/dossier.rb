@@ -29,6 +29,7 @@ module Dossier
   class ExecuteError < StandardError; end
 end
 
+require "dossier/naming"
 require "dossier/adapter/active_record"
 require "dossier/adapter/active_record/result"
 require "dossier/client"

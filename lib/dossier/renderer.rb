@@ -2,18 +2,15 @@ module Dossier
   class Renderer
     attr_reader :report
     attr_writer :engine
-    attr_accessor :template
 
     def initialize(report)
       @report = report
     end
 
-    def render
-      custom_template!
-      default_render
+    def render(options = {})
+      render_template :custom, options
     rescue ActionView::MissingTemplate => e
-      default_template!
-      default_render
+      render_template :default, options
     end
 
     def engine
@@ -22,24 +19,27 @@ module Dossier
 
     private
 
-    def default_render
-      engine.render template: template, locals: {report: report}
+    def render_template(template, options)
+      template = send("#{template}_template_path")
+      engine.render options.merge(template: template, locals: {report: report})
     end
 
-    def default_template!
-      self.template = 'show'
+    def template_path(template)
+      "dossier/reports/#{template}"
     end
 
-    def custom_template!
-      self.template = report.class.report_name
+    def custom_template_path
+      template_path(report.class.report_name)
     end
 
-    def template=(value)
-      @template = "dossier/reports/#{value}"
+    def default_template_path
+      template_path('show')
     end
 
     class Engine < AbstractController::Base
-      include AbstractController::Rendering
+      include AbstractController::Layouts
+
+      layout 'dossier/layouts/application'
 
       def self._helpers
         Module.new do

@@ -5,8 +5,9 @@ describe EmployeeWithCustomClientReport do
   describe "rendering HTML" do
 
     it "builds a report using the specified client's database" do
-      get "reports/employee_with_custom_client"
-      expect(response.body).to eq(File.read('spec/fixtures/reports/employee_with_custom_client.html'))
+      visit '/reports/employee_with_custom_client'
+      expect(page).to have_selector('table tbody tr', count: 3)
+      expect(page).to have_selector('td', text: 'ELISE ELDERBERRY')
     end
 
   end

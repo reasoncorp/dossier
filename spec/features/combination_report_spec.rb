@@ -2,18 +2,15 @@ require 'spec_helper'
 
 describe "combination report" do
   
-  describe "rendering html" do
+  it "displays the correct html" do
+    visit '/multi/reports/combination'
+    expect(page).to have_content('Employee Report')
+    expect(page).to have_content('Did you get that memo?')
+  end
 
-    context "when no custom view exists" do
-      
-      it "displays the correct html" do
-        visit '/multi/reports/combination'
-        expect(page).to have_content('Employee Report')
-        expect(page).to have_content('Did you get that memo?')
-      end
-
-    end
-
+  it "does not display options for sub reports" do
+    visit '/multi/reports/combination'
+    expect(page).to_not have_content('options be here matey!')
   end
 
 end

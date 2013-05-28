@@ -43,5 +43,15 @@ describe Dossier::Renderer do
         expect(extractor.call engine.view_paths).to eq(extractor.call ActionController::Base.view_paths)
       end
     end
+
+    describe "layouts" do
+      it "uses a layout" do
+        expect(report.render).to match('<html>')
+      end
+
+      it "makes the report available to the layout" do
+        expect(report.render).to match('<title>Employee Report</title>')
+      end
+    end
   end
 end

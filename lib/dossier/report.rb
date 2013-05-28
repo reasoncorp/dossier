@@ -1,15 +1,12 @@
 module Dossier
   class Report
+    include Dossier::Naming
     include ActiveSupport::Callbacks
-    extend ActiveModel::Naming
 
     define_callbacks :build_query, :execute
 
     attr_reader :options
-
-    def self.report_name
-      Dossier.class_to_name(self)
-    end
+    attr_accessor :multi
 
     def self.filename
       "#{report_name.parameterize}-report_#{Time.now.strftime('%m-%d-%Y_%H-%M-%S')}"
@@ -48,10 +45,6 @@ module Dossier
 
     def format_header(header)
       formatter.titleize(header.to_s)
-    end
-
-    def formatted_title
-      format_header("#{self.class.report_name.gsub('/', ' ')} Report")
     end
 
     def dossier_client

@@ -5,8 +5,9 @@ describe "EmployeeReport with custom controller" do
   describe "rendering HTML" do
 
     it "builds a report using the specified client's database" do
-      get "/employee_report_custom_controller"
-      expect(response.body).to eq(File.read('spec/fixtures/reports/employee.html'))
+      visit "/employee_report_custom_controller"
+      expect(page).to have_selector("table thead tr", count: 1)
+      expect(page).to have_selector("table tbody tr", count: 3)
     end
 
   end

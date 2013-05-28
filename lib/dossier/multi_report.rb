@@ -1,4 +1,5 @@
 class Dossier::MultiReport
+  include Dossier::Naming
 
   attr_accessor :options
 
@@ -6,16 +7,8 @@ class Dossier::MultiReport
     attr_accessor :reports
   end
 
-  def self.report_name
-    Dossier.class_to_name(self)
-  end
-
   def self.combine(*reports)
     self.reports = reports
-  end
-
-  def self.report=(value)
-    value
   end
 
   def initialize(options = {})
@@ -23,7 +16,10 @@ class Dossier::MultiReport
   end
 
   def reports
-    @reports ||= self.class.reports.map(&:new)
+    @reports ||= self.class.reports.map { |report| 
+      report.new(options).tap { |r|
+        r.multi = self
+      }
+    }
   end
-
 end
