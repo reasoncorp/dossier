@@ -18,12 +18,12 @@ module Dossier
 
     private
 
-    def as_cel(el)
+    def as_cell(el)
       %{<Cell><Data ss:Type="String">#{el}</Data></Cell>}
     end
 
     def as_row(array)
-      my_array = array.map{|a| as_cel(a)}.join("\n")
+      my_array = array.map{|a| as_cell(a)}.join("\n")
       "<Row>\n" + my_array + "\n</Row>\n"
     end
 
