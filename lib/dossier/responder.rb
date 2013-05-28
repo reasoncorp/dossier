@@ -13,7 +13,6 @@ module Dossier
       controller.render json: report.results.hashes
     end
 
-    # TODO see if i have to set the response body...
     def to_csv
       set_content_disposition!
       controller.response_body = StreamCSV.new(report.raw_results.arrays)
