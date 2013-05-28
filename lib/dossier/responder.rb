@@ -5,14 +5,8 @@ module Dossier
     alias :report :resource
 
     def to_html
-      set_report_view_context!
-      report.render
-
-      custom_template!
-      default_render
-    rescue ActionView::MissingTemplate => e
-      default_template!
-      default_render
+      report.renderer.engine   = controller
+      controller.response_body = report.render
     end
 
     def to_json

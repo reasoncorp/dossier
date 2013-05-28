@@ -51,6 +51,8 @@ module Dummy
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    Dir["#{File.dirname(__FILE__)}/../../support/reports/**/*.rb"].each { |f| require f }
   end
 end
 

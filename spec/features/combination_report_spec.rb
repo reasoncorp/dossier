@@ -9,7 +9,7 @@ describe "combination report" do
       it "displays the correct html" do
         visit '/multi/reports/combination'
         expect(page).to have_content('Employee Report')
-        expect(page).to have_content('Employee With Custom View Report')
+        expect(page).to have_content('Did you get that memo?')
       end
 
     end

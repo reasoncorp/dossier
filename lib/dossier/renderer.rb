@@ -1,14 +1,7 @@
 module Dossier
   class Renderer
-
     attr_reader :report
-    attr_accessor :template
-
-    def self._helpers
-      Module.new do
-        include Dossier::ApplicationHelper
-      end
-    end
+    attr_accessor :template, :engine
 
     def initialize(report)
       @report = report
@@ -22,20 +15,10 @@ module Dossier
       default_render
     end
 
-    def view_context_class
-      @view_context_class ||= ActionView::Base.prepare(nil, nil)
-    end
-
-    def view_context
-      view_context_class.new(view_renderer)
-    end
-
-    def view_renderer
-
-    end
+    private
 
     def default_render
-      render_to_string template: template, locals: {report: report}
+      engine.render template: template, locals: {report: report}
     end
 
     def default_template!
@@ -48,6 +31,25 @@ module Dossier
 
     def template=(value)
       @template = "dossier/reports/#{value}"
+    end
+
+    def engine
+      @engine ||= Engine.new
+    end
+
+    class Engine < AbstractController::Base
+      include AbstractController::Rendering
+
+      def self._helpers
+        Module.new do
+          include Rails.application.helpers
+          include Rails.application.routes_url_helpers
+        end
+      end
+
+      def self._view_paths
+        ActionController::Base.view_paths
+      end
     end
   end
 end

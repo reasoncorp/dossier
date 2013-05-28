@@ -18,11 +18,6 @@ describe Dossier::Responder do
   let(:responder)  { described_class.new(controller, reports, {}) }
 
   describe "to_html" do
-    it "sets the controller's view context on the report renderer" do
-      responder.to_html
-      expect(report.renderer.view).to eq(controller.view)
-    end
-
     it "calls render on the report" do
       report.should_receive(:render)
       responder.to_html
