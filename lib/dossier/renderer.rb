@@ -1,7 +1,8 @@
 module Dossier
   class Renderer
     attr_reader :report
-    attr_accessor :template, :engine
+    attr_writer :engine
+    attr_accessor :template
 
     def initialize(report)
       @report = report
@@ -13,6 +14,10 @@ module Dossier
     rescue ActionView::MissingTemplate => e
       default_template!
       default_render
+    end
+
+    def engine
+      @engine ||= Engine.new
     end
 
     private
@@ -31,10 +36,6 @@ module Dossier
 
     def template=(value)
       @template = "dossier/reports/#{value}"
-    end
-
-    def engine
-      @engine ||= Engine.new
     end
 
     class Engine < AbstractController::Base

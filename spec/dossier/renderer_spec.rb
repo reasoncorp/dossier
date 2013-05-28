@@ -4,7 +4,7 @@ describe Dossier::Renderer do
 
   let(:report)   { EmployeeReport.new }
   let(:renderer) { described_class.new(report) }
-  let(:engine)   { renderer.send(:engine) }
+  let(:engine)   { renderer.engine }
 
   describe "rendering" do
     let(:options) { {template: "dossier/reports/#{template}", locals: {report: report}} }

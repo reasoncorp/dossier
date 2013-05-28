@@ -1,7 +1,5 @@
 module Dossier
   class Responder < ::ActionController::Responder
-    attr_accessor :template
-
     alias :report :resource
 
     def to_html
