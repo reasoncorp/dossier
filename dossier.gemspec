@@ -29,5 +29,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec-rails",  ">= 2.13.2"
   s.add_development_dependency "genspec",      "~> 0.2.7"
   s.add_development_dependency "capybara",     "~> 2.1.0"
-  
+  s.add_development_dependency "simplecov",    "~> 0.7.1"
 end

@@ -7,6 +7,9 @@ require 'rspec/rails'
 require 'pry'
 require 'genspec'
 require 'capybara/rspec'
+require 'simplecov'
+
+SimpleCov.start
 
 Rails.backtrace_cleaner.remove_silencers!
 
