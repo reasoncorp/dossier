@@ -1,4 +1,4 @@
-%h1= report.class.name.titleize
+%h1= report.formatted_title
 
 = link_to 'Download CSV', dossier_report_path(format: 'csv', options: report.options, report: report.class.report_name), class: 'download-csv'
 

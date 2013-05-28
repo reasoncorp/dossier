@@ -46,6 +46,10 @@ module Dossier
       formatter.titleize(header.to_s)
     end
 
+    def formatted_title
+      format_header("#{self.class.report_name.gsub('/', ' ')} Report")
+    end
+
     def dossier_client
       Dossier.client
     end

@@ -23,7 +23,7 @@ module Dossier
   end
 
   def name_to_class(name)
-    "#{name.split('_').map(&:capitalize).join}Report".constantize
+    "#{name}_report".classify.constantize
   end
 
   class ExecuteError < StandardError; end
@@ -37,6 +37,7 @@ require "dossier/formatter"
 require "dossier/multi_report"
 require "dossier/query"
 require "dossier/report"
+require "dossier/responder"
 require "dossier/result"
 require "dossier/stream_csv"
 require "dossier/xls"

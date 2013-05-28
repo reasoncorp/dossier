@@ -2,6 +2,12 @@
 
 Dossier does its best to use [semantic versioning](http://semver.org).
 
+## Unreleased
+- Support namespaces for report names (`cats/are/super_fun` => `Cats::Are::SuperRunReport`
+
+## v2.7.0
+- Added `formatted_dossier_report_path` helper method
+
 ## v2.6.0
 - Support ability to combine reports into a macro report using the Dossier::MultiReport class
 

@@ -20,17 +20,19 @@ describe Dossier::Report do
     end
 
     it "takes options when initializing" do
-      report = TestReport.new(:foo => 'bar')
       report.options.should eq('foo' => 'bar')
     end
 
     it 'generates column headers' do
-      report = TestReport.new(:foo => 'bar')
       report.format_header('Foo').should eq 'Foo'
     end
 
     it 'allows for column header customization' do
       report_with_custom_header.format_header(:generic).should eq 'customized'
+    end
+
+    it "has a formatted title" do
+      expect(report.formatted_title).to eq 'Test Report'
     end
   end
 
