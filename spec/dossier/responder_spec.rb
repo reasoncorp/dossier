@@ -18,27 +18,15 @@ describe Dossier::Responder do
   let(:responder)  { described_class.new(controller, reports, {}) }
 
   describe "to_html" do
-    let(:options) { {template: "dossier/reports/#{template}", locals: {report: report}} }
-
-    describe "with custom view" do
-      let(:report)   { EmployeeWithCustomViewReport.new }
-      let(:template) { report.class.report_name }
-
-      it "renders the custom view" do
-        controller.should_receive(:render).with(options)
-      end
+    it "sets the controller's view context on the report renderer" do
+      responder.to_html
+      expect(report.renderer.view).to eq(controller.view)
     end
 
-    describe "without custom view" do
-      let(:template) { 'show' }
-
-      it "renders show" do
-        controller.should_receive(:render).with(options.merge(template: 'dossier/reports/employee')).and_call_original
-        controller.should_receive(:render).with(options)
-      end
+    it "calls render on the report" do
+      report.should_receive(:render)
+      responder.to_html
     end
-
-    after(:each) { responder.to_html }
   end
 
   describe "to_json" do

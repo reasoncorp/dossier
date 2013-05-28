@@ -4,6 +4,7 @@ Dossier does its best to use [semantic versioning](http://semver.org).
 
 ## Unreleased
 - Support namespaces for report names (`cats/are/super_fun` => `Cats::Are::SuperRunReport`
+- Moved controller response formats into responder class
 
 ## v2.7.0
 - Added `formatted_dossier_report_path` helper method

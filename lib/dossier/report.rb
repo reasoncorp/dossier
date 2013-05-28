@@ -54,6 +54,12 @@ module Dossier
       Dossier.client
     end
 
+    def renderer
+      @renderer ||= Renderer.new(self)
+    end
+    
+    delegate :render, to: :renderer
+
     private
 
     def build_query

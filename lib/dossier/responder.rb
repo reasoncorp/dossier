@@ -5,6 +5,9 @@ module Dossier
     alias :report :resource
 
     def to_html
+      set_report_view_context!
+      report.render
+
       custom_template!
       default_render
     rescue ActionView::MissingTemplate => e
@@ -16,6 +19,7 @@ module Dossier
       controller.render json: report.results.hashes
     end
 
+    # TODO see if i have to set the response body...
     def to_csv
       set_content_disposition!
       controller.response_body = StreamCSV.new(report.raw_results.arrays)
@@ -36,20 +40,8 @@ module Dossier
       "#{report.class.report_name.parameterize}-report_#{Time.now.strftime('%m-%d-%Y_%H-%M-%S')}.#{format}"
     end
 
-    def default_render
-      controller.render template: template, locals: {report: report}
-    end
-
-    def default_template!
-      self.template = 'show'
-    end
-
-    def custom_template!
-      self.template = report.class.report_name
-    end
-
-    def template=(value)
-      @template = "dossier/reports/#{value}"
+    def set_report_view_context!
+      report.renderer.view = controller.view
     end
   end
 end

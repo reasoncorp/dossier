@@ -23,10 +23,10 @@ Gem::Specification.new do |s|
   s.add_dependency "railties",        ">= 3.2"
   s.add_dependency "haml",            ">= 3.1"
 
-  s.add_development_dependency "activerecord", "~> 3.2.11"
+  s.add_development_dependency "activerecord", "~> 3.2.13"
   s.add_development_dependency "sqlite3",      ">= 1.3.6"
   s.add_development_dependency "pry",          ">= 0.9.10"
-  s.add_development_dependency "rspec-rails",  ">= 2.12.0"
+  s.add_development_dependency "rspec-rails",  ">= 2.13.2"
   s.add_development_dependency "genspec",      "~> 0.2.7"
   s.add_development_dependency "capybara",     "~> 2.1.0"
   
