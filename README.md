@@ -76,9 +76,9 @@ class ProductMarginReport < Dossier::Report
   # ...
   def format_header(column_name)
     {
-      'margin_percentage' => 'Margin %',
-      'absolute_margin' => 'Margin $'
-    }[column_name.to_s] || super
+      margin_percentage: 'Margin %',
+      absolute_margin:   'Margin $'
+    }.fetch(column_name.to_sym, super)
   end
 end
 ```
