@@ -29,7 +29,7 @@ describe Dossier::Adapter::ActiveRecord do
     let(:adapter_result_class) { Dossier::Adapter::ActiveRecord::Result}
 
     it "delegates to the connection" do
-      ar_connection.should_receive(:exec_query).with(query)
+      ar_connection.should_receive(:exec_query).with("\n#{query}")
       adapter.execute(query)
     end
 

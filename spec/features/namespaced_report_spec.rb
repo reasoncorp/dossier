@@ -6,7 +6,7 @@ describe "namespaced report" do
 
     it "displays the correct html" do
       visit '/reports/cats/are/super_fun'
-      expect(page).to have_content('Cats Are Super Fun Report')
+      expect(page).to have_content('Super Fun Report')
     end
 
   end
