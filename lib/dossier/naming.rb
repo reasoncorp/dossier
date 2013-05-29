@@ -1,6 +1,8 @@
 module Dossier
   module Naming
 
+    # not using ActiveSupport::Concern because ClassMethods
+    # must be extended after ActiveModel::Naming
     def self.included(base)
       base.extend ActiveModel::Naming
       base.extend ClassMethods
