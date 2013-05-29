@@ -10,15 +10,15 @@ module Dossier
     end
 
     def headers
-      adapter_results.headers
+      @headers ||= adapter_results.headers
     end
 
     def body
-      rows.first(rows.length - report.options[:footer].to_i)
+      @body ||= rows.first(rows.length - report.options[:footer].to_i)
     end
 
     def footers
-      rows.last(report.options[:footer].to_i)
+      @footer ||= rows.last(report.options[:footer].to_i)
     end
 
     def rows
