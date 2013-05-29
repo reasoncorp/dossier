@@ -13,7 +13,7 @@ module Dossier
     end
 
     def report_name(report)
-      titleize("#{report.report_name.gsub('/', ' ')} Report")
+      titleize("#{report.report_name.split('/').last} Report")
     end
 
     delegate :url_for, :link_to, :url_helpers, to: :url_formatter
