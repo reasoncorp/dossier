@@ -15,7 +15,7 @@ module Dossier
 
       def execute(query, report_name = nil)
         # Ensure that SQL logs show name of report generating query
-        Result.new(connection.exec_query(*[query, report_name].compact))
+        Result.new(connection.exec_query(*["\n#{query}", report_name].compact))
       rescue => e
         raise Dossier::ExecuteError.new "#{e.message}\n\n#{query}"
       end
