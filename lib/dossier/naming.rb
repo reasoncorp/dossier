@@ -8,9 +8,6 @@ module Dossier
       base.extend ClassMethods
     end
 
-    def formatted_title
-      Dossier::Formatter.report_name(self)
-    end
 
     def to_key
       [report_name]
@@ -20,9 +17,7 @@ module Dossier
       report_name
     end
 
-    def report_name
-      self.class.report_name
-    end
+    delegate :report_name, :formatted_title, to: "self.class"
 
     module ClassMethods
       def report_name
@@ -33,6 +28,10 @@ module Dossier
         @model_name ||= ActiveModel::Name.new(self, nil, superclass.name).tap do |name|
           name.instance_variable_set(:@param_key, 'options')
         end
+      end
+
+      def formatted_title
+        Dossier::Formatter.report_name(self)
       end
     end
 
