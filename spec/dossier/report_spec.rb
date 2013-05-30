@@ -94,4 +94,14 @@ describe Dossier::Report do
     end
   end
 
+  describe "segmenters" do
+    it "creates a segment subclass under its own namespace when inherited" do
+      expect(EmployeeReport::Segmenter.ancestors).to include(Dossier::Segmenter)
+    end
+
+    it "has a segmenter" do
+      expect(report.segmenter).to be_a TestReport::Segmenter
+    end
+  end
+
 end
