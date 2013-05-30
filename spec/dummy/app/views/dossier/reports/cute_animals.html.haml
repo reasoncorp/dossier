@@ -1,0 +1,60 @@
+= render_options(report)
+
+.row-fluid
+  .span12
+    - report.segmenter.families.each do |family|
+      %h2= family.display_name
+      - family.domestics.each do |domestic|
+        %h3= domestic.display_name
+        - domestic.groups.each do |group|
+          %table
+            %thead
+              %tr
+                %th{colspan: report.segmenter.headers.count}
+                  = group.display_name
+              %tr
+                - report.segmenter.headers.each do |header|
+                  %th= report.format_header(header)
+            %tbody
+              - group.rows.each do |row|
+                %tr
+                  - row.each do |value|
+                    %td= value
+            -# %tfoot
+              %tr
+                %th Count #{segment.summary.count}
+                %th{colspan: 3}
+                %th= segment.summary.unbilled_currency
+                %th= segment.summary.receivable_currency
+
+      -# .box{id: "#{division.name.downcase}-summary"}
+        .box-content.nopadding
+          %table.table
+            %thead
+              %tr
+                %th.text-left #{division.name} Summary
+                %th Records
+                %th Unbilled Summary
+                %th Receivable Summary
+              - division.states.each do |state|
+                %tbody
+                  - state.jurisdictions.each do |jurisdiction|
+                    - next if jurisdiction.summary.count.zero?
+                    %tr
+                      %td #{jurisdiction.name.titleize}, #{state.name}
+                      %td Count: #{jurisdiction.summary.count}
+                      %td.text-right= jurisdiction.summary.unbilled_currency
+                      %td.text-right= jurisdiction.summary.receivable_currency
+              %tfoot
+                - division.states.each do |state|
+                  - next if state.summary.count.zero?
+                  %tr
+                    %th #{state.full_name} State
+                    %th Count: #{state.summary.count}
+                    %th.text-right= state.summary.unbilled_currency
+                    %th.text-right= state.summary.receivable_currency
+                %tr
+                  %th= division.name
+                  %th Count: #{division.summary.count}
+                  %th.text-right= division.summary.unbilled_currency
+                  %th.text-right= division.summary.receivable_currency

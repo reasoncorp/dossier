@@ -2,118 +2,70 @@ module Dossier
   class Segmenter
     attr_accessor :report
 
-    delegate :segments, to: "self.class"
+    class << self
+      attr_accessor :report_class
+    end
 
     def self.segments
-      @segments ||= SegmentChain.new
+      @segment_chain ||= Segment::Chain.new
     end
 
-    def self.segment(group_by, options = {}, &block)
-      segments << SegmentDefinition.new(self, group_by, options.fetch(:display_name, group_by))
+    def self.segment(name, options = {}, &block)
+      segments << Segment::Definition.new(self, name, options)
       instance_eval(&block) if block_given?
     end
+
+    def self.skip_headers
+      segments.map(&:columns).flatten
+    end
+    delegate :skip_headers, to: "self.class"
     
     def initialize(report)
       self.report = report
-      segment_definitions.first.connect(self)
+      extend(segment_chain.first.segment_module)
+    end
+
+    def headers
+      @headers ||= report.results.headers.reject { |header| header.in?(skip_headers) }
     end
 
     def data
-      @data ||= report.results.rows.inject(default_data) { |acc, row|
-        acc.tap do |hash|
-        end
+      @data ||= report.results.rows.inject(Hash.new { [] }) { |acc, row|
+        acc.tap { |hash| hash[key_path_for(row)] += [row] }
       }
     end
 
-    def default_data
-      segment_definitions.map(&:group_by).reduce({}) do |acc, group_by|
-        acc.tap { |hash| hash[group_by] = {} }
-      end
-    end
-    
-    def segment_definitions
+    def segment_chain
       self.class.segments
     end
-    
-    def segments
-      @segments ||= segment_definitions.map { |definition| definition.segment_class.new(self, definition) }
-    end
-  end
 
-  class SegmentChain
-    include Enumerable
-
-    def initialize
-      @segment_chain = []
+    def segmenter
+      self
     end
 
-    def at(index)
-      segment_chain.at(index)
-    end
-    alias :[] :at
-
-    def <<(segment)
-      segment_chain.last.connect(segment) if segment_chain.any?
-      segment_chain << segment
-    end
-
-    def each
-      segment_chain.each { |segment| yield segment }
-    end
-
-    private
-    attr_reader :segment_chain
-  end
-
-  class SegmentDefinition
-    attr_accessor :segmenter, :group_by, :display_name, :parent, :child
-
-    def initialize(segmenter, group_by, display_name)
-      self.segmenter    = segmenter
-      self.group_by     = group_by
-      self.display_name = display_name
-      define_segment_class
-    end
-
-    def connect(segment)
-      self.parent = segment
-      segment.extend proxy_module
-    end
-
-    def proxy_module
-      segment = self
-      Module.new do
-        define_method(segment.link_method) do
-        end
-      end
-    end
-
-    def link_method
-      group_by.to_s.pluralize
-    end
-
-    def segment_class_name
-      group_by.to_s.classify
-    end
-
-    def segment_class
-      segmenter.const_get(segment_class_name)
+    def segment_options_for(segment)
+      data.keys.select { |k, v| k.match segment.key_path }.
+        map { |key| data[key].first }.
+        flatten.map { |row| Hash[report.results.headers.zip(row)] }
     end
 
     private
 
-    def define_segment_class
-      segmenter.const_set(segment_class_name, Class.new(Segment))
+    def key_path_for(row)
+      group_by_indexes.map { |i| row.at(i) }.join('.')
     end
-  end
 
-  class Segment
-    attr_accessor :segmenter, :report, :definition
+    def segment_options
+      data unless defined?(@data)
+      @segment_options
+    end
 
-    def initialize(segmenter, definition)
-      self.segmenter  = segmenter
-      self.report     = segmenter.report
-      self.definition = definition
+    def header_index_map
+      @header_index_map ||= Hash[skip_headers.map { |h| [h, report.results.headers.index(h)] }]
+    end
+
+    def group_by_indexes
+      @group_by_indexes ||= header_index_map.values_at(*segment_chain.map(&:group_by).map(&:to_s))
     end
   end
 end
