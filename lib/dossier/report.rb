@@ -8,20 +8,10 @@ module Dossier
     attr_reader :options
     attr_accessor :parent
 
-    def self.inherited(base)
-      segmenter_class = Class.new(Dossier::Segmenter)
-      segmenter_class.report_class = base
-      base.const_set(:Segmenter, segmenter_class)
-    end
-
     def self.filename
       "#{report_name.parameterize}-report_#{Time.now.strftime('%m-%d-%Y_%H-%M-%S')}"
     end
     
-    def self.segmenter_class
-      const_get(:Segmenter)
-    end
-
     def initialize(options = {})
       @options = options.dup.with_indifferent_access
     end
@@ -47,14 +37,6 @@ module Dossier
 
     def run
       tap { execute }
-    end
-
-    def segmenter
-      @segmenter ||= self.class.segmenter_class.new(self)
-    end
-
-    def segmented?
-      segmenter.segment_chain.any?
     end
 
     def formatter
