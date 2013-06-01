@@ -80,7 +80,7 @@ class ProductMarginReport < Dossier::Report
       margin_percentage: 'Margin %',
       absolute_margin:   'Margin $'
     }
-    custom_headers.fetch(column_name.to_sym, super)
+    custom_headers.fetch(column_name.to_sym) { super }
   end
 end
 ```
