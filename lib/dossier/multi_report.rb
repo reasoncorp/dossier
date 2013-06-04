@@ -30,4 +30,8 @@ class Dossier::MultiReport
   def formatter
     Module.new
   end
+  
+  def dom_id
+    nil
+  end
 end

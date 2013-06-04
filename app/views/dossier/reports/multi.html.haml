@@ -1,7 +1,8 @@
-%h1.dossier-multi-header
-  = multi.formatted_title
+%div{id: multi.dom_id}
+  %h1.dossier-multi-header
+    = multi.formatted_title
 
-= render_options(multi)
+  = render_options(multi)
 
-- multi.reports.each do |report|
-  = report.render layout: false
+  - multi.reports.each do |report|
+    = report.render layout: false
