@@ -26,4 +26,8 @@ class Dossier::MultiReport
   def parent
     nil
   end
+
+  def formatter
+    Module.new
+  end
 end

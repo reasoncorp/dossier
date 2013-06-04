@@ -8,11 +8,11 @@ module Dossier
       number_to_currency(value /= 100.0)
     end
 
-    def non_localized_number_to_currency(value)
-      "$#{non_localized_number_with_delimiter(value, 2)}"
+    def number_to_dollars(value)
+      "$#{commafy_number(value, 2)}"
     end
 
-    def non_localized_number_with_delimiter(value, precision = nil)
+    def commafy_number(value, precision = nil)
       whole, fraction = value.to_s.split('.')
       fraction = "%.#{precision}d" % ("0.#{fraction}".to_f.round(precision) * 10**precision).to_i if precision
       [whole.gsub(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,"), fraction].compact.join('.')

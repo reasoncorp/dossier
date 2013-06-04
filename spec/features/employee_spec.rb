@@ -11,6 +11,11 @@ describe "employee report" do
         expect(page).to have_content('Yeah. Did you get that memo?')
       end
 
+      it "has access to the reports formatter in the view scope" do
+        visit '/reports/employee_with_custom_view'
+        expect(page).to have_content('Margery Butts')
+      end
+
     end
 
     context "when no custom view exists for the report" do

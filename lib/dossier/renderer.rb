@@ -14,7 +14,7 @@ module Dossier
     end
 
     def engine
-      @engine ||= Engine.new
+      @engine ||= Engine.new(report)
     end
 
     private
@@ -38,6 +38,8 @@ module Dossier
 
     class Engine < AbstractController::Base
       include AbstractController::Layouts
+      include ViewContextWithReportFormatter
+      attr_reader :report
 
       layout 'dossier/layouts/application'
 
@@ -50,6 +52,11 @@ module Dossier
 
       def self._view_paths
         ActionController::Base.view_paths
+      end
+
+      def initialize(report)
+        @report = report
+        super()
       end
     end
   end

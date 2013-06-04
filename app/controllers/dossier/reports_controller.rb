@@ -1,5 +1,6 @@
 module Dossier
   class ReportsController < ApplicationController
+    include ViewContextWithReportFormatter
 
     self.responder = Dossier::Responder
 
@@ -26,6 +27,5 @@ module Dossier
     def options_params
       params[:options].presence || {}
     end
-
   end
 end

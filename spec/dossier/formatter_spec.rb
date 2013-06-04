@@ -36,8 +36,8 @@ describe Dossier::Formatter do
     end
   end
 
-  describe "non_localized" do
-    describe "number_with_delimiter" do
+  describe "custom formatters" do
+    describe "commafy_number" do
       formats = {
         10_000            => '10,000',
         10_000.01         => '10,000.01',
@@ -45,19 +45,19 @@ describe Dossier::Formatter do
         '12345.6789'      => '12,345.6789'
       }.each { |base, formatted|
         it "formats #{base} as #{formatted}" do
-          expect(formatter.non_localized_number_with_delimiter(base)).to eq formatted
+          expect(formatter.commafy_number(base)).to eq formatted
         end
       }
       it "will return the expected precision if too large" do
-        expect(formatter.non_localized_number_with_delimiter(1_000.23523563, 2)).to eq '1,000.24'
+        expect(formatter.commafy_number(1_000.23523563, 2)).to eq '1,000.24'
       end
 
       it "will return the expected precision if too small" do
-        expect(formatter.non_localized_number_with_delimiter(1_000, 5)).to eq '1,000.00000'
+        expect(formatter.commafy_number(1_000, 5)).to eq '1,000.00000'
       end
     end
 
-    describe "number_to_currency" do
+    describe "number_to_dollars" do
       formats = {
         10_000            => '$10,000.00',
         10_000.00         => '$10,000.00',
@@ -65,7 +65,7 @@ describe Dossier::Formatter do
         '12345.6788'      => '$12,345.68'
       }.each { |base, formatted|
         it "formats #{base} as #{formatted}" do
-          expect(formatter.non_localized_number_to_currency(base)).to eq formatted
+          expect(formatter.number_to_dollars(base)).to eq formatted
         end
       }
     end

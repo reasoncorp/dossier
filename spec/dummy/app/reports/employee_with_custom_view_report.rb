@@ -12,5 +12,16 @@ class EmployeeWithCustomViewReport < Dossier::Report
   def dragon_color
     options.fetch(:dragon_color, self.class.dragon_colors.sample)
   end
+  
+  def formatter
+    @formatter ||= CustomFormatter
+  end
+
+  module CustomFormatter
+    include Dossier::Formatter
+    def margery_butts(word)
+      "Margery Butts #{word}"
+    end
+  end
 
 end

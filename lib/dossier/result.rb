@@ -44,9 +44,7 @@ module Dossier
 
     class Formatted < Result
       def each
-        adapter_results.rows.each do |row|
-          yield format(row)
-        end
+        adapter_results.rows.each { |row| yield format(row) }
       end
 
       def format(row)
