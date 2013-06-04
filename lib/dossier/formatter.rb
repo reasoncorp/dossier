@@ -1,8 +1,8 @@
 module Dossier
   module Formatter
+    include ActiveSupport::Inflector
+    include ActionView::Helpers::NumberHelper
     extend self
-    extend ActiveSupport::Inflector
-    extend ActionView::Helpers::NumberHelper
 
     def number_to_currency_from_cents(value)
       number_to_currency(value /= 100.0)
@@ -15,7 +15,7 @@ module Dossier
     def commafy_number(value, precision = nil)
       whole, fraction = value.to_s.split('.')
       fraction = "%.#{precision}d" % ("0.#{fraction}".to_f.round(precision) * 10**precision).to_i if precision
-      [whole.gsub(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,"), fraction].compact.join('.')
+      [whole.to_i.to_s.gsub(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,"), fraction].compact.join('.')
     end
 
     def url_formatter
@@ -26,7 +26,10 @@ module Dossier
       titleize("#{report.report_name.split('/').last} Report")
     end
 
-    delegate :url_for, :link_to, :url_helpers, to: :url_formatter
+    # TODO figure out how to handle this better
+    # reports rendered with a system layout use this link_to instead of the
+    # correct one
+    # delegate :url_for, :link_to, :url_helpers, to: :url_formatter
 
     class UrlFormatter
       include ActionView::Helpers::UrlHelper

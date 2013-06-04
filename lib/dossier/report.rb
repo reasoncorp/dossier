@@ -8,6 +8,10 @@ module Dossier
     attr_reader :options
     attr_accessor :parent
 
+    class_attribute :formatter
+    delegate :formatter, to: "self.class"
+    self.formatter = Dossier::Formatter
+
     def self.filename
       "#{report_name.parameterize}-report_#{Time.now.strftime('%m-%d-%Y_%H-%M-%S')}"
     end
@@ -37,10 +41,6 @@ module Dossier
 
     def run
       tap { execute }
-    end
-
-    def formatter
-      Dossier::Formatter
     end
 
     def format_header(header)

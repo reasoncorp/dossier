@@ -24,15 +24,15 @@ describe Dossier::Formatter do
     let(:route) { {controller: :site, action: :index} }
 
     it "allows URL generation" do
-      expect(formatter.url_for(route)).to eq('/woo')
+      expect(formatter.url_formatter.url_for(route)).to eq('/woo')
     end
 
     it "allows link generation" do
-      expect(formatter.link_to('Woo!', route)).to eq('<a href="/woo">Woo!</a>')
+      expect(formatter.url_formatter.link_to('Woo!', route)).to eq('<a href="/woo">Woo!</a>')
     end
 
     it "allows usage of url helpers" do
-      expect(formatter.url_helpers.woo_path).to eq('/woo')
+      expect(formatter.url_formatter.url_helpers.woo_path).to eq('/woo')
     end
   end
 
