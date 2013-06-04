@@ -2,7 +2,15 @@
 ENV["RAILS_ENV"] = "test"
 
 require 'simplecov'
+require 'coveralls'
+
+
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
 SimpleCov.start
+Coveralls.wear!('rails')
 
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require "rails/test_help"
@@ -10,9 +18,6 @@ require 'rspec/rails'
 require 'pry'
 require 'genspec'
 require 'capybara/rspec'
-require 'coveralls'
-
-Coveralls.wear!
 
 Rails.backtrace_cleaner.remove_silencers!
 

@@ -15,6 +15,10 @@ describe Dossier::Result do
   let(:adapter_result) { double(:adapter_result, rows: [result_row.values], headers: result_row.keys) }
   let(:result)         { Dossier::Result.new(adapter_result, report).tap { |r| r.extend(EachStubber) } }
 
+  it "requires each to be overridden" do
+    expect { described_class.new(adapter_result, report).each }.to raise_error(NotImplementedError, /result must define/i)
+  end
+
   describe "initialization with an adapter result object" do
 
     it "will raise if the object isn't given" do

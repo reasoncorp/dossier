@@ -39,7 +39,7 @@ module Dossier
     end
 
     def each
-      raise NotImplementedError, "Every result class must define `each`"
+      raise NotImplementedError, "#{self.class.name} must define `each`"
     end
 
     class Formatted < Result
