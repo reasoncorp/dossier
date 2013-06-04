@@ -2,15 +2,16 @@ require 'csv'
 
 module Dossier
   class StreamCSV
+    attr_reader :headers, :collection
 
     def initialize(collection, headers = nil)
-      @headers    = headers || collection.shift
+      @headers    = headers || collection.shift unless false === headers
       @collection = collection
     end
 
     def each
-      yield @headers.map { |header| Dossier::Formatter.titleize(header) }.to_csv
-      @collection.each do |record|
+      yield headers.map { |header| Dossier::Formatter.titleize(header) }.to_csv if headers?
+      collection.each do |record|
         yield record.to_csv
       end
     rescue => e
@@ -22,6 +23,12 @@ module Dossier
       else
         yield "We're sorry, but something went wrong." 
       end
+    end
+
+    private
+
+    def headers?
+      headers.present?
     end
 
   end
