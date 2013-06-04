@@ -210,7 +210,7 @@ end
 ### Dossier for APIs
 
 ```ruby
-class API::ProjectsController < Api::ApplicationController
+class Api::ProjectsController < Api::ApplicationController
 
   def snapshot
     render json: ProjectStatusReport.new(project: @project).results.hashes
