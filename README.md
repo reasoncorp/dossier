@@ -5,6 +5,7 @@ Dossier is a Rails engine that turns SQL into reports. Reports can be easily ren
 - If you **hate** SQL, you can use whatever tool you like to generate it; for example, ActiveRecord's `to_sql`.
 - If you **love** SQL, you can use every feature your database supports.
 
+[![Gem Version](https://badge.fury.io/rb/dossier.png)](https://rubygems.org/gems/dossier)
 [![Code Climate](https://codeclimate.com/github/adamhunter/dossier.png)](https://codeclimate.com/github/adamhunter/dossier)
 [![Build Status](https://travis-ci.org/adamhunter/dossier.png?branch=master)](https://travis-ci.org/adamhunter/dossier)
 [![Coverage Status](https://coveralls.io/repos/adamhunter/dossier/badge.png?branch=master)](https://coveralls.io/r/adamhunter/dossier?branch=master)
