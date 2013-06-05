@@ -8,6 +8,18 @@ module Dossier
       base.extend ClassMethods
     end
 
+    def self.class_to_name(klass)
+      (klass.name || anonymous_report).underscore[0..-8]
+    end
+
+    def self.name_to_class(name)
+      "#{name}_report".classify.constantize
+    end
+
+    def self.anonymous_report
+      'AnonymousReport'
+    end
+
     def to_key
       [report_name]
     end
@@ -20,7 +32,7 @@ module Dossier
 
     module ClassMethods
       def report_name
-        Dossier.class_to_name(self)
+        Dossier::Naming.class_to_name(self)
       end
 
       def formatted_title
@@ -32,6 +44,7 @@ module Dossier
           name.instance_variable_set(:@param_key, 'options')
         end
       end
+
     end
 
   end

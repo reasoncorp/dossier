@@ -8,6 +8,15 @@ describe Dossier::Report do
     TestReport.report_name.should eq('test')
   end
 
+  it "has a template name that is the report name" do
+    expect(report.template).to eq(report.report_name)
+  end
+
+  it "allows overriding the template" do
+    report = Class.new(described_class) { def template; 'fooo'; end }
+    expect(report.new.template).to eq 'fooo'
+  end
+
   describe "report instances" do
     let(:report_with_custom_header) do
       Class.new(Dossier::Report) do

@@ -11,6 +11,7 @@ Dossier does its best to use [semantic versioning](http://semver.org).
 - Reports will work natively with `form_for` with no additional options (except `method: :get`)
 - added in `number_to_dollars` and `commafy_number` which are American only versions of `number_to_currency` and `number_with_precision` because they are suuuuuuuper slow on large datasets. (17k records profiled at 39 seconds vs 3 with the cheap ones)
 - added ability to use the report's formatter in view context for a custom view
+- allows setting template at class or instance level. Class.template = 'x' or def template; 'x'; end
 
 ## v2.7.0
 - Added `formatted_dossier_report_path` helper method

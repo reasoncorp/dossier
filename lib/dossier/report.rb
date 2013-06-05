@@ -9,8 +9,15 @@ module Dossier
     attr_accessor :parent
 
     class_attribute :formatter
-    delegate :formatter, to: "self.class"
+    class_attribute :template
+
     self.formatter = Dossier::Formatter
+
+    delegate :formatter, :template, to: "self.class"
+
+    def self.inherited(base)
+      base.template = base.report_name
+    end
 
     def self.filename
       "#{report_name.parameterize}-report_#{Time.now.strftime('%m-%d-%Y_%H-%M-%S')}"

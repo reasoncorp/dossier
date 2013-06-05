@@ -20,14 +20,6 @@ module Dossier
     configuration.client
   end
 
-  def class_to_name(klass)
-    klass.name.underscore[0..-8]
-  end
-
-  def name_to_class(name)
-    "#{name}_report".classify.constantize
-  end
-
   class ExecuteError < StandardError; end
 end
 
