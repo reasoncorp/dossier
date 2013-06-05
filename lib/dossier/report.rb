@@ -16,6 +16,7 @@ module Dossier
     delegate :formatter, :template, to: "self.class"
 
     def self.inherited(base)
+      super
       base.template = base.report_name
     end
 
