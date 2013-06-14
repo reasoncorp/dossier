@@ -43,6 +43,13 @@ module Dossier
     end
 
     class Formatted < Result
+
+      alias :raw_headers :headers
+
+      def headers
+        @formatted_headers ||= super.map { |h| report.format_header(h) }
+      end
+
       def each
         adapter_results.rows.each { |row| yield format(row) }
       end
@@ -53,7 +60,7 @@ module Dossier
         end
 
         row.each_with_index.map do |field, i|
-          method_name = "format_#{headers[i]}"
+          method_name = "format_#{raw_headers[i]}"
 
           if report.respond_to?(method_name)
 

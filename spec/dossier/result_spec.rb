@@ -56,6 +56,13 @@ describe Dossier::Result do
 
       let(:result) { Dossier::Result::Formatted.new(adapter_result, report) }
 
+      describe "headers" do
+        it "formats the headers by calling format_header" do
+          adapter_result.headers.each { |h| result.report.should_receive(:format_header).with(h) }
+          result.headers
+        end
+      end
+
       describe "each" do
 
         it "calls :each on on its adapter's results" do

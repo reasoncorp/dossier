@@ -18,7 +18,7 @@ class EmployeeWithCustomViewReport < Dossier::Report
   end
 
   module CustomFormatter
-    include Dossier::Formatter
+    extend Dossier::Formatter
     def margery_butts(word)
       "Margery Butts #{word}"
     end
