@@ -8,7 +8,7 @@
   %thead
     %tr
       - report.results.headers.each do |header|
-        %th= report.format_header(header)
+        %th= header
   %tbody
     - report.results.body.each do |row|
       %tr

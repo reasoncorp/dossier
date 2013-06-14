@@ -4,6 +4,14 @@ describe "employee report" do
 
   describe "rendering HTML" do
 
+    context "displaying headers" do
+      it "titleizes the headers by default" do
+        visit '/reports/employee'
+        expect(page).to have_content('Name')
+        expect(page).to_not have_content('name')
+      end
+    end
+
     context "when a custom view exists for the report" do
 
       it "uses the custom view" do
