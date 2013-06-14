@@ -4,6 +4,7 @@ Dossier does its best to use [semantic versioning](http://semver.org).
 
 ## Unreleased
 - headers will now be formatted without calling `format_header` in the view, that will be called when accessing them (I'm not sure if this may cause backwards incompatible changes with custom views.  I don't *think* so.
+- introduced `format_column(column, value)` as a default formatter that can be implemented as a fall back if a specific format method does not exist
 
 ## v2.8.0
 - Support namespaces for report names (`cats/are/super_fun` => `Cats::Are::SuperRunReport`

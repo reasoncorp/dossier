@@ -59,20 +59,17 @@ module Dossier
           raise ArgumentError.new("#{row.inspect} must be a kind of Enumerable") 
         end
 
-        row.each_with_index.map do |field, i|
-          method_name = "format_#{raw_headers[i]}"
+        row.each_with_index.map do |value, i|
+          column = raw_headers.at(i)
+          method = "format_#{column}"
 
-          if report.respond_to?(method_name)
-
-           # Provide the row as context if the formatter takes two arguments
-           if report.method(method_name).arity == 2
-             report.public_send(method_name, field, row_hash(row))
-           else
-             report.public_send(method_name, field)
-           end
-
+          if report.respond_to?(method)
+            args = [method, value]
+            # Provide the row as context if the formatter takes two arguments
+            args << row_hash(row) if report.method(method).arity == 2
+            report.public_send(*args)
           else
-            field
+            report.format_column(column, value)
           end
         end
       end

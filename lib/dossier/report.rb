@@ -55,6 +55,10 @@ module Dossier
       formatter.titleize(header.to_s)
     end
 
+    def format_column(column, value)
+      value
+    end
+
     def dossier_client
       Dossier.client
     end

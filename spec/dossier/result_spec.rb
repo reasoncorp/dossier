@@ -78,11 +78,27 @@ describe Dossier::Result do
       end
 
       describe "format" do
+        let(:report) {
+          Class.new(Dossier::Report) {
+            def format_mascot(value); value.upcase; end
+          }.new
+        }
 
-        it "it raises unless its argument responds to :[]" do
+        let(:row) { result_row.values }
+
+        it "raises unless its argument responds to :[]" do
           expect {result.format(Object.new)}.to raise_error(ArgumentError)
         end
 
+        it "calls a custom formatter method if available" do
+          result.report.should_receive(:format_mascot).with('platapus')
+          result.format(row)
+        end
+
+        it "calls the default format_column method otherwise" do
+          result.report.should_receive(:format_column).with('cheese', 'bleu')
+          result.format(row)
+        end
       end
 
       describe "footer" do
