@@ -19,5 +19,8 @@ describe "combination report" do
     expect(page).to_not have_content('options be here matey!')
   end
 
+  it "raises an UnsupportedFormatError when trying something besides HTML" do
+    expect { visit "#{path}.csv" }.to raise_error(Dossier::MultiReport::UnsupportedFormatError, /you tried csv/)
+  end
 end
 

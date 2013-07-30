@@ -44,4 +44,10 @@ class Dossier::MultiReport
   end
 
   delegate :render, to: :renderer
+
+  class UnsupportedFormatError < StandardError
+    def initialize(format)
+      super "Dossier::MultiReport only supports rendering in HTML format (you tried #{format})"
+    end
+  end
 end

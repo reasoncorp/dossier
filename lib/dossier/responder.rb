@@ -20,6 +20,11 @@ module Dossier
       set_content_disposition!
       controller.response_body = Xls.new(report.raw_results.arrays)
     end
+
+    def respond
+      multi_report_html_only!
+      super
+    end
     
     private
 
@@ -29,6 +34,12 @@ module Dossier
 
     def filename
       "#{report.class.filename}.#{format}"
+    end
+
+    def multi_report_html_only!
+      if report.is_a?(Dossier::MultiReport) and format.to_s != 'html'
+        raise Dossier::MultiReport::UnsupportedFormatError.new(format)
+      end
     end
   end
 end
