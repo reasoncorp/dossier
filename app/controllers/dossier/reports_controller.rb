@@ -5,13 +5,14 @@ module Dossier
     self.responder = Dossier::Responder
 
     respond_to :html, :json, :csv, :xls, only: :show
+    respond_to :html, only: :multi
 
     def show
       respond_with(report)
     end
 
     def multi
-      render template: 'dossier/reports/multi', locals: {multi: report}
+      respond_with(report)
     end
 
     private

@@ -9,7 +9,7 @@ describe Dossier::Responder do
     }
   end
 
-  let(:results)    { mock(arrays: [[]], hashes: [{}]) }
+  let(:results)    { double(arrays: [[]], hashes: [{}]) }
   let(:report)     { EmployeeReport.new }
   let(:reports)    { [stub_out_report_results(report)] }
   let(:controller) { 

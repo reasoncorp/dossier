@@ -34,4 +34,14 @@ class Dossier::MultiReport
   def dom_id
     nil
   end
+
+  def template
+    'multi'
+  end
+
+  def renderer
+    @renderer ||= Dossier::Renderer.new(self)
+  end
+
+  delegate :render, to: :renderer
 end
