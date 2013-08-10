@@ -13,7 +13,7 @@ module Dossier
     private
 
     def setup_client!
-      @connection_options = YAML.load_file(@config_path)[Rails.env].symbolize_keys
+      @connection_options = YAML.load(ERB.new(File.read(@config_path)).result)[Rails.env].symbolize_keys
       @client = Dossier::Client.new(@connection_options)
 
     rescue Errno::ENOENT => e
