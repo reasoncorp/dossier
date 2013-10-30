@@ -133,6 +133,14 @@ describe Dossier::Result do
           expect(result.footers.count).to eq(3)
         end
 
+        describe "with empty results" do
+          let(:adapter_result_rows) { [] }
+
+          it "has an empty body" do
+            expect(result.body.count).to be_zero
+          end
+        end
+
       end
 
     end

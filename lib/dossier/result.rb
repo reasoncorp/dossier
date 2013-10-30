@@ -18,7 +18,8 @@ module Dossier
     end
 
     def body
-      @body ||= rows.first(rows.length - report.options[:footer].to_i)
+      size = rows.length - report.options[:footer].to_i
+      @body ||= size < 0 ? [] : rows.first(size)
     end
 
     def footers
