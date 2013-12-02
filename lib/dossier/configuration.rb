@@ -1,3 +1,4 @@
+require 'erb'
 require 'yaml'
 
 module Dossier
