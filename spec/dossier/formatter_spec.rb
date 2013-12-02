@@ -38,7 +38,7 @@ describe Dossier::Formatter do
 
   describe "custom formatters" do
     describe "commafy_number" do
-      formats = {
+      {
         10_000            => '10,000',
         10_000.01         => '10,000.01',
         1_000_000_000.001 => '1,000,000,000.001',
@@ -48,6 +48,7 @@ describe Dossier::Formatter do
           expect(formatter.commafy_number(base)).to eq formatted
         end
       }
+
       it "will return the expected precision if too large" do
         expect(formatter.commafy_number(1_000.23523563, 2)).to eq '1,000.24'
       end
@@ -55,10 +56,15 @@ describe Dossier::Formatter do
       it "will return the expected precision if too small" do
         expect(formatter.commafy_number(1_000, 5)).to eq '1,000.00000'
       end
+
+      # h/t to @rodneyturnham for finding this edge case and providing the solution
+      it "will properly format a number given to it" do
+        expect(formatter.commafy_number(1342.58, 2)).to eq '1,342.58'
+      end
     end
 
     describe "number_to_dollars" do
-      formats = {
+      {
         10_000            => '$10,000.00',
         10_000.00         => '$10,000.00',
         1_000_000_000.000 => '$1,000,000,000.00',
