@@ -9,12 +9,17 @@ module Dossier
       self.report          = report
     end
 
+    def raw_headers
+      @raw_headers ||= adapter_results.headers
+    end
+
     def headers
-      @headers ||= adapter_results.headers
+      raise NotImplementedError.new("#{self.class.name} must implement `headers', use `raw_headers' for adapter headers")
     end
 
     def body
-      @body ||= rows.first(rows.length - report.options[:footer].to_i)
+      size = rows.length - report.options[:footer].to_i
+      @body ||= size < 0 ? [] : rows.first(size)
     end
 
     def footers
@@ -34,20 +39,20 @@ module Dossier
       @hashes = rows.map { |row| row_hash(row) }
     end
 
+    # this is the method that creates the individual hash entry
+    # hashes should always use raw headers
     def row_hash(row)
-      Hash[headers.zip(row)].with_indifferent_access
+      Hash[raw_headers.zip(row)].with_indifferent_access
     end
 
     def each
-      raise NotImplementedError, "#{self.class.name} must define `each`"
+      raise NotImplementedError.new("#{self.class.name} must define `each`")
     end
 
     class Formatted < Result
 
-      alias :raw_headers :headers
-
       def headers
-        @formatted_headers ||= super.map { |h| report.format_header(h) }
+        @formatted_headers ||= raw_headers.map { |h| report.format_header(h) }
       end
 
       def each
@@ -78,6 +83,10 @@ module Dossier
     class Unformatted < Result
       def each
         adapter_results.rows.each { |row| yield row }
+      end
+
+      def headers
+        raw_headers
       end
     end
 

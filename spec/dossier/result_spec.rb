@@ -2,21 +2,30 @@ require 'spec_helper'
 
 describe Dossier::Result do
 
-  module EachStubber
+  module AbstractStub
     def each
       adapter_results.rows.each do |row|
         yield row
       end
+    end
+
+    def headers
+      raw_headers
     end
   end
 
   let(:report)         { TestReport.new }
   let(:result_row)     { {'mascot' => 'platapus', 'cheese' => 'bleu'} }
   let(:adapter_result) { double(:adapter_result, rows: [result_row.values], headers: result_row.keys) }
-  let(:result)         { Dossier::Result.new(adapter_result, report).tap { |r| r.extend(EachStubber) } }
+  let(:result_class)   { Class.new(described_class) { include AbstractStub } }
+  let(:result)         { result_class.new(adapter_result, report) }
 
   it "requires each to be overridden" do
     expect { described_class.new(adapter_result, report).each }.to raise_error(NotImplementedError, /result must define/i)
+  end
+  
+  it "requires headers to be overridden" do
+    expect { described_class.new(adapter_result, report).headers }.to raise_error(NotImplementedError, /headers/i)
   end
 
   describe "initialization with an adapter result object" do
@@ -60,6 +69,13 @@ describe Dossier::Result do
         it "formats the headers by calling format_header" do
           adapter_result.headers.each { |h| result.report.should_receive(:format_header).with(h) }
           result.headers
+        end
+      end
+
+      describe "hashing" do
+        it "does not format the keys of the hash" do
+          hash = result.hashes.first
+          expect(hash.keys).to eq %w[mascot cheese]
         end
       end
 
@@ -115,6 +131,14 @@ describe Dossier::Result do
 
         it "has 3 footer rows" do
           expect(result.footers.count).to eq(3)
+        end
+
+        describe "with empty results" do
+          let(:adapter_result_rows) { [] }
+
+          it "has an empty body" do
+            expect(result.body.count).to be_zero
+          end
         end
 
       end
