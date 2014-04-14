@@ -34,6 +34,9 @@ module Dossier
     class UrlFormatter
       include ActionView::Helpers::UrlHelper
 
+      include ActionDispatch::Routing::UrlFor if defined?(ActionDispatch::Routing::UrlFor) # Rails 4.1
+      include ActionView::RoutingUrlFor       if defined?(ActionView::RoutingUrlFor)       # Rails 4.1
+
       def _routes
         Rails.application.routes
       end

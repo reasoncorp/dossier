@@ -6,6 +6,10 @@ module Dossier
 
     respond_to :html, :json, :csv, :xls
 
+    def index
+
+    end
+
     def show
       respond_with(report)
     end
