@@ -4,9 +4,7 @@ module Dossier
     attr_writer :engine
 
     # Conditional for Rails 4.1 or < 4.1 Layout module
-    def self.layouts
-      defined?(ActionView::Layouts) ? ActionView::Layouts : AbstractController::Layouts
-    end
+    Layouts = defined?(ActionView::Layouts) ? ActionView::Layouts : AbstractController::Layouts
 
     def initialize(report)
       @report = report
@@ -42,9 +40,9 @@ module Dossier
     end
 
     class Engine < AbstractController::Base
-      include Renderer.layouts
-      include ViewContextWithReportFormatter
       include AbstractController::Rendering
+      include Renderer::Layouts
+      include ViewContextWithReportFormatter
 
       attr_reader :report
       config.cache_store = ActionController::Base.cache_store
@@ -52,19 +50,18 @@ module Dossier
       layout 'dossier/layouts/application'
 
       def render_to_body(options = {})
-        context  = ActionView::Base.view_context_class.new(lookup_context, {}, self)
         renderer = ActionView::Renderer.new(lookup_context)
-        renderer.render(context, options)
-      end
-
-      def lookup_context
-        ActionView::LookupContext.new(self.class._view_paths)
+        renderer.render(view_context, options)
       end
 
       def self._helpers
         Module.new do
           include Rails.application.helpers
           include Rails.application.routes.url_helpers
+          
+          def default_url_options
+            {}
+          end
         end
       end
 
