@@ -11,7 +11,7 @@ module Dossier
 
     def each
       yield HEADER
-      yield headers_as_row
+      yield as_row(@headers)
       @collection.each { |record| yield as_row(record) }
       yield FOOTER
     end
@@ -25,10 +25,6 @@ module Dossier
     def as_row(array)
       my_array = array.map{|a| as_cell(a)}.join("\n")
       "<Row>\n" + my_array + "\n</Row>\n"
-    end
-
-    def headers_as_row
-      as_row(@headers.map { |header| Dossier::Formatter.titleize(header) })
     end
   end
 end

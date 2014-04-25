@@ -10,7 +10,7 @@ module Dossier
     end
 
     def each
-      yield headers.map { |header| Dossier::Formatter.titleize(header) }.to_csv if headers?
+      yield headers.to_csv if headers?
       collection.each do |record|
         yield record.to_csv
       end

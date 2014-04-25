@@ -9,7 +9,7 @@ describe Dossier::Responder do
     }
   end
 
-  let(:results)    { double(arrays: [[]], hashes: [{}]) }
+  let(:results)    { double(arrays: [%w[hi], %w[there]], hashes: [{hi: 'there'}]) }
   let(:report)     { EmployeeReport.new }
   let(:reports)    { [stub_out_report_results(report)] }
   let(:controller) { 
@@ -41,6 +41,11 @@ describe Dossier::Responder do
       responder.to_csv
       expect(responder.controller.response_body).to be_a(Dossier::StreamCSV)
     end
+
+    it "formats the headers that are passed to Dossier::StreamCSV" do
+      expect(report).to receive(:format_header).with('hi')
+      responder.to_csv
+    end
   end
 
   describe "to_xls" do
@@ -52,6 +57,11 @@ describe Dossier::Responder do
     it "sets the response body to a new xls instance" do
       responder.to_xls
       expect(responder.controller.response_body).to be_a(Dossier::Xls)
+    end
+
+    it "formats the headers that are passed to Dossier::Xls" do
+      expect(report).to receive(:format_header).with('hi')
+      responder.to_csv
     end
   end
 

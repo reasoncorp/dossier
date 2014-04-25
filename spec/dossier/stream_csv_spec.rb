@@ -15,10 +15,10 @@ describe Dossier::StreamCSV do
       expect(streamer.headers).to eq headers
     end
 
-    it "formats the headers when streamed" do
+    it "does not format the headers when streamed" do
       formatted = nil
       streamer.each { |r| formatted = r; break }
-      expect(formatted).to eq %w[W1 W2 W3 W4 W5 W6].to_csv
+      expect(formatted).to eq %w[w1 w2 w3 w4 w5 w6].to_csv
     end
 
     describe "using the first element of the collection for headers" do
@@ -68,7 +68,7 @@ describe Dossier::StreamCSV do
     it "provides a simple error if not a local request" do
       Rails.application.config.stub(:consider_all_requests_local).and_return(false)
       streamer.each { |line| output << line }
-      expect(output).to match /something went wrong/
+      expect(output).to match(/something went wrong/)
     end
   end
 
