@@ -19,21 +19,21 @@ describe Dossier::Responder do
 
   describe "to_html" do
     it "calls render on the report" do
-      report.should_receive(:render)
+      expect(report).to receive(:render)
       responder.to_html
     end
   end
 
   describe "to_json" do
     it "renders the report as json" do
-      controller.should_receive(:render).with(json: results.hashes)
+      expect(controller).to receive(:render).with(json: results.hashes)
       responder.to_json
     end
   end
 
   describe "to_csv" do
     it "sets the content disposition" do
-      responder.should_receive(:set_content_disposition!)
+      expect(responder).to receive(:set_content_disposition!)
       responder.to_csv
     end
 
@@ -50,7 +50,7 @@ describe Dossier::Responder do
 
   describe "to_xls" do
     it "sets the content disposition" do
-      responder.should_receive(:set_content_disposition!)
+      expect(responder).to receive(:set_content_disposition!)
       responder.to_xls
     end
 

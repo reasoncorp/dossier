@@ -12,7 +12,7 @@ describe Dossier::MultiReport do
 
   it "passes options to the sub reports" do
     combined_report.reports.each do |report|
-      report.should_receive(:new).with(options).and_call_original
+      expect(report).to receive(:new).with(options).and_call_original
     end
 
     report.reports

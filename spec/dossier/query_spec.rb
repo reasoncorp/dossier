@@ -24,9 +24,9 @@ describe Dossier::Query do
         end
 
         it "escapes the values" do
-          query.should_receive(:escape).with(92)
-          query.should_receive(:escape).with(3.14)
-          query.should_receive(:escape).with('2013-03-29')
+          expect(query).to receive(:escape).with(92)
+          expect(query).to receive(:escape).with(3.14)
+          expect(query).to receive(:escape).with('2013-03-29')
           query.to_s
         end
 
@@ -44,10 +44,10 @@ describe Dossier::Query do
         end
 
         it "escapes each value in the array" do
-          Dossier.client.should_receive(:escape).with(38)
-          Dossier.client.should_receive(:escape).with('blue')
-          Dossier.client.should_receive(:escape).with('mandible')
-          Dossier.client.should_receive(:escape).with(2)
+          expect(Dossier.client).to receive(:escape).with(38)
+          expect(Dossier.client).to receive(:escape).with('blue')
+          expect(Dossier.client).to receive(:escape).with('mandible')
+          expect(Dossier.client).to receive(:escape).with(2)
           query.to_s
         end
 

@@ -35,12 +35,12 @@ describe Dossier::Result do
     end
 
     it "can extract the fields queried" do
-      adapter_result.should_receive(:headers).and_return([])
+      expect(adapter_result).to receive(:headers).and_return([])
       result.headers
     end
 
     it "can extract the values from the adapter results" do
-      result.should_receive(:to_a)
+      expect(result).to receive(:to_a)
       result.rows
     end
 
@@ -67,7 +67,7 @@ describe Dossier::Result do
 
       describe "headers" do
         it "formats the headers by calling format_header" do
-          adapter_result.headers.each { |h| result.report.should_receive(:format_header).with(h) }
+          adapter_result.headers.each { |h| expect(result.report).to receive(:format_header).with(h) }
           result.headers
         end
       end
@@ -82,12 +82,12 @@ describe Dossier::Result do
       describe "each" do
 
         it "calls :each on on its adapter's results" do
-          adapter_result.rows.should_receive(:each)
+          expect(adapter_result.rows).to receive(:each)
           result.each { |result| }
         end
 
         it "formats each of the adapter's results" do
-          result.should_receive(:format).with(result_row.values)
+          expect(result).to receive(:format).with(result_row.values)
           result.each { |result| }
         end
 
@@ -107,12 +107,12 @@ describe Dossier::Result do
         end
 
         it "calls a custom formatter method if available" do
-          result.report.should_receive(:format_mascot).with('platapus')
+          expect(result.report).to receive(:format_mascot).with('platapus')
           result.format(row)
         end
 
         it "calls the default format_column method otherwise" do
-          result.report.should_receive(:format_column).with('cheese', 'bleu')
+          expect(result.report).to receive(:format_column).with('cheese', 'bleu')
           result.format(row)
         end
       end
@@ -152,7 +152,7 @@ describe Dossier::Result do
       describe "each" do
 
         it "calls :each on on its adapter's results" do
-          adapter_result.rows.should_receive(:each)
+          expect(adapter_result.rows).to receive(:each)
           result.each { |result| }
         end
 

@@ -31,7 +31,7 @@ describe Dossier::Client do
         end
 
         it "uses an adapter by that name" do
-          Dossier::Adapter::SpecAdapter.should_receive(:new).with(username: 'Timmy')
+          expect(Dossier::Adapter::SpecAdapter).to receive(:new).with(username: 'Timmy')
           described_class.new(dossier_adapter: 'spec_adapter', username: 'Timmy')
         end
 
@@ -48,7 +48,7 @@ describe Dossier::Client do
           end
 
           it "uses that ORM's adapter" do
-            Dossier::Adapter::ActiveRecord.should_receive(:new).with(username: 'Jimmy')
+            expect(Dossier::Adapter::ActiveRecord).to receive(:new).with(username: 'Jimmy')
             described_class.new(username: 'Jimmy')
           end
 
@@ -94,12 +94,12 @@ describe Dossier::Client do
     end
 
     it "delegates `escape` to its adapter" do
-      adapter.should_receive(:escape).with('Bobby Tables')
+      expect(adapter).to receive(:escape).with('Bobby Tables')
       client.escape('Bobby Tables')
     end
 
     it "delegates `execute` to its adapter" do
-      adapter.should_receive(:execute).with('SELECT * FROM `primes`') # It's OK, it's in the cloud!
+      expect(adapter).to receive(:execute).with('SELECT * FROM `primes`') # It's OK, it's in the cloud!
       client.execute('SELECT * FROM `primes`')
     end
 

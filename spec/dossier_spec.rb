@@ -25,7 +25,7 @@ describe Dossier do
 
   it "exposes the configurations client via Dossier.client" do
     Dossier.configure
-    Dossier.configuration.should_receive(:client)
+    expect(Dossier.configuration).to receive(:client)
     Dossier.client
   end
 end

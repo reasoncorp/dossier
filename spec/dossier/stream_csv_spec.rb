@@ -50,7 +50,7 @@ describe Dossier::StreamCSV do
   end
 
   it "calls to csv on each member of the collection" do
-    collection.each { |row| row.should_receive(:to_csv) }
+    collection.each { |row| expect(row).to receive(:to_csv) }
     streamer.each {}
   end
 

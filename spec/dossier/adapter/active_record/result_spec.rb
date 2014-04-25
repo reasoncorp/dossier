@@ -10,7 +10,7 @@ describe Dossier::Adapter::ActiveRecord::Result do
     let(:fake_columns) { %[foo bar] }
 
     it "calls `columns` on its connection_results" do
-      ar_connection_results.should_receive(:columns)
+      expect(ar_connection_results).to receive(:columns)
       result.headers
     end
 

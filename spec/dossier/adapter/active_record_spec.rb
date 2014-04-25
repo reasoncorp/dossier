@@ -11,7 +11,7 @@ describe Dossier::Adapter::ActiveRecord do
     let(:clean_value) { "'Robert\\'); DROP TABLE Students;--'" }
 
     it "delegates to the connection" do
-      ar_connection.should_receive(:quote).with(dirty_value)
+      expect(ar_connection).to receive(:quote).with(dirty_value)
       adapter.escape(dirty_value)
     end
 
@@ -29,13 +29,13 @@ describe Dossier::Adapter::ActiveRecord do
     let(:adapter_result_class) { Dossier::Adapter::ActiveRecord::Result}
 
     it "delegates to the connection" do
-      ar_connection.should_receive(:exec_query).with("\n#{query}")
+      expect(ar_connection).to receive(:exec_query).with("\n#{query}")
       adapter.execute(query)
     end
 
     it "builds an adapter result" do
       ar_connection.stub(:exec_query).and_return(connection_results)
-      adapter_result_class.should_receive(:new).with(connection_results)
+      expect(adapter_result_class).to receive(:new).with(connection_results)
       adapter.execute(:query)
     end
 

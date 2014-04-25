@@ -57,14 +57,14 @@ describe Dossier::Report do
     end
 
     it "has callbacks for build_query" do
-      report.should_receive(:before_test_for_build_query)
+      expect(report).to receive(:before_test_for_build_query)
       report.query
     end
 
     it "has callbacks for execute" do
       Dossier.client.stub(:execute).and_return([])
       report.stub(:before_test_for_build_query)
-      report.should_receive(:after_test_for_execute)
+      expect(report).to receive(:after_test_for_execute)
       report.run
     end
 
@@ -79,7 +79,7 @@ describe Dossier::Report do
     describe "run" do
       it "will execute the generated sql query" do
         report = EmployeeReport.new
-        Dossier.client.should_receive(:execute).with(report.query, 'EmployeeReport').and_return([])
+        expect(Dossier.client).to receive(:execute).with(report.query, 'EmployeeReport').and_return([])
         report.run
       end
 
@@ -98,7 +98,7 @@ describe Dossier::Report do
     end
 
     it "delegates render to the renderer" do
-      report.renderer.should_receive(:render)
+      expect(report.renderer).to receive(:render)
       report.render
     end
   end

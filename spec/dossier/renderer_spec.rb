@@ -14,7 +14,7 @@ describe Dossier::Renderer do
       let(:template) { report.report_name }
 
       it "renders the custom view" do
-        engine.should_receive(:render).with(options)
+        expect(engine).to receive(:render).with(options)
       end
     end
 
@@ -22,8 +22,8 @@ describe Dossier::Renderer do
       let(:template) { 'show' }
 
       it "renders show" do
-        engine.should_receive(:render).with(options.merge(template: 'dossier/reports/employee')).and_call_original
-        engine.should_receive(:render).with(options)
+        expect(engine).to receive(:render).with(options.merge(template: 'dossier/reports/employee')).and_call_original
+        expect(engine).to receive(:render).with(options)
       end
     end
 
