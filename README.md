@@ -118,7 +118,7 @@ In addition, the formatter provides Rails' URL helpers for use in your reports. 
 class LeastProfitableAccountsReport < Dossier::Report
   #...
   def format_account_id(value)
-    formatter.link_to value, formatter.url_helpers.edit_accounts_path(value)
+    formatter.url_formatter.link_to value, formatter.url_formatter.url_helpers.edit_accounts_path(value)
   end
 end
 ```
