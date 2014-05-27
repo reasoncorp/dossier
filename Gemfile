@@ -13,4 +13,3 @@ gem "activerecord",  RAILS_VERSION
 gem "jquery-rails"
 gem "mysql2"
 gem 'coveralls', require: false
-

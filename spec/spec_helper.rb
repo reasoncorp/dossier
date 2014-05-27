@@ -1,8 +1,10 @@
-# Configure Rails Environment
-ENV["RAILS_ENV"] = "test"
-
+require 'rails/all'
+require 'dummy/application'
+require 'active_model'
 require 'simplecov'
 require 'coveralls'
+
+ApplicationController.helper Dossier::ApplicationHelper
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
   SimpleCov::Formatter::HTMLFormatter,
@@ -11,7 +13,6 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
 SimpleCov.start
 Coveralls.wear!('rails')
 
-require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require "rails/test_help"
 require 'rspec/rails'
 require 'pry'
