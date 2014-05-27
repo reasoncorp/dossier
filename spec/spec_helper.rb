@@ -4,7 +4,9 @@ require 'active_model'
 require 'simplecov'
 require 'coveralls'
 
+# not sure why I need to do this now, its after I added dummy-application
 ApplicationController.helper Dossier::ApplicationHelper
+SiteController.helper Dossier::ApplicationHelper
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
   SimpleCov::Formatter::HTMLFormatter,
