@@ -221,7 +221,7 @@ end
 
 ## Advanced Usage
 
-To see a report with all the bells and whistles, check out `spec/support/reports/employee_report.rb` or other reports in `spec/support/reports`.
+To see a report with all the bells and whistles, check out `spec/dummy/app/reports/employee_report.rb` or other reports in `spec/dummy/app/reports`.
 
 ## Compatibility
 
