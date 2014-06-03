@@ -14,7 +14,8 @@ module Dossier
     private
 
     def setup_client!
-      @connection_options = YAML.load(ERB.new(File.read(@config_path)).result)[Rails.env].symbolize_keys
+      raw_connection_options = YAML.load(ERB.new(File.read(@config_path)).result)[Rails.env].symbolize_keys
+      @connection_options = ENV["DATABASE_URL"] ? DatabaseUrl.active_record_config : raw_connection_options
       @client = Dossier::Client.new(@connection_options)
 
     rescue Errno::ENOENT => e
