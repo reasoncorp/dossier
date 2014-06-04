@@ -1,5 +1,6 @@
 require 'erb'
 require 'yaml'
+require 'database_url'
 
 module Dossier
   class Configuration
