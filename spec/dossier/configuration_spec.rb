@@ -22,8 +22,8 @@ describe Dossier::Configuration do
 
   describe "client" do
     
-    it "uses ENV[\"DATABASE_URL\"] to merge with config/dossier.yml to setup the client" do
-      ENV['DATABASE_URL'] = "mysql2://localhost/foo"
+    it %q{uses ENV["DATABASE_URL"] to merge with config/dossier.yml to setup the client} do
+      ENV['DATABASE_URL'] = "mysql2://localhost/dossier_test"
       options = connection_options.merge Dossier::ConnectionUrl.new.to_hash
       expect(Dossier::Client).to receive(:new).with(options)
       Dossier.configure    
