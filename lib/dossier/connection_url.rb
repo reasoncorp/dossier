@@ -21,7 +21,7 @@ module Dossier
         user:     uri.user,
         password: uri.password,
         encoding: query && query['encoding'] ? query['encoding'][0] : nil,
-        pool: query && query['pool'] ? query['pool'][0].to_i : nil
+        pool: (query && query['pool'] && query['pool'][0]) ? query['pool'][0].to_i : nil
       }.delete_if{|k,v| v.nil? }
     end
 

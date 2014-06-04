@@ -1,10 +1,17 @@
 require 'spec_helper'
 
 describe Dossier::Configuration do
-
+  
+  let(:connection_options){ YAML.load_file(Rails.root.join('config', 'dossier.yml'))[Rails.env].symbolize_keys }
+  let(:old_database_url) { ENV.delete "DATABASE_URL"}  
+  
   before :each do 
     Dossier.configure
     @config = Dossier.configuration
+  end
+
+  after :each do
+    ENV["DATABASE_URL"] = old_database_url
   end
 
   describe "defaults" do
@@ -16,21 +23,15 @@ describe Dossier::Configuration do
   describe "client" do
     
     it "uses ENV[\"DATABASE_URL\"] to merge with config/dossier.yml to setup the client" do
-      old_database_url = ENV.delete "DATABASE_URL"
       ENV['DATABASE_URL'] = "mysql2://localhost/foo"
-      options = YAML.load_file(Rails.root.join('config', 'dossier.yml'))[Rails.env].symbolize_keys 
-      options = options.merge Dossier::ConnectionUrl.new.to_hash
+      options = connection_options.merge Dossier::ConnectionUrl.new.to_hash
       expect(Dossier::Client).to receive(:new).with(options)
       Dossier.configure    
-      ENV['DATABASE_URL'] = old_database_url
     end
 
     it "uses config/dossier.yml to setup the client" do
-      options = YAML.load_file(Rails.root.join('config', 'dossier.yml'))[Rails.env].symbolize_keys
-      old_database_url = ENV.delete "DATABASE_URL"
-      expect(Dossier::Client).to receive(:new).with(options)
+      expect(Dossier::Client).to receive(:new).with(connection_options)
       Dossier.configure
-      ENV["DATABASE_URL"] = old_database_url
     end
 
     it "will raise an exception if config/dossier.yml cannot be read" do
