@@ -1,6 +1,5 @@
 require 'erb'
 require 'yaml'
-require 'database_url'
 
 module Dossier
   class Configuration
@@ -11,12 +10,20 @@ module Dossier
       @config_path = Rails.root.join('config', 'dossier.yml')
       setup_client!
     end
+ 
+    def load_config
+      raw_connection_options = YAML.load(ERB.new(File.read(@config_path)).result)[Rails.env].symbolize_keys || {}
+      @connection_options = if ENV["DATABASE_URL"]
+        raw_connection_options.merge(Dossier::ConnectionUrl.new.to_hash) 
+      else 
+        raw_connection_options
+      end
+    end
 
     private
 
     def setup_client!
-      raw_connection_options = YAML.load(ERB.new(File.read(@config_path)).result)[Rails.env].symbolize_keys
-      @connection_options = ENV["DATABASE_URL"] ? DatabaseUrl.active_record_config : raw_connection_options
+      load_config
       @client = Dossier::Client.new(@connection_options)
 
     rescue Errno::ENOENT => e
