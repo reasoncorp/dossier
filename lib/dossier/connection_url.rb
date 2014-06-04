@@ -11,7 +11,7 @@ module Dossier
     end
   
     def to_hash
-      query = uri.query ? CGI.parse(uri.query) : nil
+      query = CGI.parse(uri.query) if uri.query
       adapter = uri.scheme == "postgres" ? "postgresql" : uri.scheme
       {
         adapter:  adapter,
