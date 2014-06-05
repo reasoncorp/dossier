@@ -9,7 +9,7 @@ module Dossier
     end
 
     def number_to_dollars(value)
-      "$#{commafy_number(value, 2)}"
+      value.to_f < 0 ? "-$#{commafy_number(value, 2)}" : "$#{commafy_number(value, 2)}"
     end
 
     def commafy_number(value, precision = nil)
