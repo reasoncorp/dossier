@@ -1,10 +1,17 @@
 require 'spec_helper'
 
 describe Dossier::Configuration do
-
+  
+  let(:connection_options){ YAML.load_file(Rails.root.join('config', 'dossier.yml'))[Rails.env].symbolize_keys }
+  let(:old_database_url) { ENV.delete "DATABASE_URL"}  
+  
   before :each do 
     Dossier.configure
     @config = Dossier.configuration
+  end
+
+  after :each do
+    ENV["DATABASE_URL"] = old_database_url
   end
 
   describe "defaults" do
@@ -14,9 +21,17 @@ describe Dossier::Configuration do
   end
 
   describe "client" do
-    it "uses config/dossier.yml to setup the client" do
-      options = YAML.load_file(Rails.root.join('config', 'dossier.yml'))[Rails.env].symbolize_keys
+    
+    it %q{uses ENV["DATABASE_URL"] to merge with config/dossier.yml to setup the client} do
+      ENV['DATABASE_URL'] = "mysql2://localhost/dossier_test"
+      options = connection_options.merge Dossier::ConnectionUrl.new.to_hash
       expect(Dossier::Client).to receive(:new).with(options)
+      Dossier.configure    
+    end
+
+    it "uses config/dossier.yml to setup the client" do
+      ENV.delete "DATABASE_URL" if ENV.has_key? "DATABASE_URL"
+      expect(Dossier::Client).to receive(:new).with(connection_options)
       Dossier.configure
     end
 

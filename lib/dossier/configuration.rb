@@ -4,18 +4,29 @@ require 'yaml'
 module Dossier
   class Configuration
 
-    attr_accessor :config_path, :connection_options, :client
+    attr_accessor :config_path, :client
 
     def initialize
       @config_path = Rails.root.join('config', 'dossier.yml')
       setup_client!
     end
+   
+    def connection_options
+      yaml_config.merge(dburl_config || {})
+    end
+
+    def yaml_config
+      YAML.load(ERB.new(File.read(@config_path)).result)[Rails.env].symbolize_keys
+    end
+   
+    def dburl_config
+      Dossier::ConnectionUrl.new.to_hash if ENV.has_key? "DATABASE_URL"
+    end
 
     private
 
     def setup_client!
-      @connection_options = YAML.load(ERB.new(File.read(@config_path)).result)[Rails.env].symbolize_keys
-      @client = Dossier::Client.new(@connection_options)
+      @client = Dossier::Client.new(connection_options)
 
     rescue Errno::ENOENT => e
       raise ConfigurationMissingError.new(
