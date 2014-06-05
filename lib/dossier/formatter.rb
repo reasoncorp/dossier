@@ -9,13 +9,13 @@ module Dossier
     end
 
     def number_to_dollars(value)
-      value.to_f < 0 ? "-$#{commafy_number(value, 2)}" : "$#{commafy_number(value, 2)}"
+      commafy_number(value, 2).sub(/(\d)/, '$\1')
     end
 
     def commafy_number(value, precision = nil)
       whole, fraction = value.to_s.split('.')
       fraction = "%.#{precision}d" % (BigDecimal.new("0.#{fraction}").round(precision) * 10**precision).to_i if precision
-      [whole.to_i.to_s.gsub(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,"), fraction].compact.join('.')
+      [whole.gsub(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,"), fraction].compact.join('.')
     end
 
     def url_formatter
