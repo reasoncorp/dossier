@@ -30,6 +30,7 @@ describe Dossier::Configuration do
     end
 
     it "uses config/dossier.yml to setup the client" do
+      ENV.delete "DATABASE_URL" if ENV.has_key? "DATABASE_URL"
       expect(Dossier::Client).to receive(:new).with(connection_options)
       Dossier.configure
     end

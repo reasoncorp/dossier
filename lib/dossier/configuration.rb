@@ -16,7 +16,7 @@ module Dossier
     end
 
     def yaml_config
-      YAML.load(ERB.new(File.read(@config_path)).result)[Rails.env].symbolize_keys || {}
+      YAML.load(ERB.new(File.read(@config_path)).result)[Rails.env].symbolize_keys
     end
    
     def dburl_config
