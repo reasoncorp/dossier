@@ -68,7 +68,9 @@ describe Dossier::Formatter do
         10_000            => '$10,000.00',
         10_000.00         => '$10,000.00',
         1_000_000_000.000 => '$1,000,000,000.00',
-        '12345.6788'      => '$12,345.68'
+        '12345.6788'      => '$12,345.68',
+        0.01              => '$0.01',
+        -0.01             => '-$0.01'
       }.each { |base, formatted|
         it "formats #{base} as #{formatted}" do
           expect(formatter.number_to_dollars(base)).to eq formatted
