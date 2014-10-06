@@ -38,13 +38,13 @@ module Dossier
     end
 
     def results
-      execute unless defined?(@results)
-      @results
+      execute unless query_results
+      @results ||= Result::Formatted.new(query_results, self)
     end
 
     def raw_results
-      execute unless defined?(@raw_results)
-      @raw_results
+      execute unless query_results
+      @raw_results ||= Result::Unformatted.new(query_results, self)
     end
 
     def run
@@ -78,15 +78,14 @@ module Dossier
     def execute
       build_query
       run_callbacks :execute do
-        self.results = dossier_client.execute(query, self.class.name)
+        self.query_results = dossier_client.execute(query, self.class.name)
       end
     end
 
-    def results=(results)
-      results.freeze
-      @raw_results = Result::Unformatted.new(results, self)
-      @results     = Result::Formatted.new(results, self)
+    def query_results=(query_results)
+      @query_results = query_results.freeze
     end
+    attr_reader :query_results
 
   end
 end
