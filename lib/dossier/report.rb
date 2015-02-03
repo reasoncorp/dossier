@@ -59,6 +59,10 @@ module Dossier
       value
     end
 
+    def display_column?(column)
+      true
+    end
+
     def dossier_client
       Dossier.client
     end

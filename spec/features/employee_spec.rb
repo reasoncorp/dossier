@@ -12,6 +12,13 @@ describe "employee report" do
       end
     end
 
+    context "hiding columns" do
+      it "does not display hidden columns" do
+        visit '/reports/employee'
+        expect(page).to_not have_content('Id')
+      end
+    end
+
     context "when a custom view exists for the report" do
 
       it "uses the custom view" do
