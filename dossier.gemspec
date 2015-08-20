@@ -7,11 +7,11 @@ require "dossier/version"
 Gem::Specification.new do |s|
   s.name        = "dossier"
   s.version     = Dossier::VERSION
-  s.authors     = ["Adam Hunter", "Nathan Long", "Rodney Turnham"]
-  s.email       = ["adamhunter@me.com", "nathanmlong@gmail.com", "rodney.turnham@tma1.com"]
+  s.authors     = ["TMA IT"]
+  s.email       = ["developer@tma1.com"]
   s.summary     = "SQL based report generation."
   s.description = "Easy SQL based report generation with the ability to accept request parameters and render multiple formats."
-  s.homepage    = "https://github.com/adamhunter/dossier"
+  s.homepage    = "https://github.com/tma1/dossier"
   s.license     = 'MIT'
 
   s.files = Dir["{app,config,db,lib}/**/*"] + %w[MIT-LICENSE Rakefile README.md]
