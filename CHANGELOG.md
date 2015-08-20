@@ -3,6 +3,7 @@
 Dossier does its best to use [semantic versioning](http://semver.org).
 
 ## Unreleased
+- `Dossier::Naming` renamed to `Dossier::Model`
 - Reports have a `display_column?(name)` method that can be overriden to
     determine if a column should be displayed.
 - Rails v4.2.X support
