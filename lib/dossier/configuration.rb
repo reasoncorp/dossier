@@ -4,6 +4,8 @@ require 'yaml'
 module Dossier
   class Configuration
 
+    DB_KEY = 'DATABASE_URL'.freeze
+
     attr_accessor :config_path, :client
 
     def initialize
@@ -12,25 +14,28 @@ module Dossier
     end
    
     def connection_options
-      yaml_config.merge(dburl_config || {})
+      yaml_config.merge(dburl_config || {}).presence || raise_empty_conn_config
     end
 
     def yaml_config
-      YAML.load(ERB.new(File.read(@config_path)).result)[Rails.env].symbolize_keys
+      YAML.load(ERB.new(File.read(config_path)).result)[Rails.env].symbolize_keys
+    rescue Errno::ENOENT
+      {}
     end
    
     def dburl_config
-      Dossier::ConnectionUrl.new.to_hash if ENV.has_key? "DATABASE_URL"
+      Dossier::ConnectionUrl.new.to_hash if ENV.has_key? DB_KEY
     end
 
     private
 
     def setup_client!
       @client = Dossier::Client.new(connection_options)
+    end
 
-    rescue Errno::ENOENT => e
+    def raise_empty_conn_config
       raise ConfigurationMissingError.new(
-        "#{e.message}. #{@config_path} must exist for Dossier to connect to the database."
+        "Your connection options are blank, you are missing both #{config_path} and ENV['#{DB_KEY}']"
       )
     end
 
