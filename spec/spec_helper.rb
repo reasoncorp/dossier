@@ -15,10 +15,10 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
 SimpleCov.start
 Coveralls.wear!('rails')
 
-require "rails/test_help"
+# require "rails/test_help"
 require 'rspec/rails'
 require 'pry'
-require 'genspec'
+require 'generator_spec'
 require 'capybara/rspec'
 
 Rails.backtrace_cleaner.remove_silencers!
@@ -34,6 +34,7 @@ DB_CONFIG = [:mysql2, :sqlite3].reduce({}) do |config, adapter_name|
 end.freeze
 
 RSpec.configure do |config|
+  config.infer_spec_type_from_file_location!
   config.mock_with :rspec
 
   config.before :suite do
