@@ -181,9 +181,13 @@ It's up to you to use these options in generating your SQL query.
 
 However, Dossier does support one URL parameter natively: if you supply a `footer` parameter with an integer value, the last N rows will be accesible via `report.results.footers` instead of `report.results.body`. The built-in `show` view renders those rows inside an HTML footer. This is an easy way to display a totals row or something similar.
 
+## Styling
+
+The default report views use a `<table class="dossier report">` for easy CSS styling.
+
 ## Additional View Customization
 
-To further customize your results view, run the the generator provided. The default will provide 'app/views/dossier/reports/show'.
+To further customize your results view, run the generator provided. The default will provide 'app/views/dossier/reports/show'.
 
 ```ruby
 rails generate dossier:views
