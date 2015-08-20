@@ -10,6 +10,7 @@ Dossier does its best to use [semantic versioning](http://semver.org).
 - introduced `format_column(column, value)` as a default formatter that can be implemented as a fall back if a specific format method does not exist
 - Add license to gemspec, thanks to notice from [Benjamin Fleischer](https://github.com/bf4) - see [his blog post](http://www.benjaminfleischer.com/2013/07/12/make-the-world-a-better-place-put-a-license-in-your-gemspec/)
 - Output files now have a sortable date/time stamp by default. Eg, "foo-report_2014-10-02_09-12-24-EDT.csv". This can still be customized by defining a report class's `filename` method.
+- Add CSS classes to report `<table>` elements to facilitate styling.
 
 ## v2.8.0
 - Support namespaces for report names (`cats/are/super_fun` => `Cats::Are::SuperRunReport`
