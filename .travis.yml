@@ -16,7 +16,6 @@ script:
 before_script:
   - mysql -e 'create database dossier_test;'
   - psql -c 'create database dossier_test;' -U postgres
-  - cp spec/dummy/config/database.yml.travis spec/dummy/config/database.yml
   - cp spec/fixtures/db/mysql2.yml.travis    spec/fixtures/db/mysql2.yml
   - cp spec/fixtures/db/sqlite3.yml.travis   spec/fixtures/db/sqlite3.yml
   - cp spec/fixtures/db/postgresql.yml.travis   spec/fixtures/db/postgresql.yml

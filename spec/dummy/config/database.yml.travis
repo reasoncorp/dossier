@@ -1,5 +1,0 @@
-test:
-  adapter:  mysql2
-  database: dossier_test
-  username: root
-  encoding: utf8
