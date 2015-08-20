@@ -62,13 +62,13 @@ describe Dossier::StreamCSV do
     }
 
     it "provides a backtrace if local request" do
-      Rails.application.config.stub(:consider_all_requests_local).and_return(true)
+      allow(Rails.application.config).to receive(:consider_all_requests_local).and_return(true)
       streamer.each { |line| output << line }
       expect(output).to include(error)
     end
 
     it "provides a simple error if not a local request" do
-      Rails.application.config.stub(:consider_all_requests_local).and_return(false)
+      allow(Rails.application.config).to receive(:consider_all_requests_local).and_return(false)
       streamer.each { |line| output << line }
       expect(output).to match(/something went wrong/)
     end

@@ -32,5 +32,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency "generator_spec", "~> 0.9.3"
   s.add_development_dependency "capybara",       "~> 2.4.4"
   s.add_development_dependency "simplecov",      "~> 0.10.0"
-  s.add_development_dependency "dummy-application"
 end

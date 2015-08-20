@@ -16,7 +16,7 @@ describe Dossier::Configuration do
 
   describe "defaults" do
     it "uses the rails configuration directory for the config path" do
-      @config.config_path.should eq(Rails.root.join("config", "dossier.yml"))
+      expect(@config.config_path).to eq(Rails.root.join("config", "dossier.yml"))
     end
   end
 
@@ -43,7 +43,7 @@ describe Dossier::Configuration do
     end
 
     it "will setup the connection options" do
-      @config.connection_options.should be_a(Hash)
+      expect(@config.connection_options).to be_a(Hash)
     end
   end
 

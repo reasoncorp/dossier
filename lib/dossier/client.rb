@@ -7,7 +7,10 @@ module Dossier
 
     def initialize(options)
       self.options = options.symbolize_keys
-      self.adapter = dossier_adapter.new(self.options.except(:dossier_adapter))
+    end
+
+    def adapter
+      @adapter ||= dossier_adapter.new(self.options.except(:dossier_adapter))
     end
 
     def dossier_adapter

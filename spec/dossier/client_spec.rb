@@ -32,48 +32,48 @@ describe Dossier::Client do
 
         it "uses an adapter by that name" do
           expect(Dossier::Adapter::SpecAdapter).to receive(:new).with(username: 'Timmy')
-          described_class.new(dossier_adapter: 'spec_adapter', username: 'Timmy')
+          described_class.new(dossier_adapter: 'spec_adapter', username: 'Timmy').adapter
         end
 
       end
 
       context "when not given a connection or a dossier_adapter option" do
 
-        let(:client)   { described_class.new(username: 'Jimmy') }
+        let(:loaded_orms) { raise 'implement in nested describe' }
+        let(:client)   { 
+          described_class.new(username: 'Jimmy').tap { |c|
+            allow(c).to receive(:loaded_orms).and_return(loaded_orms)
+          }
+        }
 
         describe "if there is one known ORM loaded" do
-          
-          before :each do
-            described_class.any_instance.stub(:loaded_orms).and_return([double(:class, name: 'ActiveRecord::Base')])
-          end
+
+          let(:loaded_orms) { [double(:class, name: 'ActiveRecord::Base')] }
 
           it "uses that ORM's adapter" do
-            expect(Dossier::Adapter::ActiveRecord).to receive(:new).with(username: 'Jimmy')
-            described_class.new(username: 'Jimmy')
+            expect(Dossier::Adapter::ActiveRecord).to(
+              receive(:new).with(username: 'Jimmy'))
+            client.adapter
           end
 
         end
 
         context "if there are no known ORMs loaded" do
-
-          before :each do
-            described_class.any_instance.stub(:loaded_orms).and_return([])
-          end
+          
+          let(:loaded_orms) { [] }
 
           it "raises an error" do
-            expect{described_class.new(username: 'Jimmy')}.to raise_error(Dossier::Client::IndeterminableAdapter)
+            expect{ client.adapter }.to raise_error(Dossier::Client::IndeterminableAdapter)
           end
 
         end
 
         describe "if there are multiple known ORMs loaded" do
-
-          before :each do
-            described_class.any_instance.stub(:loaded_orms).and_return([:orm1, :orm2])
-          end
+          
+          let(:loaded_orms) { [:orm1, :orm2] }
 
           it "raises an error" do
-            expect{described_class.new(username: 'Jimmy')}.to raise_error(Dossier::Client::IndeterminableAdapter)
+            expect{ client.adapter }.to raise_error(Dossier::Client::IndeterminableAdapter)
           end
 
         end
@@ -90,7 +90,7 @@ describe Dossier::Client do
     let(:adapter) { double(:adapter) }
 
     before :each do
-      client.stub(:adapter).and_return(adapter)
+      allow(client).to receive(:adapter).and_return(adapter)
     end
 
     it "delegates `escape` to its adapter" do

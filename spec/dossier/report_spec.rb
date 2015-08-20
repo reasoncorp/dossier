@@ -5,7 +5,7 @@ describe Dossier::Report do
   let(:report) { TestReport.new(:foo => 'bar') }
 
   it "has a report name" do
-    TestReport.report_name.should eq('test')
+    expect(TestReport.report_name).to eq('test')
   end
 
   it "has a template name that is the report name" do
@@ -29,15 +29,15 @@ describe Dossier::Report do
     end
 
     it "takes options when initializing" do
-      report.options.should eq('foo' => 'bar')
+      expect(report.options).to eq('foo' => 'bar')
     end
 
     it 'generates column headers' do
-      report.format_header('Foo').should eq 'Foo'
+      expect(report.format_header('Foo')).to eq 'Foo'
     end
 
     it 'allows for column header customization' do
-      report_with_custom_header.format_header(:generic).should eq 'customized'
+      expect(report_with_custom_header.format_header(:generic)).to eq 'customized'
     end
 
     it "has a formatted title" do
@@ -62,8 +62,8 @@ describe Dossier::Report do
     end
 
     it "has callbacks for execute" do
-      Dossier.client.stub(:execute).and_return([])
-      report.stub(:before_test_for_build_query)
+      allow(Dossier.client).to receive(:execute).and_return([])
+      allow(report).to receive(:before_test_for_build_query)
       expect(report).to receive(:after_test_for_execute)
       report.run
     end
@@ -86,7 +86,7 @@ describe Dossier::Report do
       it "will cache the results of the run in `results`" do
         report = EmployeeReport.new
         report.run
-        report.results.should_not be_nil
+        expect(report.results).not_to be_nil
       end
     end
 

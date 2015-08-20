@@ -1,12 +1,10 @@
-require 'rails/all'
-require 'dummy/application'
-require 'active_model'
+ENV['RAILS_ENV']   = 'test'
 require 'simplecov'
 require 'coveralls'
 
 # not sure why I need to do this now, its after I added dummy-application
-ApplicationController.helper Dossier::ApplicationHelper
-SiteController.helper Dossier::ApplicationHelper
+# ApplicationController.helper Dossier::ApplicationHelper
+# SiteController.helper Dossier::ApplicationHelper
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
   SimpleCov::Formatter::HTMLFormatter,
@@ -15,13 +13,11 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
 SimpleCov.start
 Coveralls.wear!('rails')
 
-# require "rails/test_help"
+require File.expand_path("../dummy/config/application.rb",  __FILE__)
 require 'rspec/rails'
 require 'pry'
 require 'generator_spec'
 require 'capybara/rspec'
-
-Rails.backtrace_cleaner.remove_silencers!
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }

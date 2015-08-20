@@ -2,18 +2,18 @@ require 'spec_helper'
 
 describe Dossier::Responder do
 
-  def stub_out_report_results(report)
+  def mock_out_report_results(report)
     report.tap { |r|
-      r.stub(:results).and_return(results)
-      r.stub(:raw_results).and_return(results)
+      allow(r).to receive(:results).and_return(results)
+      allow(r).to receive(:raw_results).and_return(results)
     }
   end
 
   let(:results)    { double(arrays: [%w[hi], %w[there]], hashes: [{hi: 'there'}]) }
   let(:report)     { EmployeeReport.new }
-  let(:reports)    { [stub_out_report_results(report)] }
+  let(:reports)    { [mock_out_report_results(report)] }
   let(:controller) { 
-    ActionController::Base.new.tap { |controller| controller.stub(:headers).and_return({}) }
+    ActionController::Base.new.tap { |controller| allow(controller).to receive(:headers).and_return({}) }
   }
   let(:responder)  { described_class.new(controller, reports, {}) }
 
