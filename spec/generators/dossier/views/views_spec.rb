@@ -3,13 +3,12 @@ require 'spec_helper'
 require 'generators/dossier/views/views_generator'
 
 describe Dossier::ViewsGenerator, type: :generator  do
-  before(:each) { cleanup }
   after(:each)  { cleanup }
 
   let(:path) { Rails.root.join(*%w[app views dossier reports]) }
   let(:file) { raise 'implement in nested context/describe' }
   let(:file_path) { path.join(file) }
-  let(:cleanup)   { FileUtils.rm file_path }
+  let(:cleanup)   { FileUtils.rm_f file_path }
 
   context "with no arguments or options" do
     let(:file) { 'show.html.haml' }
