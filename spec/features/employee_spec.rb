@@ -53,7 +53,7 @@ describe "employee report" do
         it "uses any options provided" do
           visit path
           expect(page).to have_selector("table tbody tr", count: 1)
-          expect(page).to have_selector("td", text: 'Employee Jimmy Jackalope, Jr.')
+          expect(page).to have_selector("td", text: %r(Employee Jimmy Jackalope, Jr.)i)
         end
       end
 
@@ -62,7 +62,7 @@ describe "employee report" do
 
         it "moves the specified number of rows into the footer" do
           visit path
-          expect(page).to have_selector("table tfoot tr th", text: 'Employee Moustafa McMann')
+          expect(page).to have_selector("table tfoot tr th", text: %r(Employee Moustafa McMann)i)
         end
       end
 
@@ -74,7 +74,8 @@ describe "employee report" do
 
     it "creates a standard CSV report" do
       visit '/reports/employee.csv'
-      expect(page.body).to eq(File.read('spec/fixtures/reports/employee.csv'))
+      expect(page.body.downcase).to(
+        eq(File.read('spec/fixtures/reports/employee.csv').downcase))
     end
 
   end
@@ -83,7 +84,8 @@ describe "employee report" do
 
     it "creates a standard XLS report" do
       visit '/reports/employee.xls'
-      expect(page.body).to eq(File.read('spec/fixtures/reports/employee.xls'))
+      expect(page.body.downcase).to(
+        eq(File.read('spec/fixtures/reports/employee.xls').downcase))
     end
 
   end

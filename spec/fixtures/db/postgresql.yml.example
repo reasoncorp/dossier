@@ -1,0 +1,5 @@
+adapter: postgresql
+database: dossier_test
+host: localhost
+username: your_user_name
+password: 

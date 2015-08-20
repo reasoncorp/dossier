@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Dossier::Configuration do
   
-  let(:connection_options){ YAML.load_file(Rails.root.join('config', 'dossier.yml'))[Rails.env].symbolize_keys }
+  let(:connection_options){ YAML.load(ERB.new(File.read Rails.root.join('config', 'dossier.yml')).result)[Rails.env].symbolize_keys }
   let(:old_database_url) { ENV.delete "DATABASE_URL"}  
   
   before :each do 
