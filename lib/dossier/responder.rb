@@ -1,3 +1,5 @@
+require 'responders' unless defined? ::ActionController::Responder
+
 module Dossier
   class Responder < ::ActionController::Responder
     alias :report :resource

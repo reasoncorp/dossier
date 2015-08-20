@@ -1,6 +1,6 @@
 module Dossier
   class Report
-    include Dossier::Naming
+    include Dossier::Model
     include ActiveSupport::Callbacks
 
     define_callbacks :build_query, :execute

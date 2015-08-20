@@ -1,5 +1,5 @@
 module Dossier
-  module Naming
+  module Model
 
     # not using ActiveSupport::Concern because ClassMethods
     # must be extended after ActiveModel::Naming
@@ -28,11 +28,19 @@ module Dossier
       report_name
     end
 
+    def to_model
+      self
+    end
+
+    def persisted?
+      true
+    end
+
     delegate :report_name, :formatted_title, to: "self.class"
 
     module ClassMethods
       def report_name
-        Dossier::Naming.class_to_name(self)
+        Dossier::Model.class_to_name(self)
       end
 
       def formatted_title

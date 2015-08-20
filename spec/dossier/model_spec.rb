@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Dossier::Naming do
+describe Dossier::Model do
   describe "report naming" do
     let(:klass) { HelloMyFriendsReport }
     let(:name)  { 'hello_my_friends' }
@@ -11,6 +11,11 @@ describe Dossier::Naming do
 
     it "converting a report name to a report class" do
       expect(described_class.name_to_class(name)).to eq(klass)
+    end
+
+    it "has a to_model" do
+      instance = klass.new
+      expect(instance.to_model).to eq(instance)
     end
 
     describe "with namespaces" do

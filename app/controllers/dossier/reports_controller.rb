@@ -17,7 +17,7 @@ module Dossier
     private
 
     def report_class
-      Dossier::Naming.name_to_class(params[:report])
+      Dossier::Model.name_to_class(params[:report])
     end
 
     def report
