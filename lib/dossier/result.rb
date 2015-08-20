@@ -52,7 +52,11 @@ module Dossier
     class Formatted < Result
 
       def headers
-        @formatted_headers ||= raw_headers.map { |h| report.format_header(h) }
+        @formatted_headers ||= raw_headers.select { |h|
+          report.display_column?(h)
+        }.map { |h|
+          report.format_header(h)
+        }
       end
 
       def each
@@ -64,7 +68,10 @@ module Dossier
           raise ArgumentError.new("#{row.inspect} must be a kind of Enumerable") 
         end
 
-        row.each_with_index.map do |value, i|
+        row.each_with_index.select { |value, i|
+          column = raw_headers.at(i)
+          report.display_column?(column)
+        }.map { |value, i|
           column = raw_headers.at(i)
           method = "format_#{column}"
 
@@ -76,7 +83,7 @@ module Dossier
           else
             report.format_column(column, value)
           end
-        end
+        }
       end
     end
 

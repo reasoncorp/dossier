@@ -137,6 +137,27 @@ class MoneyLaunderingReport < Dossier::Report
 end
 ```
 
+## Hidden Columns
+
+You may override `display_column?` in your report class in order to hide columns from the formatted results. For instance, you might select an employee's ID and name in order to generate a link from their name to their profile page, without actually displaying the ID value itself:
+
+```ruby
+class EmployeeReport < Dossier::Report
+  # ...
+
+  def display_column?(name)
+    name != 'id'
+  end
+
+  def format_name(value, row)
+    url = formatter.url_formatter.url_helpers.employee_path(row['id'])
+    formatter.url_formatter.link_to(value, url)
+  end
+end
+```
+
+By default, all selected columns are displayed.
+
 ## Report Options and Footers
 
 You may want to specify parameters for a report: which columns to show, a range of dates, etc. Dossier supports this via URL parameters, anything in `params[:options]` will be passed into your report's `initialize` method and made available via the `options` reader.

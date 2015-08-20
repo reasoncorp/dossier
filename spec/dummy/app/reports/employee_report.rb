@@ -55,6 +55,10 @@ class EmployeeReport < Dossier::Report
     @names ||= options.fetch(:names) { [] }.dup
   end
 
+  def display_column?(name)
+    name != 'id'
+  end
+
   def format_salary(amount, row)
     return "Who's Asking?" if row[:division] == "Corporate Malfeasance"
     formatter.number_to_currency(amount)
