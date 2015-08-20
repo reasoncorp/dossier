@@ -3,6 +3,8 @@
 Dossier does its best to use [semantic versioning](http://semver.org).
 
 ## Unreleased
+- Heroku `DATABASE_URL` support
+- CSS classes on Dossier views
 - `Dossier::Naming` renamed to `Dossier::Model`
 - Reports have a `display_column?(name)` method that can be overriden to
     determine if a column should be displayed.
