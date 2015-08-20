@@ -16,3 +16,4 @@ before_script:
   - cp spec/dummy/config/database.yml.travis spec/dummy/config/database.yml
   - cp spec/fixtures/db/mysql2.yml.travis    spec/fixtures/db/mysql2.yml
   - cp spec/fixtures/db/sqlite3.yml.travis   spec/fixtures/db/sqlite3.yml
+sudo: false # upgrade travis ci infrastructure http://bit.ly/1J6D4W9

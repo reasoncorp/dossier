@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency "actionmailer",    ">= 3.2"
   s.add_dependency "railties",        ">= 3.2"
   s.add_dependency "haml",            ">= 3.1"
-  s.add_dependency "responders",      ">= 2.1"
+  s.add_dependency "responders",      ">= 1.1"
 
   s.add_development_dependency "activerecord", ">= 3.2"
   s.add_development_dependency "sqlite3",      ">= 1.3.6"
