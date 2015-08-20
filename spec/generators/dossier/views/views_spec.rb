@@ -3,27 +3,31 @@ require 'spec_helper'
 require 'generators/dossier/views/views_generator'
 
 describe Dossier::ViewsGenerator, type: :generator  do
-  context "with no arguments or options" do
+  before(:each) { cleanup }
+  after(:each)  { cleanup }
 
-    before :each do
-      FileUtils.rm_rf("spec/dummy/app/views/dossier/reports/show.html.haml")
-      run_generator
-    end
+  let(:path) { Rails.root.join(*%w[app views dossier reports]) }
+  let(:file) { raise 'implement in nested context/describe' }
+  let(:file_path) { path.join(file) }
+  let(:cleanup)   { FileUtils.rm file_path }
+
+  context "with no arguments or options" do
+    let(:file) { 'show.html.haml' }
+
+    before(:each) { run_generator }
 
     it "should generate a view file" do
-      FileTest.exists?(Rails.root.join("app" "views" "dossier" "show.html.haml"))
+      expect(FileTest.exists? file_path).to be true
     end
   end
 
   context "with_args: account_tracker" do
+    let(:file) { 'account_tracker.html.haml' }
 
-    before :each do
-      FileUtils.rm_rf("spec/dummy/app/views/dossier/reports/account_tracker.html.haml")
-      run_generator %w[account_tracker]
-    end
+    before(:each) { run_generator %w[account_tracker] }
 
     it "should generate a edit_account form" do
-      FileTest.exists?(Rails.root.join("app" "views" "dossier" "account_tracker.html.haml"))
+      expect(FileTest.exists? file_path).to be true
     end 
   end
 end
