@@ -67,23 +67,33 @@ module Dossier
         unless row.kind_of?(Enumerable)
           raise ArgumentError.new("#{row.inspect} must be a kind of Enumerable") 
         end
+        
+        displayable_columns(row).map { |value, i|
+          column = raw_headers.at(i)
+          apply_formatter(row, column, value)
+        }
+      end
 
+      private
+
+      def displayable_columns(row)
         row.each_with_index.select { |value, i|
           column = raw_headers.at(i)
           report.display_column?(column)
-        }.map { |value, i|
-          column = raw_headers.at(i)
-          method = "format_#{column}"
-
-          if report.respond_to?(method)
-            args = [method, value]
-            # Provide the row as context if the formatter takes two arguments
-            args << row_hash(row) if report.method(method).arity == 2
-            report.public_send(*args)
-          else
-            report.format_column(column, value)
-          end
         }
+      end
+
+      def apply_formatter(row, column, value)
+        method = "format_#{column}"
+
+        if report.respond_to?(method)
+          args = [method, value]
+          # Provide the row as context if the formatter takes two arguments
+          args << row_hash(row) if report.method(method).arity == 2
+          report.public_send(*args)
+        else
+          report.format_column(column, value)
+        end
       end
     end
 
