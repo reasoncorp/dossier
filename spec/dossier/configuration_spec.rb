@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Dossier::Configuration do
   
-  let(:connection_options){ YAML.load_file(Rails.root.join('config', 'dossier.yml'))[Rails.env].symbolize_keys }
+  let(:connection_options){ YAML.load(ERB.new(File.read Rails.root.join('config', 'dossier.yml')).result)[Rails.env].symbolize_keys }
   let(:old_database_url) { ENV.delete "DATABASE_URL"}  
   
   before :each do 
@@ -11,12 +11,16 @@ describe Dossier::Configuration do
   end
 
   after :each do
+    ENV.delete "DATABASE_URL" if ENV.has_key? "DATABASE_URL"
+  end
+
+  after :each do
     ENV["DATABASE_URL"] = old_database_url
   end
 
   describe "defaults" do
     it "uses the rails configuration directory for the config path" do
-      @config.config_path.should eq(Rails.root.join("config", "dossier.yml"))
+      expect(@config.config_path).to eq(Rails.root.join("config", "dossier.yml"))
     end
   end
 
@@ -30,20 +34,36 @@ describe Dossier::Configuration do
     end
 
     it "uses config/dossier.yml to setup the client" do
-      ENV.delete "DATABASE_URL" if ENV.has_key? "DATABASE_URL"
       expect(Dossier::Client).to receive(:new).with(connection_options)
       Dossier.configure
     end
 
-    it "will raise an exception if config/dossier.yml cannot be read" do
-      config_path = Rails.root.join('config')
-      FileUtils.mv config_path.join('dossier.yml'), config_path.join('dossier.yml.test')
-      expect { Dossier.configure }.to raise_error(Dossier::ConfigurationMissingError)
-      FileUtils.mv config_path.join('dossier.yml.test'), config_path.join('dossier.yml')
+    describe "missing a dossier.yml" do
+      let(:config_path) { Rails.root.join('config') }
+
+      before :each do
+        FileUtils.mv config_path.join('dossier.yml'),
+          config_path.join('dossier.yml.test')
+      end
+
+      after :each do
+        FileUtils.mv config_path.join('dossier.yml.test'),
+          config_path.join('dossier.yml')
+      end
+
+      it "will not raise an exception if config/dossier.yml cannot be read and DATABSE_URL is set" do
+        ENV['DATABASE_URL'] = "mysql2://localhost/dossier_test"
+        expect { Dossier.configure }.not_to raise_error
+      end
+
+      it "will raise an error if connection options is blank" do
+        expect { Dossier.configure }.to(
+          raise_error(Dossier::ConfigurationMissingError))
+      end
     end
 
     it "will setup the connection options" do
-      @config.connection_options.should be_a(Hash)
+      expect(@config.connection_options).to be_a(Hash)
     end
   end
 

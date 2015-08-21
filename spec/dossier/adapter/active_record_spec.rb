@@ -16,7 +16,7 @@ describe Dossier::Adapter::ActiveRecord do
     end
 
     it "returns the connection's escaped value" do
-      ar_connection.stub(:quote).and_return(clean_value)
+      allow(ar_connection).to receive(:quote).and_return(clean_value)
       expect(adapter.escape(dirty_value)).to eq(clean_value)
     end
 
@@ -34,18 +34,18 @@ describe Dossier::Adapter::ActiveRecord do
     end
 
     it "builds an adapter result" do
-      ar_connection.stub(:exec_query).and_return(connection_results)
+      allow(ar_connection).to receive(:exec_query).and_return(connection_results)
       expect(adapter_result_class).to receive(:new).with(connection_results)
       adapter.execute(:query)
     end
 
     it "returns the adapter result" do
-      ar_connection.stub(:exec_query).and_return(connection_results)
+      allow(ar_connection).to receive(:exec_query).and_return(connection_results)
       expect(adapter.execute(:query)).to be_a(adapter_result_class)
     end
 
     it "rescues any errors and raises a Dossier::ExecuteError" do
-      ar_connection.stub(:exec_query).and_raise(StandardError.new('wat'))
+      allow(ar_connection).to receive(:exec_query).and_raise(StandardError.new('wat'))
       expect{ adapter.execute(:query) }.to raise_error(Dossier::ExecuteError)
     end
 

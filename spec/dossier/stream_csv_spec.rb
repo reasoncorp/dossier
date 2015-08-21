@@ -57,16 +57,18 @@ describe Dossier::StreamCSV do
   describe "exceptions" do
     let(:output) { String.new }
     let(:error)  { "Woooooooo cats are fluffy!" }
-    before(:each) { collection[0].stub(:to_csv).and_return { raise error } }
+    before(:each) {
+      allow(collection[0]).to receive(:to_csv).and_raise(error)
+    }
 
     it "provides a backtrace if local request" do
-      Rails.application.config.stub(:consider_all_requests_local).and_return(true)
+      allow(Rails.application.config).to receive(:consider_all_requests_local).and_return(true)
       streamer.each { |line| output << line }
       expect(output).to include(error)
     end
 
     it "provides a simple error if not a local request" do
-      Rails.application.config.stub(:consider_all_requests_local).and_return(false)
+      allow(Rails.application.config).to receive(:consider_all_requests_local).and_return(false)
       streamer.each { |line| output << line }
       expect(output).to match(/something went wrong/)
     end

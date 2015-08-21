@@ -6,7 +6,7 @@ class EmployeeWithCustomViewReport < Dossier::Report
   end
 
   def sql
-    "SELECT * FROM employees WHERE suspended = true"
+    "SELECT * FROM employees WHERE suspended = :suspended"
   end
 
   def dragon_color
@@ -15,6 +15,10 @@ class EmployeeWithCustomViewReport < Dossier::Report
   
   def formatter
     @formatter ||= CustomFormatter
+  end
+
+  def suspended
+    true
   end
 
   module CustomFormatter

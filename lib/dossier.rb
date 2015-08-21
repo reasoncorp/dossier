@@ -1,5 +1,5 @@
 require "dossier/engine"
-require "dossier/naming"
+require "dossier/model"
 require "dossier/view_context_with_report_formatter"
 require "dossier/version"
 

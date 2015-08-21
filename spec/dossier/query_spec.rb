@@ -6,8 +6,8 @@ describe Dossier::Query do
   let(:query)  { Dossier::Query.new(report) }
 
   before :each do
-    report.stub(:salary).and_return(2)
-    report.stub(:ids).and_return([1,2,3])
+    allow(report).to receive(:salary).and_return(2)
+    allow(report).to receive(:ids).and_return([1,2,3])
   end
 
   describe "replacing symbols by calling methods of the same name" do
@@ -17,10 +17,10 @@ describe Dossier::Query do
       context "when the methods return single values" do
 
         before :each do
-          report.stub(:sql).and_return("SELECT * FROM employees WHERE id = :id OR girth < :girth OR hired_on = :hired_on")
-          report.stub(:id).and_return(92)
-          report.stub(:girth).and_return(3.14)
-          report.stub(:hired_on).and_return('2013-03-29')
+          allow(report).to receive(:sql).and_return("SELECT * FROM employees WHERE id = :id OR girth < :girth OR hired_on = :hired_on")
+          allow(report).to receive(:id).and_return(92)
+          allow(report).to receive(:girth).and_return(3.14)
+          allow(report).to receive(:hired_on).and_return('2013-03-29')
         end
 
         it "escapes the values" do
@@ -39,8 +39,8 @@ describe Dossier::Query do
       context "when the methods return arrays" do
 
         before :each do
-          report.stub(:sql).and_return("SELECT * FROM employees WHERE stuff IN :stuff")
-          report.stub(:stuff).and_return([38, 'blue', 'mandible', 2])
+          allow(report).to receive(:sql).and_return("SELECT * FROM employees WHERE stuff IN :stuff")
+          allow(report).to receive(:stuff).and_return([38, 'blue', 'mandible', 2])
         end
 
         it "escapes each value in the array" do
@@ -60,14 +60,14 @@ describe Dossier::Query do
     context "when it's another string that includes :" do
 
       it "does not escape a namespaced constant" do
-        report.stub(:sql).and_return("SELECT * FROM employees WHERE type = 'Foo::Bar'") 
-        query.should_not_receive(:Bar)
+        allow(report).to receive(:sql).and_return("SELECT * FROM employees WHERE type = 'Foo::Bar'") 
+        expect(query).not_to receive(:Bar)
         query.to_s
       end
 
       it "does not escape a top-level constant" do
-        report.stub(:sql).and_return("SELECT * FROM employees WHERE type = '::Foo'") 
-        query.should_not_receive(:Foo)
+        allow(report).to receive(:sql).and_return("SELECT * FROM employees WHERE type = '::Foo'") 
+        expect(query).not_to receive(:Foo)
         query.to_s
       end
 

@@ -1,5 +1,5 @@
 class Dossier::MultiReport
-  include Dossier::Naming
+  include Dossier::Model
 
   attr_accessor :options
 

@@ -17,12 +17,20 @@ module Dossier
       @sqlite3_client ||= Dossier::Client.new(DB_CONFIG.fetch(:sqlite3))
     end
 
+    def postgresql_client
+      @postgres_client ||= Dossier::Client.new(DB_CONFIG.fetch(:postgresql))
+    end
+
     def mysql2_connection
       mysql2_client.adapter.connection
     end
 
     def sqlite3_connection
       sqlite3_client.adapter.connection
+    end
+
+    def postgresql_connection
+      postgresql_client.adapter.connection
     end
 
     def mysql2_create_employees
@@ -59,6 +67,24 @@ module Dossier
       )
     end
 
+    def postgresql_create_employees
+      # database must be created by hand (as far as I can tell), create
+      # `dossier_test'
+      postgresql_connection.execute('DROP TABLE IF EXISTS employees', 'FACTORY')
+      postgresql_connection.execute(
+        <<-SQL, 'FACTORY'
+          CREATE TABLE employees (
+            id serial PRIMARY KEY,
+            name varchar(255) NOT NULL,
+            division varchar(255) NOT NULL,
+            salary integer NOT NULL,
+            suspended boolean NOT NULL DEFAULT false,
+            hired_on date NOT NULL
+          ) 
+        SQL
+      )
+    end
+
     def mysql2_seed_employees
       mysql2_connection.execute('TRUNCATE `employees`', 'FACTORY')
       employees.each do |employee|
@@ -80,6 +106,18 @@ module Dossier
           VALUES ('#{employee[:name].upcase}', '#{employee[:hired_on]}', #{employee[:suspended] ? 1 : 0}, '#{employee[:division]}', #{employee[:salary]});
         QUERY
         sqlite3_connection.execute(query, 'FACTORY')
+      end
+    end
+
+    def postgresql_seed_employees
+      postgresql_connection.execute('TRUNCATE employees', 'FACTORY')
+      employees.each do |employee|
+        query = <<-QUERY
+          INSERT INTO 
+            employees (name, hired_on, suspended, division, salary) 
+          VALUES ('#{employee[:name]}', '#{employee[:hired_on]}', #{employee[:suspended]}, '#{employee[:division]}', #{employee[:salary]});
+        QUERY
+        postgresql_connection.execute(query, 'FACTORY')
       end
     end
   end

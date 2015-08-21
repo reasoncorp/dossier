@@ -7,11 +7,11 @@ require "dossier/version"
 Gem::Specification.new do |s|
   s.name        = "dossier"
   s.version     = Dossier::VERSION
-  s.authors     = ["Adam Hunter", "Nathan Long", "Rodney Turnham"]
-  s.email       = ["adamhunter@me.com", "nathanmlong@gmail.com", "rodney.turnham@tma1.com"]
+  s.authors     = ["TMA IT"]
+  s.email       = ["developer@tma1.com"]
   s.summary     = "SQL based report generation."
   s.description = "Easy SQL based report generation with the ability to accept request parameters and render multiple formats."
-  s.homepage    = "https://github.com/adamhunter/dossier"
+  s.homepage    = "https://github.com/tma1/dossier"
   s.license     = 'MIT'
 
   s.files = Dir["{app,config,db,lib}/**/*"] + %w[MIT-LICENSE Rakefile README.md]
@@ -23,13 +23,13 @@ Gem::Specification.new do |s|
   s.add_dependency "actionmailer",    ">= 3.2"
   s.add_dependency "railties",        ">= 3.2"
   s.add_dependency "haml",            ">= 3.1"
+  s.add_dependency "responders",      ">= 1.1"
 
-  s.add_development_dependency "activerecord", ">= 3.2"
-  s.add_development_dependency "sqlite3",      ">= 1.3.6"
-  s.add_development_dependency "pry",          ">= 0.9.10"
-  s.add_development_dependency "rspec-rails",  ">= 2.14.1"
-  s.add_development_dependency "genspec",      "~> 0.2.7"
-  s.add_development_dependency "capybara",     "~> 2.1.0"
-  s.add_development_dependency "simplecov",    "~> 0.7.1"
-  s.add_development_dependency "dummy-application"
+  s.add_development_dependency "activerecord",   ">= 3.2"
+  s.add_development_dependency "sqlite3",        ">= 1.3.6"
+  s.add_development_dependency "pry",            ">= 0.10.1"
+  s.add_development_dependency "rspec-rails",    ">= 3.3.3"
+  s.add_development_dependency "generator_spec", "~> 0.9.3"
+  s.add_development_dependency "capybara",       "~> 2.4.4"
+  s.add_development_dependency "simplecov",      "~> 0.10.0"
 end

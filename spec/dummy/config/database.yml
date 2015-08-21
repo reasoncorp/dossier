@@ -1,0 +1,14 @@
+<% options = DB_CONFIG.fetch(ENV.fetch('DOSSIER_DB', :sqlite3).to_sym) %>
+defaults: &defaults
+  adapter:  <%= options.fetch(:adapter)  %>
+  database: <%= options.fetch(:database) %>
+  host:     <%= options.fetch(:host, 'localhost') %>
+  username: <%= options[:username] %>
+  password: <%= options[:password] %>
+  
+development:
+  <<: *defaults
+test:
+  <<: *defaults
+production:
+  <<: *defaults

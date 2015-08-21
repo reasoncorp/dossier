@@ -65,6 +65,7 @@ class EmployeeReport < Dossier::Report
   end
 
   def format_hired_on(date)
+    date = Date.parse(date) if String === date
     date.to_s(:db)
   end
 
@@ -73,11 +74,19 @@ class EmployeeReport < Dossier::Report
   end
 
   def format_suspended(value)
-    value.to_i == 1 ? 'Yes' : 'No'
+    value.to_s.in?(%w(1 t)) ? 'Yes' : 'No'
   end
 
   def example_before_hook
     # do some stuff
+  end
+
+  def raw_results
+    super
+    results = query_results.rows.map { |qr|
+      qr.tap { |q| q[4] = format_suspended(q[4]) }
+    }
+    @raw_results ||= Result::Unformatted.new(results, self)
   end
 
 end

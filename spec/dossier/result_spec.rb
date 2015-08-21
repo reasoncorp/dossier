@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Dossier::Result do
 
-  module AbstractStub
+  module AbstractMock
     def each
       adapter_results.rows.each do |row|
         yield row
@@ -17,7 +17,7 @@ describe Dossier::Result do
   let(:report)         { TestReport.new }
   let(:result_row)     { {'mascot' => 'platapus', 'cheese' => 'bleu'} }
   let(:adapter_result) { double(:adapter_result, rows: [result_row.values], headers: result_row.keys) }
-  let(:result_class)   { Class.new(described_class) { include AbstractStub } }
+  let(:result_class)   { Class.new(described_class) { include AbstractMock } }
   let(:result)         { result_class.new(adapter_result, report) }
 
   it "requires each to be overridden" do
@@ -51,7 +51,7 @@ describe Dossier::Result do
       end
 
       it "can return an array of arrays" do
-        result.stub(:headers).and_return(%w[mascot cheese])
+        allow(result).to receive(:headers).and_return(%w[mascot cheese])
         expect(result.arrays).to eq([%w[mascot cheese], %w[platapus bleu]])
       end
 
@@ -122,7 +122,7 @@ describe Dossier::Result do
         let(:adapter_result_rows) { 7.times.map { result_row.values } }
 
         before :each do
-          adapter_result.stub(:rows).and_return(adapter_result_rows)
+          allow(adapter_result).to receive(:rows).and_return(adapter_result_rows)
         end
 
         it "has 4 result rows" do
@@ -157,7 +157,7 @@ describe Dossier::Result do
         end
 
         it "does not format the results" do
-          result.should_not_receive(:format)
+          expect(result).not_to receive(:format)
           result.each { |result| }
         end
 
