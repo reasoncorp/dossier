@@ -1,3 +1,3 @@
 module Dossier
-  VERSION = "2.12.2"
+  VERSION = File.read(File.expand_path '../../../VERSION', __FILE__).chomp
 end
