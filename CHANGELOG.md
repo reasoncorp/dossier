@@ -3,6 +3,8 @@
 Dossier does its best to use [semantic versioning](http://semver.org).
 
 ## Unreleased
+
+## v2.13.0
 - Heroku `DATABASE_URL` support
 - CSS classes on Dossier views
 - `Dossier::Naming` renamed to `Dossier::Model`
