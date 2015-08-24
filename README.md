@@ -6,10 +6,10 @@ Dossier is a Rails engine that turns SQL into reports. Reports can be easily ren
 - If you **love** SQL, you can use every feature your database supports.
 
 [![Gem Version](https://badge.fury.io/rb/dossier.svg)](http://badge.fury.io/rb/dossier)
-[![Code Climate](https://codeclimate.com/github/tma1/dossier.png)](https://codeclimate.com/github/tma1/dossier)
-[![Build Status](https://travis-ci.org/tma1/dossier.png?branch=master)](https://travis-ci.org/tma1/dossier)
+[![Code Climate](https://codeclimate.com/github/tma1/dossier/badges/gpa.svg)](https://codeclimate.com/github/tma1/dossier)
+[![Build Status](https://travis-ci.org/tma1/dossier.svg?branch=master)](https://travis-ci.org/tma1/dossier)
 [![Coverage Status](https://coveralls.io/repos/tma1/dossier/badge.svg?branch=master&service=github)](https://coveralls.io/github/tma1/dossier?branch=master)
-[![Dependency Status](https://gemnasium.com/tma1/dossier.png)](https://gemnasium.com/tma1/dossier)
+[![Dependency Status](https://gemnasium.com/tma1/dossier.svg)](https://gemnasium.com/tma1/dossier)
 
 ## Setup
 
