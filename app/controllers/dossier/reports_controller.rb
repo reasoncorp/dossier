@@ -25,7 +25,9 @@ module Dossier
     end
 
     def options_params
-      params[:options].presence || {}
+      report_params = params[:options].presence || {}
+      report_params[:session] = session
+      report_params
     end
   end
 end
