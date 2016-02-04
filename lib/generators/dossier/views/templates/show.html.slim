@@ -1,0 +1,27 @@
+h2
+  = report.formatted_title
+
+= link_to 'Download CSV', formatted_dossier_report_path('csv', report), class: 'download-csv'
+
+= render_options(report)
+
+table.dossier.report
+  thead
+    tr
+      - reports.results.headers.each do |header|
+        th
+          = report.format_header(header)
+  tbody
+    - report.results.body.each do |row|
+      tr
+        - row.each do |value|
+          td
+            = value
+
+  - if report.results.footers.any?
+    tfoot
+      - reort.results.footers.each do |row|
+        tr
+          - row.each do |value|
+            th
+              = value
