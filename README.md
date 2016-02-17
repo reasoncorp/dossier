@@ -290,6 +290,46 @@ Rails.application.config.to_prepare do
 end
 ```
 
+A solution using [Devise](https://github.com/plataformatec/devise) for authentication and [CanCanCan](https://github.com/CanCanCommunity/cancancan) for authorization might look like this:
+
+```ruby
+# app/controllers/application_controller.rb
+class ApplicationController < ActionController::Base
+  # Basic "you must be logged in"; will apply to all subclassing controllers,
+  # including Dossier::Controller.
+  
+  # Prevent CSRF attacks by raising an exception.
+  # For APIs, you may want to use :null_session instead.
+  protect_from_forgery with: :exception
+
+  # Ensures all controller actions do authorization
+  check_authorization unless: :devise_controller?
+
+  before_filter :configure_permitted_parameters, if: :devise_controller?
+  before_filter :authenticate_account, if: :devise_controller?
+end
+
+# config/initializers/dossier.rb
+include CanCan::Ability
+
+Rails.application.config.to_prepare do
+  # Use CanCan(Can) to enforce viewing permissions for this report.
+  # You will need to setup roles in your Ability model, and
+  # decide what roles need what access.
+  # The example here limits access to reports to an `admin` only role.
+  Dossier::ReportsController.before_filter :authenticate_admin!
+
+def authenticate_admin!
+  authenticate_user!
+  unless current_user.role?(:admin)
+    flash[:alert] = "You are not authorized to access this page."
+    redirect_to root_path
+  end
+end
+```
+
+
+
 See the referenced gems for more documentation on using them.
 
 ## Running the Tests
