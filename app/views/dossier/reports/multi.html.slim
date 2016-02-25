@@ -1,0 +1,9 @@
+div id="#{report.dom_id}"
+
+  h1.dossier-multi-header
+    = report.formatted_title
+
+  = render_options(report)
+
+  - report.reports.each do |r|
+    = r.render layout: false
