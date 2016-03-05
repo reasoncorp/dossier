@@ -319,12 +319,13 @@ Rails.application.config.to_prepare do
   # The example here limits access to reports to an `admin` only role.
   Dossier::ReportsController.before_filter :authenticate_admin!
 
+
 def authenticate_admin!
-  authenticate_user!
-  unless current_user.role?(:admin)
+ authenticate_user!
+ if current_user.role!="admin"
     flash[:alert] = "You are not authorized to access this page."
     redirect_to root_path
-  end
+ end
 end
 ```
 
