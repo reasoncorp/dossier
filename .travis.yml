@@ -10,13 +10,5 @@ env:
   - "RAILS_VERSION=4.1.12"
   - "RAILS_VERSION=4.2.3"
 script: 
-  - DOSSIER_DB=sqlite3 bundle exec rspec
-  - DOSSIER_DB=mysql2 bundle exec rspec
-  - DOSSIER_DB=postgresql bundle exec rspec
-before_script:
-  - mysql -e 'create database dossier_test;'
-  - psql -c 'create database dossier_test;' -U postgres
-  - cp spec/fixtures/db/mysql2.yml.travis    spec/fixtures/db/mysql2.yml
-  - cp spec/fixtures/db/sqlite3.yml.travis   spec/fixtures/db/sqlite3.yml
-  - cp spec/fixtures/db/postgresql.yml.travis   spec/fixtures/db/postgresql.yml
+  - bundle exec rspec
 sudo: false # upgrade travis ci infrastructure http://bit.ly/1J6D4W9

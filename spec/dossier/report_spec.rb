@@ -91,15 +91,4 @@ describe Dossier::Report do
     end
 
   end
-
-  describe "rendering" do
-    it "has a renderer" do
-      expect(report.renderer).to be_a(Dossier::Renderer)
-    end
-
-    it "delegates render to the renderer" do
-      expect(report.renderer).to receive(:render)
-      report.render
-    end
-  end
 end
