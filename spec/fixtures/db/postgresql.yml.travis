@@ -1,4 +1,0 @@
-adapter: postgresql
-database: dossier_test
-host: localhost
-username: postgres

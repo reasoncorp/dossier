@@ -1,14 +1,25 @@
-<% options = DB_CONFIG.fetch(ENV.fetch('DOSSIER_DB', :sqlite3).to_sym) %>
-defaults: &defaults
-  adapter:  <%= options.fetch(:adapter)  %>
-  database: <%= options.fetch(:database) %>
-  host:     <%= options.fetch(:host, 'localhost') %>
-  username: <%= options[:username] %>
-  password: <%= options[:password] %>
-  
+# SQLite version 3.x
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
+#
+default: &default
+  adapter: sqlite3
+  pool: 5
+  timeout: 5000
+
 development:
-  <<: *defaults
+  <<: *default
+  database: db/development.sqlite3
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
 test:
-  <<: *defaults
+  <<: *default
+  database: db/test.sqlite3
+
 production:
-  <<: *defaults
+  <<: *default
+  database: db/production.sqlite3
