@@ -15,7 +15,8 @@ module Dossier
 
     def to_xls
       set_content_disposition!
-      controller.response_body = Xls.new(*collection_and_headers(report.raw_results.arrays))
+      xls_opts = [options[:user]]+collection_and_headers(report.raw_results.arrays)
+      controller.response_body = Xls.new(*xls_opts)
     end
 
     def respond
