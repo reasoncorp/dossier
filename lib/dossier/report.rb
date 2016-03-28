@@ -59,6 +59,10 @@ module Dossier
       value
     end
 
+    def use_format_column?
+      false
+    end
+
     def display_column?(column)
       true
     end
@@ -66,12 +70,6 @@ module Dossier
     def dossier_client
       Dossier.client
     end
-
-    def renderer
-      @renderer ||= Renderer.new(self)
-    end
-    
-    delegate :render, to: :renderer
 
     private
 

@@ -111,10 +111,6 @@ describe Dossier::Result do
           result.format(row)
         end
 
-        it "calls the default format_column method otherwise" do
-          expect(result.report).to receive(:format_column).with('cheese', 'bleu')
-          result.format(row)
-        end
       end
 
       describe "footer" do

@@ -1,6 +1,0 @@
-%h3 #{report.formatted_title} Options
-options be here matey!
-= form_for report, method: :get do |f|
-  = f.label :dragon_color
-  = f.select :dragon_color, report.class.dragon_colors.map { |c| [c.titleize, c] }
-

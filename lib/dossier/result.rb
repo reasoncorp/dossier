@@ -7,8 +7,10 @@ module Dossier
     def initialize(adapter_results, report)
       self.adapter_results = adapter_results
       self.report          = report
+      @raw_headers         = adapter_results.headers
+      @use_format_column   = report.use_format_column?
     end
-
+    
     def raw_headers
       @raw_headers ||= adapter_results.headers
     end
@@ -52,11 +54,7 @@ module Dossier
     class Formatted < Result
 
       def headers
-        @formatted_headers ||= raw_headers.select { |h|
-          report.display_column?(h)
-        }.map { |h|
-          report.format_header(h)
-        }
+        @formatted_headers ||= @raw_headers.map { |h| report.format_header(h) }
       end
 
       def each
@@ -68,10 +66,21 @@ module Dossier
           raise ArgumentError.new("#{row.inspect} must be a kind of Enumerable") 
         end
         
-        displayable_columns(row).map { |value, i|
-          column = raw_headers.at(i)
-          apply_formatter(row, column, value)
-        }
+        row.each_with_index.map do |value, i|
+          column = @raw_headers.at(i)
+          method = "format_#{column}"
+
+          if report.respond_to?(method)
+            args = [method, value]
+            # Provide the row as context if the formatter takes two arguments
+            args << row_hash(row) if report.method(method).arity == 2
+            report.public_send(*args)
+          elsif @use_format_column
+            report.format_column(column, value)
+          else
+            value
+          end
+        end
       end
 
       private

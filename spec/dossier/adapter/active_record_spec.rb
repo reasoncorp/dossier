@@ -3,9 +3,13 @@ require 'spec_helper'
 describe Dossier::Adapter::ActiveRecord do
 
   let(:ar_connection) { double(:activerecord_connection) }
-  let(:adapter)       { described_class.new({connection: ar_connection}) }
+  let(:adapter)       { described_class.new }
 
   describe "escaping" do
+
+    before do
+      allow(::ActiveRecord::Base).to receive(:connection) { ar_connection }
+    end
 
     let(:dirty_value) { "Robert'); DROP TABLE Students;--" }
     let(:clean_value) { "'Robert\\'); DROP TABLE Students;--'" }
@@ -23,6 +27,9 @@ describe Dossier::Adapter::ActiveRecord do
   end
 
   describe "execution" do
+    before do
+      allow(::ActiveRecord::Base).to receive(:connection) { ar_connection }
+    end
 
     let(:query)                { 'SELECT * FROM `people_who_resemble_vladimir_putin`' }
     let(:connection_results)   { [] }

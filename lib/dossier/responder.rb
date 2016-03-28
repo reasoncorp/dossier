@@ -4,11 +4,6 @@ module Dossier
   class Responder < ::ActionController::Responder
     alias :report :resource
 
-    def to_html
-      report.renderer.engine   = controller
-      controller.response_body = report.render
-    end
-
     def to_json
       controller.render json: report.results.hashes
     end
@@ -20,11 +15,11 @@ module Dossier
 
     def to_xls
       set_content_disposition!
-      controller.response_body = Xls.new(*collection_and_headers(report.raw_results.arrays))
+      xls_opts = [options[:user]]+collection_and_headers(report.raw_results.arrays)
+      controller.response_body = Xls.new(*xls_opts)
     end
 
     def respond
-      multi_report_html_only!
       super
     end
     
@@ -43,10 +38,5 @@ module Dossier
       "#{report.class.filename}.#{format}"
     end
 
-    def multi_report_html_only!
-      if report.is_a?(Dossier::MultiReport) and format.to_s != 'html'
-        raise Dossier::MultiReport::UnsupportedFormatError.new(format)
-      end
-    end
   end
 end

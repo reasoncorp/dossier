@@ -17,13 +17,6 @@ describe Dossier::Responder do
   }
   let(:responder)  { described_class.new(controller, reports, {}) }
 
-  describe "to_html" do
-    it "calls render on the report" do
-      expect(report).to receive(:render)
-      responder.to_html
-    end
-  end
-
   describe "to_json" do
     it "renders the report as json" do
       expect(controller).to receive(:render).with(json: results.hashes)
