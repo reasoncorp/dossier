@@ -42,4 +42,15 @@ describe Dossier::ConnectionUrl do
     expect(connection_options.slice(:username, :password, :port)).to be_empty
   end
 
+  it "drops blank database name" do
+    database_url  = "postgresql://localhost"
+    connection_options = described_class.new(database_url).to_hash
+    expect(connection_options.slice(:database)).to be_empty
+  end
+
+  it "drops trailing slash database name" do
+    database_url  = "postgresql://localhost/"
+    connection_options = described_class.new(database_url).to_hash
+    expect(connection_options.slice(:database)).to be_empty
+  end
 end
