@@ -17,7 +17,7 @@ module Dossier
         password: uri.password,
         host:     uri.host,
         port:     uri.port,
-        database: File.basename(uri.path)
+        database: database_name
       }.merge(params).reject { |k,v| v.nil? }
     end
 
@@ -32,5 +32,13 @@ module Dossier
       Rack::Utils.parse_nested_query(uri.query).symbolize_keys
     end
 
+    def database_name
+      path = File.basename(uri.path)
+      if path.blank? || path == "/"
+        nil
+      else
+        path
+      end
+    end
   end
 end
