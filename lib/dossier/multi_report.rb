@@ -12,11 +12,12 @@ class Dossier::MultiReport
   end
 
   def initialize(options = {})
+    self.options = self.options.to_unsafe_h if self.options.respond_to?(:to_unsafe_h)
     self.options = options.dup.with_indifferent_access
   end
 
   def reports
-    @reports ||= self.class.reports.map { |report| 
+    @reports ||= self.class.reports.map { |report|
       report.new(options).tap { |r|
         r.parent = self
       }
@@ -30,7 +31,7 @@ class Dossier::MultiReport
   def formatter
     Module.new
   end
-  
+
   def dom_id
     nil
   end

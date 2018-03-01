@@ -23,8 +23,9 @@ module Dossier
     def self.filename
       "#{report_name.parameterize}-report_#{Time.now.strftime('%Y-%m-%d_%H-%M-%S-%Z')}"
     end
-    
+
     def initialize(options = {})
+      options = options.to_unsafe_h if options.respond_to?(:to_unsafe_h)
       @options = options.dup.with_indifferent_access
     end
 
@@ -70,7 +71,7 @@ module Dossier
     def renderer
       @renderer ||= Renderer.new(self)
     end
-    
+
     delegate :render, to: :renderer
 
     private
