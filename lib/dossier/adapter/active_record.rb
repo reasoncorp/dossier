@@ -14,10 +14,19 @@ module Dossier
       end
 
       def execute(query, report_name = nil)
-        # Ensure that SQL logs show name of report generating query
-        Result.new(connection.exec_query(*["\n#{query}", report_name].compact))
+        new_result(connection, query, report_name)
+      rescue => e
+        # In case the error ocurred because of a faulty connection, we should
+        # aquire a new connection.
+        self.connection = active_record_connection
+        new_result(connection, query, report_name)
       rescue => e
         raise Dossier::ExecuteError.new "#{e.message}\n\n#{query}"
+      end
+
+      def new_result(connection, query, report_name)
+        # Ensure that SQL logs show name of report generating query
+        Result.new(connection.exec_query(*["\n#{query}", report_name].compact))
       end
 
       private
