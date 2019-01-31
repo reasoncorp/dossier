@@ -14,22 +14,31 @@ module Dossier
       end
 
       def execute(query, report_name = nil)
-        new_result(connection, query, report_name)
-      rescue => e
-        # In case the error ocurred because of a faulty connection, we should
-        # aquire a new connection.
-        self.connection = active_record_connection
-        new_result(connection, query, report_name)
+        retries ||= 0
+
+        Result.new(connection.exec_query(*["\n#{query}", report_name].compact))
+      rescue PG::ConnectionBad => e
+        if retries < 3
+          retries += 1
+
+          logger.error("Dossier bad connection: #{e.message}. Retrying #{3 - retries} times.")
+
+          # Attempt to acquire a new connection
+          self.connection = active_record_connection
+
+          retry
+        else
+          raise Dossier::ExecuteError.new "#{e.message}\n\n#{query}"
+        end
       rescue => e
         raise Dossier::ExecuteError.new "#{e.message}\n\n#{query}"
       end
 
-      def new_result(connection, query, report_name)
-        # Ensure that SQL logs show name of report generating query
-        Result.new(connection.exec_query(*["\n#{query}", report_name].compact))
-      end
-
       private
+
+      def logger
+        defined?(Rails) ? Rails.logger : Logger.new($stdout)
+      end
 
       def active_record_connection
         @abstract_class = Class.new(::ActiveRecord::Base) do
