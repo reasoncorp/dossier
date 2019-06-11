@@ -38,7 +38,6 @@ describe Dossier::Responder do
     it "sets the content disposition" do
       expect(responder).to receive(:set_content_disposition!)
       responder.to_csv
-      # expect(responder.controller.headers.keys).to include('Content-Disposition')
     end
 
     it "sets the response body to a new csv streamer instance" do

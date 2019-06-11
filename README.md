@@ -246,7 +246,7 @@ end
 
 ## Advanced Usage
 
-To see a report with all the bells and whistles, check out `spec/dummy/app/reports/employee_report.rb` or other reports in `spec/dummy/app/reports`.
+To see a report with all the bells and whistles, check out `spec/sample/app/reports/employee_report.rb` or other reports in `spec/sample/app/reports`.
 
 ## Compatibility
 
@@ -298,7 +298,7 @@ Note: when you run the tests, Dossier will **make and/or truncate** some tables 
 
 - Run `bundle`
 - `RAILS_ENV=test rake db:create`
-- `cp spec/dummy/config/database.yml{.example,}` and edit it so that it can connect to the test database.
+- `cp spec/sample/config/database.yml{.example,}` and edit it so that it can connect to the test database.
 - `cp spec/fixtures/db/mysql2.yml{.example,}`
 - `cp spec/fixtures/db/sqlite3.yml{.example,}`
 - `rspec spec`

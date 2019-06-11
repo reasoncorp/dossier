@@ -2,10 +2,6 @@ ENV['RAILS_ENV']   = 'test'
 require 'simplecov'
 require 'coveralls'
 
-# not sure why I need to do this now, its after I added dummy-application
-# ApplicationController.helper Dossier::ApplicationHelper
-# SiteController.helper Dossier::ApplicationHelper
-
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
   SimpleCov::Formatter::HTMLFormatter,
   Coveralls::SimpleCov::Formatter
@@ -13,7 +9,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
 SimpleCov.start
 Coveralls.wear!('rails')
 
-require File.expand_path("../dummy/config/application.rb",  __FILE__)
+require File.expand_path("../sample/config/application.rb",  __FILE__)
 require 'rspec/rails'
 require 'pry'
 require 'generator_spec'

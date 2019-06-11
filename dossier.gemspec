@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
 
   s.files = Dir["{app,config,db,lib}/**/*"] + %w[MIT-LICENSE Rakefile README.md VERSION]
-  s.test_files = Dir["spec/**/*"] - %w[spec/dummy/config/dossier.yml]
+  s.test_files = Dir["spec/**/*"] - %w[spec/sample/config/dossier.yml]
 
   s.add_dependency "arel",            ">= 4.2.11.1"
   s.add_dependency "activesupport",   ">= 4.2.11.1"

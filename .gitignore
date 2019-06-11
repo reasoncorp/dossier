@@ -6,9 +6,9 @@ Gemfile.lock
 log/*.log
 pkg/
 coverage/*
-spec/dummy/db/*.sqlite3
-spec/dummy/log/*.log
-spec/dummy/tmp/
-spec/dummy/.sass-cache
+spec/sample/db/*.sqlite3
+spec/sample/log/*.log
+spec/sample/tmp/
+spec/sample/.sass-cache
 spec/fixtures/db/*.yml
 spec/fixtures/db/*.sqlite3
