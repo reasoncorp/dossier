@@ -325,3 +325,4 @@ Note: when you run the tests, Dossier will **make and/or truncate** some tables 
 
 Rails 3.x and 4.x are supported in the Dossier 2.x version.
 Ruby 2.4+, Rails 4.2.11, Rails 5.0.x, 5.1.x, 5.2.x are supported in the Dossier 3.x version.
+
