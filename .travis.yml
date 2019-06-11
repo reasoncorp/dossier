@@ -1,14 +1,15 @@
 language: ruby
 rvm:
-  - "1.9.3"
-  - "2.0.0"
-  - "2.1.2"
-  - "2.2.2"
+  - "2.2.10"
+  - "2.3.8"
+  - "2.4.3"
+  - "2.5.5"
+  - "2.6.3"
 env:
-  - "RAILS_VERSION=3.2.22"
-  - "RAILS_VERSION=4.0.13"
-  - "RAILS_VERSION=4.1.12"
-  - "RAILS_VERSION=4.2.3"
+  - "RAILS_VERSION=4.1.11.1"
+  - "RAILS_VERSION=5.0.7.2"
+  - "RAILS_VERSION=5.1.7"
+  - "RAILS_VERSION=5.2.3"
 script: 
   - DOSSIER_DB=sqlite3 bundle exec rspec
   - DOSSIER_DB=mysql2 bundle exec rspec
