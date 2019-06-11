@@ -14,7 +14,7 @@ gem "activerecord",  RAILS_VERSION
 # gems used by the dummy application
 gem "jquery-rails"
 gem "mysql2"
-gem "pg"
+gem "pg", '~> 0.15'
 gem 'coveralls', require: false
 
 # test unit removed from stdlib in ruby 2.2.0
