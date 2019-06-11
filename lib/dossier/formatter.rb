@@ -14,7 +14,7 @@ module Dossier
 
     def commafy_number(value, precision = nil)
       whole, fraction = value.to_s.split('.')
-      fraction = "%.#{precision}d" % (BigDecimal.new("0.#{fraction}").round(precision) * 10**precision).to_i if precision
+      fraction = "%.#{precision}d" % (BigDecimal("0.#{fraction || 0}").round(precision) * 10**precision).to_i if precision
       [whole.gsub(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,"), fraction].compact.join('.')
     end
 
