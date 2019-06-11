@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 gemspec
 
-ruby '~> 2.4'
+ruby '~> 2.2'
 
 RAILS_VERSION = ENV.fetch('RAILS_VERSION', '4.2.11.1')
 gem "activesupport", RAILS_VERSION

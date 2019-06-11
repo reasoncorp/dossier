@@ -12,8 +12,11 @@ describe Dossier::Responder do
   let(:results)    { double(arrays: [%w[hi], %w[there]], hashes: [{hi: 'there'}]) }
   let(:report)     { EmployeeReport.new }
   let(:reports)    { [mock_out_report_results(report)] }
+
   let(:controller) { 
-    ActionController::Base.new.tap { |controller| allow(controller).to receive(:headers).and_return({}) }
+    ActionController::Base.new.tap { |controller| 
+      controller.response = ActionDispatch::TestResponse.new(200, {}, [''])
+    }
   }
   let(:responder)  { described_class.new(controller, reports, {}) }
 
@@ -35,6 +38,7 @@ describe Dossier::Responder do
     it "sets the content disposition" do
       expect(responder).to receive(:set_content_disposition!)
       responder.to_csv
+      # expect(responder.controller.headers.keys).to include('Content-Disposition')
     end
 
     it "sets the response body to a new csv streamer instance" do

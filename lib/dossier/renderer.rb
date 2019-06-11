@@ -4,7 +4,8 @@ module Dossier
     attr_writer :engine
 
     # Conditional for Rails 4.1 or < 4.1 Layout module
-    Layouts = defined?(ActionView::Layouts) ? ActionView::Layouts : AbstractController::Layouts
+    # Layouts = defined?(ActionView::Layouts) ? ActionView::Layouts : AbstractController::Layouts
+    Layouts = ActionView::Layouts
 
     def initialize(report)
       @report = report

@@ -22,8 +22,10 @@ module Dummy
     # thanks rails 5 :/
     config.active_support.test_order = :random
 
-    config.secret_token = config.secret_key_base = 
+    config.secret_key_base = 
       'http://s3-ec.buzzfed.com/static/enhanced/webdr03/2013/5/25/8/anigif_enhanced-buzz-11857-1369483324-0.gif'
+
+    config.active_record.sqlite3.represent_boolean_as_integer = true
   end
 end
 
