@@ -74,7 +74,7 @@ class EmployeeReport < Dossier::Report
   end
 
   def format_suspended(value)
-    value.to_s.in?(%w(1 t)) ? 'Yes' : 'No'
+    value.to_s.in?(%w(true 1 t)) ? 'Yes' : 'No'
   end
 
   def example_before_hook

@@ -12,8 +12,11 @@ describe Dossier::Responder do
   let(:results)    { double(arrays: [%w[hi], %w[there]], hashes: [{hi: 'there'}]) }
   let(:report)     { EmployeeReport.new }
   let(:reports)    { [mock_out_report_results(report)] }
+
   let(:controller) { 
-    ActionController::Base.new.tap { |controller| allow(controller).to receive(:headers).and_return({}) }
+    ActionController::Base.new.tap { |controller| 
+      controller.response = ActionDispatch::TestResponse.new(200, {}, [''])
+    }
   }
   let(:responder)  { described_class.new(controller, reports, {}) }
 

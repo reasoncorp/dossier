@@ -12,7 +12,7 @@ class Dossier::MultiReport
   end
 
   def initialize(options = {})
-    self.options = options.dup.with_indifferent_access
+    self.options = options.to_hash.dup.with_indifferent_access
   end
 
   def reports

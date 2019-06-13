@@ -1,6 +1,10 @@
 module Dossier
   module ApplicationHelper
 
+    def report
+      @report
+    end
+
     def formatted_dossier_report_path(format, report)
       dossier_report_path(format: format, options: report.options, report: report.report_name)
     end
