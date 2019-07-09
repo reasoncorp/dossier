@@ -16,6 +16,7 @@ module Dossier
       def execute(query, report_name = nil)
         retries ||= 0
 
+        connection.verify!
         Result.new(connection.exec_query(*["\n#{query}", report_name].compact))
       rescue PG::ConnectionBad => e
         if retries < 3
@@ -43,7 +44,7 @@ module Dossier
       def active_record_connection
         @abstract_class = Class.new(::ActiveRecord::Base) do
           self.abstract_class = true
-          
+
           # Needs a unique name for ActiveRecord's connection pool
           def self.name
             "Dossier::Adapter::ActiveRecord::Connection_#{object_id}"
