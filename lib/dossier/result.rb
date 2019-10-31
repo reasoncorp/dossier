@@ -59,8 +59,8 @@ module Dossier
         }
       end
 
-      def each
-        adapter_results.rows.each { |row| yield format(row) }
+      def each(&block)
+        formatted_rows.each(&block)
       end
 
       def format(row)
@@ -75,6 +75,10 @@ module Dossier
       end
 
       private
+
+      def formatted_rows
+        @formatted_rows ||= adapter_results.rows.map { |row| format(row) }
+      end
 
       def displayable_columns(row)
         row.each_with_index.select { |value, i|
