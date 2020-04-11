@@ -15,11 +15,13 @@ module Dossier
 
     def to_csv
       set_content_disposition!
+      set_content_type!('text/csv')
       controller.response_body = StreamCSV.new(*collection_and_headers(report.raw_results.arrays))
     end
 
     def to_xls
       set_content_disposition!
+      set_content_type!('application/xls')
       controller.response_body = Xls.new(*collection_and_headers(report.raw_results.arrays))
     end
 
@@ -27,13 +29,17 @@ module Dossier
       multi_report_html_only!
       super
     end
-    
+
     private
 
     def set_content_disposition!
       controller.headers["Content-Disposition"] = %[attachment;filename=#{filename}]
     end
-    
+
+    def set_content_type!(type)
+      controller.headers["Content-Type"] = %[#{type}; charset=utf-8]
+    end
+
     def collection_and_headers(collection)
       headers = collection.shift.map { |header| report.format_header(header) }
       [collection, headers]
