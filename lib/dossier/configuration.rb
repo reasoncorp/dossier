@@ -24,7 +24,7 @@ module Dossier
     end
    
     def dburl_config
-      Dossier::ConnectionUrl.new.to_hash if ENV.has_key? DB_KEY
+      Dossier::ConnectionUrl.new(ENV['DOSSIER_DATABASE_URL']).to_hash if ENV.has_key? DB_KEY
     end
 
     private
