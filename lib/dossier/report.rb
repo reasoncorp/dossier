@@ -25,7 +25,7 @@ module Dossier
     end
     
     def initialize(options = {})
-      @options = options.dup.with_indifferent_access
+      @options = options.dup.to_hash.with_indifferent_access
     end
 
     def sql
