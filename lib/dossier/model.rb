@@ -48,7 +48,7 @@ module Dossier
       end
 
       def model_name
-        @model_name ||= ActiveModel::Name.new(self, nil, superclass.name).tap do |name|
+        @model_name ||= ActiveModel::Name.new(self, nil, Dossier::Report.name).tap do |name|
           name.instance_variable_set(:@param_key, 'options')
         end
       end

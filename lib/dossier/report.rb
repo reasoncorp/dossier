@@ -63,6 +63,8 @@ module Dossier
       true
     end
 
+    def css_class ; end
+
     def dossier_client
       Dossier.client
     end
