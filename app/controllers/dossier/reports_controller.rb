@@ -25,7 +25,7 @@ module Dossier
     end
 
     def options_params
-      params[:options].presence || {}
+      params[:options].present? ?  params.require(:options).permit! : {}
     end
   end
 end
