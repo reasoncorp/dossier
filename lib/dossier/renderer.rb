@@ -3,9 +3,6 @@ module Dossier
     attr_reader :report
     attr_writer :engine
 
-    # Conditional for Rails 4.1 or < 4.1 Layout module
-    Layouts = defined?(ActionView::Layouts) ? ActionView::Layouts : AbstractController::Layouts
-
     def initialize(report)
       @report = report
     end
@@ -41,7 +38,7 @@ module Dossier
 
     class Engine < AbstractController::Base
       include AbstractController::Rendering
-      include Renderer::Layouts
+      include ActionView::Layouts
       include ViewContextWithReportFormatter
 
       attr_reader :report
